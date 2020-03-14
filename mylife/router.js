@@ -38,7 +38,7 @@ const HomeStack = createStackNavigator(
       //Defination of Navigaton from home screen
       Home: { screen: HomePage },
 
-      AreaPessoal: { screen: Profile,
+      Profile: { screen: Profile,
         navigationOptions: {
           header: null,
         }},
