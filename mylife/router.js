@@ -9,6 +9,8 @@ import {
 } from 'react-navigation';
 
 import Login from './screens/Login'
+import Profile from './screens/Profile'
+import HomePage from './screens/HomePage'
 
 const LoginStack = createStackNavigator( //SignedOut Stack
   {
@@ -17,39 +19,6 @@ const LoginStack = createStackNavigator( //SignedOut Stack
       navigationOptions: {
           header: null,
         }
-    },
-    EmailLogin: {screen: EmailLogin,
-      navigationOptions: {
-        headerStyle: {
-          backgroundColor: '#c73737',
-          marginTop: Platform.OS === "android" ? 0 : 20
-        },
-        headerTintColor: '#FFFFFF',
-        title: 'Entrar',
-
-      }
-    },
-    Registo : {screen: Registo,
-      navigationOptions: {
-        headerStyle: {
-          backgroundColor: '#c73737',
-          marginTop: Platform.OS === "android" ? 0 : 20
-        },
-        headerTintColor: '#FFFFFF',
-        title: 'Registar',
-
-      }
-    },
-    RecoverPassword : {screen: RecoverPassword,
-      navigationOptions: {
-        headerStyle: {
-          backgroundColor: '#c73737',
-          marginTop: Platform.OS === "android" ? 0 : 20
-        },
-        headerTintColor: '#FFFFFF',
-        title: 'Recuperar Palavra-Passe',
-
-      }
     },
 
   },
@@ -64,12 +33,45 @@ const LoginStack = createStackNavigator( //SignedOut Stack
   }
 );
 
+const HomeStack = createStackNavigator(
+    {
+      //Defination of Navigaton from home screen
+      Home: { screen: HomePage },
+
+      AreaPessoal: { screen: Profile,
+        navigationOptions: {
+          header: null,
+        }},
+    },
+    {
+      //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
+      defaultNavigationOptions: {
+        //Header customization of the perticular Screen
+        headerStyle: {
+          backgroundColor: '#c73737',
+          marginTop: Platform.OS === "android" ? 0 : 20,
+        },
+        headerTintColor: '#FFFFFF',
+        title: 'Profile',
+        headerLeft: <ActionBarImage tipo={0} />,
+  
+        
+  
+        headerRight: (
+          <HeaderRightNavBar/>
+        )
+        //Header title
+      },
+      navigationOptions: {
+        tabBarIcon: ({ tintColor }) => <Icon os={Platform.os} icon="home" color={tintColor}   />
+      }
+    }
+  );
+
 const AppNavigator = createBottomTabNavigator( //Signed In Stack
     {
-      PratosDoDia: { screen: PratosStack },
-      Restaurantes: { screen: HomeStack },
-      Rank: { screen: SettingsStack },
-      
+      HomePage: { screen: HomeStack },
+      Profile: { screen: Profile },
     },
     {
       defaultNavigationOptions: ({ navigation }) => ({
@@ -90,11 +92,9 @@ const AppNavigatorFinal = createSwitchNavigator(
       Auth:{
         screen: LoginStack
       },
-      AuthLoading: AuthLoadingScreen,
-
   },
   {
-    initialRouteName: 'AuthLoading', 
+    initialRouteName: 'Login', 
   }
 );
 
