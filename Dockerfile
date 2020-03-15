@@ -1,25 +1,26 @@
 # base image
-FROM node:12.2.0-alpine as builder
+FROM node as builder
+
+ARG PLATFORM=web
 
 # set working directory
 WORKDIR /app/
 
 # Copy all important files for the installation
-COPY mylife/package.json ./
+COPY mylife/package*.json ./
 
 RUN npm install -g
+RUN npm install expo-cli
 
-COPY mylife/ .
+COPY mylife/ ./
+RUN npm audit fix
 
-RUN npm run build
+RUN npm run build-$PLATFORM
 
-# FROM node:12.2.0-alpine
+WORKDIR /app/$PLATFORM-build/
 
-# RUN yarn global add serve
+RUN yarn global add serve
 
-# WORKDIR /app/
-# COPY --from=builder /app/build .
+EXPOSE 80
 
-# EXPOSE 80
-
-# CMD ["serve", "-p", "80", "-s", "."]
+CMD ["serve", "-p", "80", "-s", "."]
