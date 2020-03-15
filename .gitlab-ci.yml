@@ -4,7 +4,7 @@ image: node:latest
 stages:
   - Lint
   - Test
-  - Build
+  # - Build
   - Deploy
 
 # This folder is cached between builds
@@ -27,31 +27,31 @@ test:
   script:
     - echo "Testing..."
 
-build-android:
-  stage: Build
-  image: node
-  script:
-    - cd mylife/
-    - npm install -g
-    - npm install -g expo-cli
-    - npm run build-android
-  artifacts:
-    paths:
-      - mylife/android-build/
-    expire_in: 1 week
+# build-android:
+#   stage: Build
+#   image: node
+#   script:
+#     - cd mylife/
+#     - npm install -g
+#     - npm install -g expo-cli
+#     - npm run build-android
+#   artifacts:
+#     paths:
+#       - mylife/android-build/
+#     expire_in: 1 week
 
-build-ios:
-  stage: Build
-  image: node
-  script:
-    - cd mylife/
-    - npm install -g
-    - npm install -g expo-cli
-    - npm run build-ios
-  artifacts:
-    paths:
-      - mylife/android-ios/
-    expire_in: 1 week
+# build-ios:
+#   stage: Build
+#   image: node
+#   script:
+#     - cd mylife/
+#     - npm install -g
+#     - npm install -g expo-cli
+#     - npm run build-ios
+#   artifacts:
+#     paths:
+#       - mylife/android-ios/
+#     expire_in: 1 week
 
 docker:
   stage: Deploy
