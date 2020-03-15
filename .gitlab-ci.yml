@@ -4,7 +4,6 @@ image: node:latest
 stages:
   - Lint
   - Test
-  # - Build
   - Deploy
 
 # This folder is cached between builds
