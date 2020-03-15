@@ -9,11 +9,9 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "eject": "expo eject",
-    "build": {
-      "android": "expo build:android",
-      "ios": "expo build:ios",
-      "web": "expo build:web"
-    }
+    "build-android": "expo build:android",
+    "build-ios": "expo build:ios",
+    "build-web": "expo build:web"
   },
   "dependencies": {
     "react": "~16.9.0",
