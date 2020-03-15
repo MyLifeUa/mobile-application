@@ -3,6 +3,8 @@ FROM node as builder
 
 ARG PLATFORM=web
 
+EXPOSE 19000 19001 19002
+
 # set working directory
 WORKDIR /app/
 
@@ -15,12 +17,4 @@ RUN npm install expo-cli
 COPY mylife/ ./
 RUN npm audit fix
 
-RUN npm run build-$PLATFORM
-
-WORKDIR /app/$PLATFORM-build/
-
-RUN yarn global add serve
-
-EXPOSE 80
-
-CMD ["serve", "-p", "80", "-s", "."]
+CMD ["npm", "run", "start"]
