@@ -1,0 +1,78 @@
+
+image: node:latest
+
+stages:
+  - Lint
+  - Test
+  - Deploy
+
+# This folder is cached between builds
+# http://docs.gitlab.com/ce/ci/yaml/README.html#cache
+cache:
+  paths:
+    - ~/.cache/
+
+lint:
+  stage: Lint
+  script:
+    - npm install eslint -g
+    - cd mylife/
+    - npm install -g --only=dev
+    - npm install eslint-plugin-react@latest
+    - eslint --fix --max-warnings 20 src/ || echo "Skipping errors for now..."
+
+test:
+  stage: Test
+  script:
+    - echo "Testing..."
+
+# build-android:
+#   stage: Build
+#   image: node
+#   script:
+#     - cd mylife/
+#     - npm install -g
+#     - npm install -g expo-cli
+#     - npm run build-android
+#   artifacts:
+#     paths:
+#       - mylife/android-build/
+#     expire_in: 1 week
+
+# build-ios:
+#   stage: Build
+#   image: node
+#   script:
+#     - cd mylife/
+#     - npm install -g
+#     - npm install -g expo-cli
+#     - npm run build-ios
+#   artifacts:
+#     paths:
+#       - mylife/android-ios/
+#     expire_in: 1 week
+
+docker:
+  stage: Deploy
+  image: docker:stable
+  only:
+    - master
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    DOCKER_DRIVER: overlay2
+    DOCKER_TLS_CERTDIR: ""
+  services:
+    - name: docker:dind
+      entrypoint: ["env", "-u", "DOCKER_HOST"]
+      command: ["dockerd-entrypoint.sh"]
+  script:
+    - echo "Building and uploading Docker image 🐳"
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+    - docker build -t $CI_REGISTRY/$CI_PROJECT_PATH .
+    - docker push $CI_REGISTRY/$CI_PROJECT_PATH
+
+deploy:
+  stage: Deploy
+  trigger: my-life-ua/compose
+  only:
+    - master
