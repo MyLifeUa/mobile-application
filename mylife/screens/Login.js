@@ -1,6 +1,8 @@
 //This is an example code for Bottom Navigation//
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../constants/theme.style.js';
+
 //import react in our code.
 import {
     View,
@@ -35,6 +37,8 @@ export default class Login extends React.Component {
               < Image style={{
                 width: 250,
                 height: 150,
+                border:1,
+                borderColor:'white',
                 resizeMode: 'contain',
               }} source={require('../assets/icon.png')} />
 
