@@ -2,7 +2,7 @@
 //This is an example code for Bottom Navigation//
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
-import styles from '../constants/styles'
+import theme from '../constants/theme.style.js';
 //import react in our code.
 import {
     View,
@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
+
 
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
@@ -48,3 +49,9 @@ export default class Login extends React.Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+    container : {
+        height: height*0.5,
+    }
+});

@@ -10,6 +10,8 @@ import {
     Dimensions
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
+import theme from '../constants/theme.style.js';
+
 //import all the basic component we have used
 
 export default class Login extends React.Component {

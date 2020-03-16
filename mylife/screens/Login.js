@@ -1,6 +1,8 @@
 //This is an example code for Bottom Navigation//
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import theme from '../constants/theme.style.js';
+
 //import react in our code.
 import {
     View,
