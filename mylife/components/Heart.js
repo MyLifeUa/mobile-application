@@ -6,7 +6,6 @@ import {
     StyleSheet,
 } from 'react-native';
 //import all the basic component we have used
-import styles from '../constants/styles.js';
 
 export const Heart = ({filled,style, ...props}) => {
     const centerNonFilled = (

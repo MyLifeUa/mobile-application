@@ -1,8 +1,8 @@
+
 //This is an example code for Bottom Navigation//
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../constants/theme.style.js';
-
 //import react in our code.
 import {
     View,
@@ -14,7 +14,8 @@ import {
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 
-export default class Login extends React.Component {
+
+export default class LoadingScreen extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
@@ -22,22 +23,21 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <LinearGradient colors={['#C73737', '#EE7777']} start={{ x: 0, y: 0.5 }}
+      <LinearGradient colors={['#1D71B8', '#69C8F3']} start={{ x: 0, y: 0.5 }}
         end={{ x: 1, y: 0.5 }} style={{flex:1}}>
-        <ScrollView style={{}} contentContainerStyle={{ flexGrow: 1 }}>
+        <ScrollView style={styles.container} contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ flex:1}}>
             <View style={{
               flex: 2,
               marginTop: 0.036 * height,
               alignItems: 'center',
               justifyContent: 'center',
-           
             }}>
 
-              < Image style={{
-                width: 250,
+            < Image style={{
+                width: 150,
                 height: 150,
-                border:1,
+                borderWidth:3,
                 borderColor:'white',
                 resizeMode: 'contain',
               }} source={require('../assets/icon.png')} />
@@ -53,4 +53,7 @@ export default class Login extends React.Component {
 }
 
 const styles = StyleSheet.create({
+    container : {
+        height: height*0.5,
+    }
 });

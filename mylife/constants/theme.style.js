@@ -1,13 +1,10 @@
 export default {
-    accent: "#F3534A",
-    primary_color: "rgba(199,55,55,1)",
-    secondary: "#2BDA8E",
+    primary_color: "#1D71B8",
+    secondary: "#69C8F3",
     tertiary: "#FFE358",
-    black: "#323643",
+    black: "#1F1F1F",
     white: "#FFFFFF",
     gray: "rgba(113,113,113,1)",
-    gray2: "#C5CCD6",
-    green: "rgba(76,175,80,1)",
   
     // global sizes
     base: 16,

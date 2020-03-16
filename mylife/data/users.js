@@ -1,9 +1,9 @@
 var usersList = [
     {
         "id": "1",
-        "name": "Joaquim Carlos",
-        "weight": "62.0",
-        "photo": "../assets/icon.png"
+        "name": "Tomás Costa",
+        "weight": "65.0",
+        "photo": "../assets/tomas.png"
 
     },
 
