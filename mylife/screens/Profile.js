@@ -101,17 +101,17 @@ export default class Login extends React.Component {
                 <View style={{flexDirection:'row' ,justifyContent:'space-between', alignContent:'space-between', padding:scale(20)}}>
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Steps</Text>
-                    <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.steps}</Text>
+                    <Text style={{fontSize:theme.body,color:theme.white}}>861</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Heartrate</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.heartRate}</Text>
+                            <Text style={{fontSize:theme.body,color:theme.white}}>54</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Weight</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.users[0].weight} kg</Text>
+                            <Text style={{fontSize:theme.body,color:theme.white}}>75 kg</Text>
                         </View>
                 </View>
             </View>
@@ -120,7 +120,7 @@ export default class Login extends React.Component {
             style={{backgroundColor:theme.white,flex:2}}>
                 <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center'}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Desired Weight: </Text>
-                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>75kg</Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>68 kg</Text>
                 </View>
             </View>
         </View>
