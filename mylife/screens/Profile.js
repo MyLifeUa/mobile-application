@@ -3,6 +3,7 @@
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../constants/theme.style.js';
+import URIs from '../constants/baseURIs';
 import { scale, verticalScale, moderateScale } from 'react-native-size-matters';
 import usersList from '../data/users'
 //import react in our code.
@@ -31,6 +32,7 @@ export default class Login extends React.Component {
             date: null,
             caloriesBMR: null,
             caloriesOut: null,
+            heartRate:null,
             sedentaryMinutes: null,
             steps: null
         }
@@ -99,12 +101,12 @@ export default class Login extends React.Component {
                 <View style={{flexDirection:'row' ,justifyContent:'space-between', alignContent:'space-between', padding:scale(20)}}>
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Steps</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>10000</Text>
+                    <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.steps}</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Heartrate</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>66 bpm</Text>
+                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.heartRate}</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
