@@ -24,7 +24,61 @@ export default class Login extends React.Component {
     super(props);
     this.users = usersList;
     this.user_id = 0;
+    this.state = {
+        fetched: false,
+        measures: {
+            currentWeight: null,
+            date: null,
+            caloriesBMR: null,
+            caloriesOut: null,
+            sedentaryMinutes: null,
+            steps: null
+        }
+    }
   }
+
+  componentDidMount(){
+      //get the info of the user as soon as page loads
+      this.getMeasures()
+  }
+
+  getMeasures() {
+
+    console.log(URIs.fitbit.baseURI + "fitbit/");
+    fetch(URIs.fitbit.baseURI + "fitbit/", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            this.setState({
+                fetched: true,
+                measures: {
+                    currentWeight: data[0].currentWeight + " kg",
+                    date: data[0].date,
+                    caloriesBMR: data[0].caloriesBMR,
+                    caloriesOut: data[0].caloriesOut,
+                    sedentaryMinutes: data[0].sedentaryMinutes,
+                    steps: data[0].steps,
+                    goalWeight: data[0].goalWeight + " kg",
+                    heartRate: data[0].heartRate,
+                    age: data[0].age,
+                    avatar: data[0].avatar,
+                    dateOfBirth: data[0].dateOfBirth,
+                    fullName: data[0].fullName,
+                    gender: data[0].gender,
+                    height: data[0].height + " cm"
+                }
+            })
+        })
+        .catch(error => {
+            console.log("GET ERROR: " + error);
+        })
+
+}
 
   render() {
     return (
