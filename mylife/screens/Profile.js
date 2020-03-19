@@ -96,7 +96,7 @@ export default class Login extends React.Component {
                         }} source={require('../assets/tomas.png')} />
                 </View>
                 
-                    <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center'}}><Text style={{fontSize:theme.h2,color:theme.white,fontWeight:'bold'}}>{this.users[0].name}</Text></View>
+                    <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center'}}><Text style={{fontSize:theme.h2,color:theme.white,fontWeight:'bold'}}>Vasco Ramos</Text></View>
                 
                 <View style={{flexDirection:'row' ,justifyContent:'space-between', alignContent:'space-between', padding:scale(20)}}>
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
