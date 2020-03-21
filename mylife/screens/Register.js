@@ -41,7 +41,7 @@ export default class Register extends React.Component {
     
   }
 
-  makeLoginRequest(){
+  makeRegisterRequest(){
       //unsecure way to send a post
     fetch('https://mywebsite.com/endpoint/', {
         method: 'POST',
@@ -74,7 +74,7 @@ export default class Register extends React.Component {
 
             <Text style={styles.register_title}>Registo</Text>
 
-            <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center',paddingVertical:10}}>
+            <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center' }}>
                     <Image style={{
                         width: moderateScale(100),
                         height: moderateScale(100),
@@ -83,8 +83,8 @@ export default class Register extends React.Component {
                         }} source={require('../assets/tomas.png')} />
             </View>
 
-            <TouchableOpacity onPress={() => this.uploadPhoto()} style={styles.photoButton}>
-                <Text style={styles.photoText}><Icon name='md-camera' color='#00aced'/> Upload Photo</Text>
+            <TouchableOpacity style={styles.photoButton}>
+                <Text style={styles.photoText}><Icon name='md-add_a_photo' color='white'/> Upload Photo</Text>
             </TouchableOpacity>
                 
             <ScrollView style={{width:'100%'}}>
