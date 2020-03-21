@@ -28,8 +28,23 @@ export default class Login extends React.Component {
     }
   }
 
-  makeRemoteRequest(){
-      
+  componentDidMount(){
+    
+  }
+
+  makeLoginRequest(){
+      //unsecure way to send a post
+    fetch('https://mywebsite.com/endpoint/', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: this.state.email,
+          password: this.state.password,
+        }),
+      });
   }
 
   render() {
