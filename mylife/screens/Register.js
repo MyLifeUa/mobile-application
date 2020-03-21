@@ -181,6 +181,19 @@ const styles = StyleSheet.create({
     loginText:{
         color:'white'
     },
+    photoText:{
+        color:theme.primary_color
+    },
+    photoButton:{
+        width:"80%",
+        backgroundColor:theme.white,
+        borderRadius:25,
+        height:45,
+        alignItems:"center",
+        justifyContent:"center",
+        marginTop:40,
+        marginBottom:10
+    },
     container:{
         flex: 1,
         backgroundColor: theme.primary_color,
