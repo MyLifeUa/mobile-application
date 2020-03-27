@@ -26,31 +26,3 @@ function getData(access_token) {
     console.error('Error: ', err);
     });
 }
-
-export default class App extends Component {
-    componentDidMount() {
-        OAuth(config.client_id, getData);
-     }
-     
-     render() {
-      return (
-        <Profile></Profile>
-      );
-     }
-    }
-    
-    
-    const styles = StyleSheet.create({
-    container: {
-     flex: 1,
-     justifyContent: 'center',
-     alignItems: 'center',
-     backgroundColor: '#00a8b5',
-    },
-    welcome: {
-     fontSize: 25,
-     textAlign: 'center',
-     color: '#fff',
-     margin: 10,
-    },
-    });
