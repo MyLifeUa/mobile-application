@@ -17,13 +17,14 @@ import {
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
+const API_URL = 'mednat.ieeta.pt:8442';
 
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
     state = {
-        email:'',
+        email:'a',
         password:'',
     }
   }
@@ -34,17 +35,37 @@ export default class Login extends React.Component {
 
   makeLoginRequest(){
       //unsecure way to send a post
-    fetch('https://mywebsite.com/endpoint/', {
-        method: 'POST',
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: this.state.email,
-          password: this.state.password,
-        }),
-      });
+    if (this.state.email=='') {
+        alert("Fill in the login information")
+    } else {
+        fetch(API_URL+'/login', {
+            method: 'POST',
+            headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              username: this.state.email,
+              password: this.state.password,
+            }),
+          })
+            .then((response) => response.json())
+            .then((json) => {
+                alert("Funcionou");
+                console.log(json);
+                if (json.details){
+                    //Credentials incorrect
+                    alert("Login Credentials are invalid.")
+                }
+                else { //Navigate to home screen,  with fields: role, Token, data
+                    alert("Login Success")
+                }
+            })
+            .catch((error) => {
+                alert("Error fetching login")
+                console.error(error);
+            });
+    }
   }
 
   render() {
@@ -80,7 +101,7 @@ export default class Login extends React.Component {
                 <Text style={styles.forgot}>Forgot Password?</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.loginBtn}>
+            <TouchableOpacity style={styles.loginBtn} onPress={() => this.makeLoginRequest()}>
                 <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
 
