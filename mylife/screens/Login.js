@@ -23,11 +23,12 @@ export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
-    state = {
-        email:'a',
-        password:'',
-    }
   }
+
+  state = {
+    email:'',
+    password:'',
+}
 
   componentDidMount(){
     
@@ -38,7 +39,8 @@ export default class Login extends React.Component {
     if (this.state.email=='') {
         alert("Fill in the login information")
     } else {
-        fetch(API_URL+'/login', {
+        console.log("Fetching:" + `${API_URL}/login`)
+        fetch(`${API_URL}/login`, {
             method: 'POST',
             headers: {
               Accept: 'application/json',
