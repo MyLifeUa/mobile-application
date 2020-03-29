@@ -10,12 +10,17 @@ import {
     Image,
     StyleSheet,
     TouchableOpacity,
+    Platform,
     TextInput,
     Text,
+    AsyncStorage,
     KeyboardAvoidingView,
     Dimensions
 } from 'react-native';
+
+import * as ImagePicker from 'expo-image-picker';
 import { ScrollView } from 'react-native-gesture-handler';
+import themeStyle from '../constants/theme.style.js';
 const { width, height } = Dimensions.get('screen');
 const API_URL = 'mednat.ieeta.pt:8442';
 
@@ -35,7 +40,8 @@ export default class Register extends React.Component {
     weight_goal:'',
     birthday:'',
     phone_number:null,
-    photo:null,
+    photo:'../assets/tomas.png',
+    photo_base64:''
   }
 
   componentDidMount(){
@@ -52,24 +58,53 @@ export default class Register extends React.Component {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ //change these params later
-            email:'',
-            first_name:'',
-            last_name:'',
-            password:'',
-            height :'',
-            weight_goal:'',
-            birthday:'',
-            phone_number:null,
-            photo:null,
+            email:this.state.email,
+            first_name:this.state.first_name,
+            last_name:this.state.last_name,
+            password:this.state.password, //this shouldnt go out as clear text
+            height :this.state.height,
+            weight_goal:this.state.weight_goal,
+            birthday:this.state.birthday,
+            phone_number:this.state.phone_number,
+            photo_base64:this.state.photo_base64,
         }),
       });
   }
 
-  uploadPhoto(){
-      //stuff here to upload or just update base64 of image?
+  // Get permissions from camera
+  getPermissionAsync = async () => {
+    if (Platform.OS === 'ios') {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Desculpe, precisamos de acesso a camara para tirar fotos!');
+      }
+    }
   }
 
-  render() {
+  selectPicture = async () => {
+    await this.getPermissionAsync();
+    let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.All,
+        allowsEditing: true,
+        //aspect: [4, 3],
+        base64: true,
+    });
+
+
+    if (!result.cancelled) {
+        base64image = result.base64.replace(/(?:\r\n|\r|\n)/g, '');
+        this.setState({ photo: result.uri,photo_base64:base64image });
+    }
+
+    console.log(this.state)
+    };
+
+
+    uploadPhoto(){
+        //stuff here to upload or just update base64 of image?
+    }
+
+  render() {  
     return (
         <KeyboardAvoidingView style={styles.container} behavior='padding' enabled>
             
@@ -82,10 +117,13 @@ export default class Register extends React.Component {
                         height: moderateScale(100),
                         borderColor:'white',
                         resizeMode: 'contain',
-                        }} source={require('../assets/tomas.png')} />
+                        }} source={{uri:this.state.photo}} />
             </View>
 
-            <TouchableOpacity style={styles.photoButton}>
+            <TouchableOpacity style={styles.photoButton} onPress={()=>{
+                      this.selectPicture()
+                      }
+                    }>
                 <Text style={styles.photoText}> Upload Photo</Text>
             </TouchableOpacity>
                 
