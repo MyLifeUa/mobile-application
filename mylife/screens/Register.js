@@ -12,6 +12,7 @@ import {
     TouchableOpacity,
     Platform,
     TextInput,
+    DatePickerAndroid,
     Text,
     AsyncStorage,
     KeyboardAvoidingView,
@@ -37,8 +38,9 @@ export default class Register extends React.Component {
     last_name:'',
     password:'',
     height :'',
+    current_weight:'',
     weight_goal:'',
-    birthday:'',
+    birthday:'Birthday',
     phone_number:null,
     photo:'../assets/tomas.png',
     photo_base64:''
@@ -76,7 +78,7 @@ export default class Register extends React.Component {
     if (Platform.OS === 'ios') {
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
       if (status !== 'granted') {
-        alert('Desculpe, precisamos de acesso a camara para tirar fotos!');
+        alert('To upload a photo, you must allow MyLife to access your gallery.');
       }
     }
   }
@@ -92,7 +94,7 @@ export default class Register extends React.Component {
 
 
     if (!result.cancelled) {
-        base64image = result.base64.replace(/(?:\r\n|\r|\n)/g, '');
+        var base64image = result.base64.replace(/(?:\r\n|\r|\n)/g, '');
         this.setState({ photo: result.uri,photo_base64:base64image });
     }
 
@@ -102,6 +104,42 @@ export default class Register extends React.Component {
 
     uploadPhoto(){
         //stuff here to upload or just update base64 of image?
+    }
+
+    openDatepicker = async () => {
+        if (Platform.OS === 'android') { 
+          try {
+            const { action, year, month, day } = await DatePickerAndroid.open({
+              // Use `new Date()` for current date.
+              // May 25 2020. Month 0 is January.
+              date: new Date(),
+            });
+            if (action !== DatePickerAndroid.dismissedAction) {
+              this.setState({
+                birthday: year.toString() + '-' + (month+1).toString() + '-' + day.toString(),
+              })
+            }
+          } catch ({ code, message }) {
+            console.warn('Cannot open date picker', message);
+          }
+
+        }
+      }
+
+    onChanged(text){
+        let newText = '';
+        let numbers = '0123456789';
+    
+        for (var i=0; i < text.length; i++) {
+            if(numbers.indexOf(text[i]) > -1 ) {
+                newText = newText + text[i];
+            }
+            else {
+                // your call back function
+                alert("Please enter numbers only.");
+            }
+        }
+        this.setState({ phone_number: newText });
     }
 
   render() {  
@@ -168,38 +206,52 @@ export default class Register extends React.Component {
                     </View>
 
                     {/* Intro */}
-                    <View style={styles.inputView} >
-                        <TextInput  
-                            style={styles.inputText}
-                            placeholder="Birthdate" 
-                            placeholderTextColor="#003f5c"
-                            onChangeText={text => this.setState({birthday:text})}/>
-                    </View>
+                    <TouchableOpacity onPress={() => this.openDatepicker()} style={styles.inputView}>
+                        <Text style={styles.inputText}>{this.state.birthday}</Text>
+                    </TouchableOpacity>
 
                     {/* Intro */}
+                    {/* Only working for portuguese numbers */}
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
                             placeholder="Phone Number (optional)" 
                             placeholderTextColor="#003f5c"
-                            onChangeText={text => this.setState({phone_number:text})}/>
+                            keyboardType='numeric'
+                            onChangeText={(text)=> this.onChanged(text)}
+                            maxLength={9}/> 
                     </View>
 
                     {/* Intro */}
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Current Height" 
+                            placeholder="Current Height (Ex: 183 (cm))" 
                             placeholderTextColor="#003f5c"
+                            maxLength={3}
+                            keyboardType={'numeric'}
                             onChangeText={text => this.setState({height:text})}/>
                     </View>
 
+                    {/* Current Weight */}
+                    <View style={styles.inputView} >
+                        <TextInput  
+                            style={styles.inputText}
+                            placeholder="Current Weight (Ex: 75 (kg))" 
+                            placeholderTextColor="#003f5c"
+                            maxLength={3}
+                            keyboardType={'numeric'}
+                            onChangeText={text => this.setState({current_weight:text})}/>
+                    </View>
+
                     {/* Intro */}
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Weight Goal" 
+                            placeholder="Weight Goal (Ex: 70 (kg))" 
                             placeholderTextColor="#003f5c"
+                            maxLength={3}
+                            keyboardType={'numeric'}
                             onChangeText={text => this.setState({weight_goal:text})}/>
                     </View>
 
