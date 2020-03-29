@@ -99,10 +99,11 @@ export default class Login extends React.Component {
                     onChangeText={text => this.setState({password:text})}/>
             </View>
 
+            {/* Forgot password has no use for now
             <TouchableOpacity>
                 <Text style={styles.forgot}>Forgot Password?</Text>
             </TouchableOpacity>
-
+            */}
             <TouchableOpacity style={styles.loginBtn} onPress={() => this.makeLoginRequest()}>
                 <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
