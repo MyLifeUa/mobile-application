@@ -36,7 +36,7 @@ export default class Register extends React.Component {
     birthday:'',
     phone_number:null,
     photo:null,
-    }
+  }
 
   componentDidMount(){
     
@@ -74,7 +74,7 @@ export default class Register extends React.Component {
         <KeyboardAvoidingView style={styles.container} behavior='padding' enabled>
             
 
-            <Text style={styles.register_title}>Registo</Text>
+            <Text style={styles.register_title}>Register</Text>
 
             <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center' }}>
                     <Image style={{
@@ -86,13 +86,12 @@ export default class Register extends React.Component {
             </View>
 
             <TouchableOpacity style={styles.photoButton}>
-                <Text style={styles.photoText}><Icon name='md-add_a_photo' color='white'/> Upload Photo</Text>
+                <Text style={styles.photoText}> Upload Photo</Text>
             </TouchableOpacity>
                 
-            <ScrollView style={{width:'100%'}}>
+            <ScrollView style={{width:'100%', maxHeight:verticalScale(250)}}>
                 <View style={styles.containerScroll}>
 
-                    
                     {/* FN */}
                     <View style={styles.inputView} >
                         <TextInput  
@@ -189,7 +188,7 @@ const styles = StyleSheet.create({
     photoButton:{
         width:"80%",
         backgroundColor:theme.white,
-        borderRadius:25,
+        borderRadius:5,
         height:45,
         alignItems:"center",
         justifyContent:"center",
@@ -207,6 +206,7 @@ const styles = StyleSheet.create({
     containerScroll:{
         flex: 1,
         width:'100%',
+        height:'20%',
         backgroundColor: theme.primary_color,
         alignItems: 'center',
         justifyContent: 'center',
