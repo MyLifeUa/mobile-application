@@ -102,10 +102,6 @@ export default class Register extends React.Component {
     };
 
 
-    uploadPhoto(){
-        //stuff here to upload or just update base64 of image?
-    }
-
     openDatepicker = async () => {
         if (Platform.OS === 'android') { 
           try {
