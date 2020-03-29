@@ -1,13 +1,12 @@
 //This is an example code for Bottom Navigation//
 import React from 'react';
-import { LinearGradient } from 'expo-linear-gradient';
 import theme from '../constants/theme.style.js';
 import { scale,verticalScale, moderateScale } from 'react-native-size-matters';
 import { Icon } from 'react-native-elements'
 
 //import react in our code.
 import {
-    View,
+    View, 
     Image,
     StyleSheet,
     TouchableOpacity,
@@ -18,24 +17,26 @@ import {
 } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 const { width, height } = Dimensions.get('screen');
+const API_URL = 'mednat.ieeta.pt:8442';
+
 //import all the basic component we have used
 
 export default class Register extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
-    state = {
-        email:'',
-        first_name:'',
-        last_name:'',
-        password:'',
-        height :'',
-        weight_goal:'',
-        birthday:'',
-        phone_number:null,
-        photo:null,
-    }
   }
+  state = {
+    email:'',
+    first_name:'',
+    last_name:'',
+    password:'',
+    height :'',
+    weight_goal:'',
+    birthday:'',
+    phone_number:null,
+    photo:null,
+    }
 
   componentDidMount(){
     
@@ -43,7 +44,8 @@ export default class Register extends React.Component {
 
   makeRegisterRequest(){
       //unsecure way to send a post
-    fetch('https://mywebsite.com/endpoint/', {
+    console.log("Fetching:" + `${API_URL}/clients`)
+    fetch(`${API_URL}/clients`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',
