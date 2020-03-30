@@ -23,7 +23,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ScrollView } from 'react-native-gesture-handler';
 import themeStyle from '../constants/theme.style.js';
 const { width, height } = Dimensions.get('screen');
-const API_URL = 'mednat.ieeta.pt:8442';
+const API_URL = 'http://mednat.ieeta.pt:8442';
 
 //import all the basic component we have used
 

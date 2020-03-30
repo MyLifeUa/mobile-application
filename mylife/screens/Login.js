@@ -17,7 +17,7 @@ import {
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
-const API_URL = 'mednat.ieeta.pt:8442';
+const API_URL = 'http://mednat.ieeta.pt:8442';
 
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
