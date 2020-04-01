@@ -53,14 +53,15 @@ export default class Login extends React.Component {
           })
             .then((response) => response.json())
             .then((json) => {
-                alert("Funcionou");
                 console.log(json);
-                if (json.details){
+                if (json.detail != undefined){
                     //Credentials incorrect
                     alert("Login Credentials are invalid.")
                 }
-                else { //Navigate to home screen,  with fields: role, Token, data
-                    alert("Login Success")
+                else { 
+                    //Navigate to home screen,  with fields: role, Token, data
+                    alert(`Welcome to MyLife, ${json.data.first_name} ${json.data.last_name}!`)
+                    console.log(`Role: ${json.role}, with Token: ${json.token}`)
                 }
             })
             .catch((error) => {
