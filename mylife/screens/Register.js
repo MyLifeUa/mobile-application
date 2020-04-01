@@ -65,11 +65,27 @@ export default class Register extends React.Component {
             last_name:this.state.last_name,
             password:this.state.password, //this shouldnt go out as clear text
             height :this.state.height,
+            current_weight:this.state.current_weight,
             weight_goal:this.state.weight_goal,
             birthday:this.state.birthday,
             phone_number:this.state.phone_number,
-            photo_base64:this.state.photo_base64,
+            photo:this.state.photo_base64,
         }),
+      }).then((response) => response.json())
+      .then((json) => {
+          alert("Funcionou");
+          console.log(json);
+          if (json.details){
+              //Credentials incorrect
+              alert("Login Credentials are invalid.")
+          }
+          else { //Navigate to home screen,  with fields: role, Token, data
+              alert("Login Success")
+          }
+      })
+      .catch((error) => {
+          alert("Error fetching login")
+          console.error(error);
       });
   }
 
