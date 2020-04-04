@@ -40,9 +40,9 @@ export default class Register extends React.Component {
     height :'',
     current_weight:'',
     weight_goal:'',
-    birthday:'Birthday',
+    birthday:'Birthdate',
     sex:'M',
-    phone_number:null,
+    phone_number:'',
     photo:'../assets/tomas.png',
     photo_base64:''
   }
@@ -53,7 +53,10 @@ export default class Register extends React.Component {
 
   makeRegisterRequest(){
       //unsecure way to send a post
-    console.log("Fetching:" + `${API_URL}/clients`)
+    if (this.state.email=='' || this.state.first_name=='' || this.state.last_name=='' || this.state.password=='' || this.state.height=='' || this.state.current_weight=='' || this.state.weight_goal=='' || this.state.birthday=='Birthday' || this.state.sex=='') {
+        alert("Fill in the required information!")
+    } else {
+        console.log("Fetching:" + `${API_URL}/clients`)
     fetch(`${API_URL}/clients`, {
         method: 'POST',
         headers: {
@@ -69,26 +72,29 @@ export default class Register extends React.Component {
             sex: this.state.sex,
             current_weight:this.state.current_weight,
             weight_goal:this.state.weight_goal,
-            birthday:this.state.birthday,
+            birth_date:this.state.birthday,
             phone_number:this.state.phone_number,
             photo:this.state.photo_base64,
         }),
       }).then((response) => response.json())
       .then((json) => {
-          alert("Funcionou");
-          console.log(json);
-          if (json.details){
-              //Credentials incorrect
-              alert("Login Credentials are invalid.")
-          }
-          else { //Navigate to home screen,  with fields: role, Token, data
-              alert("Login Success")
-          }
+            console.log(json);
+            if (json.state == "Error"){
+            //Credentials incorrect
+                alert(json.message)
+            }
+            else { 
+                //Navigate to home screen,  with fields: role, Token, data
+                // So fazer o navigate if json.role == client
+                alert(`Welcome to MyLife, ${this.state.first_name}!`)
+            }
       })
       .catch((error) => {
           alert("Error fetching login")
           console.error(error);
       });
+    }
+    
   }
 
   // Get permissions from camera
