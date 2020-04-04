@@ -41,6 +41,7 @@ export default class Register extends React.Component {
     current_weight:'',
     weight_goal:'',
     birthday:'Birthday',
+    sex:'M',
     phone_number:null,
     photo:'../assets/tomas.png',
     photo_base64:''
@@ -65,6 +66,7 @@ export default class Register extends React.Component {
             last_name:this.state.last_name,
             password:this.state.password, //this shouldnt go out as clear text
             height :this.state.height,
+            sex: this.state.sex,
             current_weight:this.state.current_weight,
             weight_goal:this.state.weight_goal,
             birthday:this.state.birthday,
@@ -156,7 +158,7 @@ export default class Register extends React.Component {
 
   render() {  
     return (
-        <KeyboardAvoidingView style={styles.container} behavior='padding' enabled>
+        <KeyboardAvoidingView style={styles.container} enabled>
             
 
             <Text style={styles.register_title}>Register</Text>
