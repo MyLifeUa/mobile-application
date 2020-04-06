@@ -63,6 +63,7 @@ export default class Login extends React.Component {
                     // So fazer o navigate if json.role == client
                     alert(`Welcome to MyLife, ${json.data.first_name} ${json.data.last_name}!`)
                     console.log(`Role: ${json.role}, with Token: ${json.token}`)
+                    this.props.navigation.navigate('Register')
                 }
             })
             .catch((error) => {
