@@ -18,14 +18,11 @@ const Stack = createStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen} />
-      </Stack.Navigator>
+      <Login></Login>
     </NavigationContainer>
   );
 }
 
-export default App;
 
 const styles = StyleSheet.create({
   container: {
@@ -35,3 +32,5 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
 });
+
+export default App;
