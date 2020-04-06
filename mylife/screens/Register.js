@@ -41,7 +41,7 @@ export default class Register extends React.Component {
     current_weight:'',
     weight_goal:'',
     birthday:'Birthdate',
-    sex:'M',
+    sex:'',
     phone_number:'',
     photo:'../assets/tomas.png',
     photo_base64:''
