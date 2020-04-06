@@ -53,7 +53,7 @@ export default class Register extends React.Component {
 
   makeRegisterRequest(){
       //unsecure way to send a post
-    if (email=='' || first_name=='' || last_name=='' || password=='' || height=='' || current_weight=='' || weight_goal=='' || birthday=='Birthday' || this.state.sex=='') {
+    if (this.state.email=='' || this.state.first_name=='' || this.state.last_name=='' || this.state.password=='' || this.state.height=='' || this.state.current_weight=='' || this.state.weight_goal=='' || this.state.birthday=='Birthday' || this.state.sex=='') {
         alert("Fill in the required information!")
     } else {
         console.log("Fetching:" + `${API_URL}/clients`)
@@ -240,6 +240,16 @@ export default class Register extends React.Component {
                             keyboardType='numeric'
                             onChangeText={(text)=> this.onChanged(text)}
                             maxLength={9}/> 
+                    </View>
+
+                    {/* Intro */}
+                    <View style={styles.inputView} >
+                        <TextInput  
+                            style={styles.inputText}
+                            placeholder="Sex (Ex: M or F)" 
+                            placeholderTextColor="#003f5c"
+                            maxLength={1}
+                            onChangeText={text => this.setState({sex:text})}/>
                     </View>
 
                     {/* Intro */}
