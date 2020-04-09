@@ -71,15 +71,24 @@ const MealsStack = createStackNavigator();
 const ExerciseStack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
+function BottomTab() {
+  return (
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Profile" component={ProfileStackScreen} />
+      </Tab.Navigator>
+  );
+}
+
+const AppStackNavigator = createStackNavigator();
 function App() {
   return (
     /* Tab bottom */
     <NavigationContainer>
-      <Tab.Navigator>
-        <Tab.Screen name="Home" component={HomeStackScreen} />
-        <Tab.Screen name="Login" component={LoginStackScreen} />
-        <Tab.Screen name="Login" component={ProfileStackScreen} />
-      </Tab.Navigator>
+      <AppStackNavigator.Navigator>
+        <AppStackNavigator.Screen name="OAuth" component={LoginStackScreen} />
+        <AppStackNavigator.Screen name="App" component={BottomTab} />
+      </AppStackNavigator.Navigator>
     </NavigationContainer>
   );
 }
