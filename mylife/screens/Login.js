@@ -19,6 +19,7 @@ const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 const API_URL = 'http://mednat.ieeta.pt:8442';
 
+
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
@@ -111,7 +112,7 @@ export default class Login extends React.Component {
                 <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={this.props.navigation.navigate('Register')}>
                 <Text style={styles.loginText}>Signup</Text>
             </TouchableOpacity>
 

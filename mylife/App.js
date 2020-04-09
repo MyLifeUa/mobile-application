@@ -26,15 +26,15 @@ function ProfileScreen() {
   );
 }
 
-function LoginScreen() {
+function LoginScreen({ navigation }) {
   return (
-    <Login></Login>
+    <Login navigation={navigation}></Login>
   );
 }
 
-function RegisterScreen() {
+function RegisterScreen({ navigation }) {
   return (
-    <Register></Register>
+    <Register navigation={navigation}></Register>
   );
 }
 
@@ -42,8 +42,8 @@ const LoginStack = createStackNavigator();
 function LoginStackScreen() {
   return (
     <LoginStack.Navigator>
-      <LoginStack.Screen name="Home" component={LoginScreen} />
-      <LoginStack.Screen name="Register" component={RegisterScreen} />
+      <LoginStack.Screen name="Login" component={LoginScreen} options={{headerShown:false}} />
+      <LoginStack.Screen name="Register" component={RegisterScreen} options={{headerShown:false}}/>
     </LoginStack.Navigator>
   );
 }
@@ -86,8 +86,8 @@ function App() {
     /* Tab bottom */
     <NavigationContainer>
       <AppStackNavigator.Navigator>
-        <AppStackNavigator.Screen name="OAuth" component={LoginStackScreen} />
-        <AppStackNavigator.Screen name="App" component={BottomTab} />
+        <AppStackNavigator.Screen name="OAuth" component={LoginStackScreen} options={{headerShown:false}} />
+        <AppStackNavigator.Screen name="App" component={BottomTab} options={{headerShown:false}} />
       </AppStackNavigator.Navigator>
     </NavigationContainer>
   );
