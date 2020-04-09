@@ -20,6 +20,12 @@ function HomeScreen() {
   );
 }
 
+function ProfileScreen() {
+  return (
+    <Profile></Profile>
+  );
+}
+
 function LoginScreen() {
   return (
     <Login></Login>
@@ -32,21 +38,47 @@ function RegisterScreen() {
   );
 }
 
-const Tab = createBottomTabNavigator();
 const LoginStack = createStackNavigator();
+function LoginStackScreen() {
+  return (
+    <LoginStack.Navigator>
+      <LoginStack.Screen name="Home" component={LoginScreen} />
+      <LoginStack.Screen name="Register" component={RegisterScreen} />
+    </LoginStack.Navigator>
+  );
+}
+
 const HomeStack = createStackNavigator();
+function HomeStackScreen() {
+  return (
+    <HomeStack.Navigator>
+      <HomeStack.Screen name="Home" component={HomeScreen} />
+    </HomeStack.Navigator>
+  );
+}
 
+const ProfileStack = createStackNavigator();
+function ProfileStackScreen() {
+  return (
+    <ProfileStack.Navigator>
+      <ProfileStack.Screen name="Home" component={ProfileScreen} />
+    </ProfileStack.Navigator>
+  );
+}
 
+const StatisticsStack = createStackNavigator();
+const MealsStack = createStackNavigator();
+const ExerciseStack = createStackNavigator();
 
-
+const Tab = createBottomTabNavigator();
 function App() {
   return (
-    /* OAuth Stack */
+    /* Tab bottom */
     <NavigationContainer>
-      <Tab.Navigator initialRouteName="Login">
-        <Tab.Screen name="Register" component={RegisterScreen} />
-        <Tab.Screen name="Login" component={LoginScreen} />
-        <Tab.Screen name="BotTabs" children={createBotTabs} />
+      <Tab.Navigator>
+        <Tab.Screen name="Home" component={HomeStackScreen} />
+        <Tab.Screen name="Login" component={LoginStackScreen} />
+        <Tab.Screen name="Login" component={ProfileStackScreen} />
       </Tab.Navigator>
     </NavigationContainer>
   );
