@@ -41,7 +41,7 @@ function RegisterScreen({ navigation }) {
 const LoginStack = createStackNavigator();
 function LoginStackScreen() {
   return (
-    <LoginStack.Navigator>
+    <LoginStack.Navigator initialRouteName="Login">
       <LoginStack.Screen name="Login" component={LoginScreen} options={{headerShown:false}} />
       <LoginStack.Screen name="Register" component={RegisterScreen} options={{headerShown:false}}/>
     </LoginStack.Navigator>

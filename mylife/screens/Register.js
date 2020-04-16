@@ -87,6 +87,7 @@ export default class Register extends React.Component {
                 //Navigate to home screen,  with fields: role, Token, data
                 // So fazer o navigate if json.role == client
                 alert(`Welcome to MyLife, ${this.state.first_name}!`)
+                this.props.navigation.navigate('Profile')
             }
       })
       .catch((error) => {
