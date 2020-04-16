@@ -19,6 +19,7 @@ const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 const API_URL = 'http://mednat.ieeta.pt:8442';
 
+
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
@@ -63,6 +64,7 @@ export default class Login extends React.Component {
                     // So fazer o navigate if json.role == client
                     alert(`Welcome to MyLife, ${json.data.first_name} ${json.data.last_name}!`)
                     console.log(`Role: ${json.role}, with Token: ${json.token}`)
+                    //this.props.navigation.navigate('Profile')
                 }
             })
             .catch((error) => {
@@ -110,7 +112,7 @@ export default class Login extends React.Component {
                 <Text style={styles.loginText}>LOGIN</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('Register')}>
                 <Text style={styles.loginText}>Signup</Text>
             </TouchableOpacity>
 
