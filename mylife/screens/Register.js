@@ -1,5 +1,5 @@
 //This is an example code for Bottom Navigation//
-import React from 'react';
+import React, { PureComponent } from 'react';
 import theme from '../constants/theme.style.js';
 import { scale,verticalScale, moderateScale } from 'react-native-size-matters';
 import { Icon } from 'react-native-elements'
@@ -11,6 +11,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Platform,
+    Picker,
     TextInput,
     DatePickerAndroid,
     Text,
@@ -173,6 +174,12 @@ export default class Register extends React.Component {
         this.setState({ phone_number: newText });
     }
 
+    setSelectedGender(gender) {
+        this.setState({
+            sex: gender
+        })
+    }
+
   render() {  
     return (
         <KeyboardAvoidingView style={styles.container} enabled>
@@ -256,14 +263,14 @@ export default class Register extends React.Component {
                     </View>
 
                     {/* Intro */}
-                    <View style={styles.inputView} >
-                        <TextInput  
-                            style={styles.inputText}
-                            placeholder="Sex (Ex: M or F)" 
-                            placeholderTextColor="#003f5c"
-                            maxLength={1}
-                            onChangeText={text => this.setState({sex:text})}/>
-                    </View>
+                        <Picker
+                            selectedValue={this.state.sex}
+                            style={styles.inputView}
+                            onValueChange={(itemValue,itemIndex) => this.setSelectedGender(itemValue)}
+                        >
+                            <Picker.Item label="Male" value="Male" />
+                            <Picker.Item label="Female" value="Female" />
+                        </Picker>
 
                     {/* Intro */}
                     <View style={styles.inputView} >
