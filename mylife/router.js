@@ -84,7 +84,32 @@ const StatsNavigator = createStackNavigator(
 const ProfileNavigator = createStackNavigator(
   //Signed In Stack
   {
-    Profile: { screen: Profile }
+    Profile: { screen: Profile,
+      navigationOptions:{
+        headerRight : () => {
+          <Button
+            onPress={ () => navigation.navigate('EditProfile')}
+            title="Edit"
+            color={theme.white}
+          >
+
+          </Button>
+        },
+      } 
+    },
+    EditProfile: {
+      screen: EditProfile,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: theme.primary_color,
+          marginTop: Platform.OS === "android" ? 0 : 20
+        },
+        headerTitleStyle: {
+          color: "white"
+        },
+        title: "EditProfile"
+      }
+    }
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -94,15 +119,6 @@ const ProfileNavigator = createStackNavigator(
       },
       headerTitleStyle: {
         color: "white"
-      },
-      headerRight : () => {
-        <Button
-          onPress={ () => navigation.navigate('EditProfile')}
-          title="Edit"
-          color={theme.white}
-        >
-
-        </Button>
       },
       title: "Profile"
     }),
