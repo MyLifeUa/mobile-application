@@ -226,13 +226,8 @@ export default class Login extends React.Component {
 
                 <TouchableOpacity style={styles.loginGoogleButtonDoctor}
 
-                    onPress={()=> this.props.navigation.navigate('EditProfile', {
-                        user_data: this.state.user_data,
+                    onPress={()=> this.props.navigation.navigate('CheckDoctor', {
                         email: this.state.user_data.email,
-                        weight: this.state.user_data.weight,
-                        height: this.state.user_data.height,
-                        goal_weight: this.state.user_data.weight,
-                        photo: this.state.user_data.weight
                     })}
                     >
                     <Text style={styles.loginButtonText}>
