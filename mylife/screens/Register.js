@@ -181,8 +181,8 @@ export default class Register extends React.Component {
 
             <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center' }}>
                     <Image style={{
-                        width: moderateScale(200),
-                        height: moderateScale(200),
+                        width: moderateScale(130),
+                        height: moderateScale(130),
                         borderColor:'white',
                         resizeMode: 'contain',
                         borderWidth:2

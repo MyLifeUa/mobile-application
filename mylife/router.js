@@ -84,19 +84,7 @@ const StatsNavigator = createStackNavigator(
 const ProfileNavigator = createStackNavigator(
   //Signed In Stack
   {
-    Profile: { screen: Profile,
-      navigationOptions:{
-        headerRight : () => {
-          <Button
-            onPress={ () => navigation.navigate('EditProfile')}
-            title="Edit"
-            color={theme.white}
-          >
-
-          </Button>
-        },
-      } 
-    },
+    Profile: { screen: Profile },
     EditProfile: {
       screen: EditProfile,
       navigationOptions: {

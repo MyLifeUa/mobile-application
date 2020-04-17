@@ -12,14 +12,15 @@ import {
     Text,
     Image,
     StyleSheet,
+    TouchableOpacity,
     ScrollView,
     Dimensions
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 
-const TOKEN = '9ada84428a40227eb0b0afbcf028fd2b17bb7615';
-const API = 'http://mednat.ieeta.pt:8442/';
+const TOKEN = '4cbab41fb2bd5b2fbf35e307ecc8640e48eeabd8';
+const API = 'http://mednat.ieeta.pt:8442';
 
 
 export default class Login extends React.Component {
@@ -30,8 +31,16 @@ export default class Login extends React.Component {
     this.user_id = 0;
     this.state = {
         fetched: false,
-        user_email: 'tomascosta@ua.pti',
-        measures: {
+        user_data: {
+            email: 'tomascosta@ua.pta',
+            height: null,
+            weight: null,
+            name: null,
+            phone_number: null,
+            sex: '',
+            photo: '',
+        },
+        fitbit_measures: {
             currentWeight: null,
             date: null,
             caloriesBMR: null,
@@ -51,13 +60,13 @@ export default class Login extends React.Component {
 
   getValues(){
 
-    fetch(`${API}/clients/${this.state.user_email}`, {
+    console.log(`${API}/clients/${this.state.user_data.email}`)
+    fetch(`${API}/clients/${this.state.user_data.email}`, {
         method: 'GET',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
           "Authorization": "Token " + TOKEN 
-
         }
       }).then((response) => response.json())
       .then((json) => {
@@ -66,8 +75,19 @@ export default class Login extends React.Component {
                 alert(json.message)
             }
             else { 
-                alert(json)
-                //this.refs.toast.show("Food Log added 💯",DURATION.LENGTH_LONG);
+                // Success
+                this.setState({
+                    user_data : {
+                        name: json.message.name,
+                        email: json.message.email,
+                        phone_number: json.message.phone_number,
+                        photo: json.message.photo,
+                        weight: json.message.current_weight,
+                        height: json.message.height,
+                        sex: json.message.sex,
+                        weight_goal: json.message.weight_goal
+                    }
+                })
             }
       })
       .catch((error) => {
@@ -91,7 +111,7 @@ export default class Login extends React.Component {
             console.log(data);
             this.setState({
                 fetched: true,
-                measures: {
+                fitbit_measures: {
                     currentWeight: data[0].currentWeight + " kg",
                     date: data[0].date,
                     caloriesBMR: data[0].caloriesBMR,
@@ -113,7 +133,7 @@ export default class Login extends React.Component {
             console.log("GET ERROR: " + error);
         })
 
-}
+  }
 
   render() {
     return (
@@ -122,46 +142,83 @@ export default class Login extends React.Component {
             style={{backgroundColor:theme.primary_color,flex:1.2, flexDirection:'column' ,justifyContent:'center', alignContent:'center'}}>
                 <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center',}}>
                     <Image style={{
-                        width: moderateScale(80),
-                        height: moderateScale(80),
+                        width: moderateScale(100),
+                        height: moderateScale(100),
                         borderColor:'white',
-                        borderRadius:'50%',
+                        borderRadius:400,
+                        marginTop:20,
                         resizeMode: 'contain',
-                        }} source={require('../assets/tomas.png')} />
+                        }} source={{uri:`data:image/png;base64,${this.state.user_data.photo}`}} />
                 </View>
                 
-                    <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center'}}><Text style={{fontSize:theme.h2,color:theme.white,fontWeight:'bold'}}>Vasco Ramos</Text></View>
+  <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center'}}><Text style={{fontSize:theme.h2,color:theme.white,fontWeight:'bold'}}>{this.state.user_data.name}</Text></View>
                 
                 <View style={{flexDirection:'row' ,justifyContent:'space-between', alignContent:'space-between', padding:scale(20)}}>
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Steps</Text>
-  <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.steps}</Text>
+  <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.fitbit_measures.steps}</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Heartrate</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.heartRate} bpm</Text>
+                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.fitbit_measures.heartRate} bpm</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Weight</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.currentWeight} kg</Text>
+                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.fitbit_measures.currentWeight} kg</Text>
                         </View>
                 </View>
             </View>
 
             <View
-            style={{backgroundColor:theme.white,flex:2}}>
-                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center'}}>
-                    <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Desired Weight: </Text>
-                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.measures.currentWeight} kg</Text>
+            style={{backgroundColor:theme.white,flex:1.3,alignContent:'space-between'}}>
+
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', marginTop:moderateScale(20)}}><Text style={{fontSize:theme.h1,color:theme.primary_color,fontWeight:'bold'}}>User Information</Text></View>
+
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                    <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Email: </Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.email}</Text>
                 </View>
+
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                    <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Height: </Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.height} cm</Text>
+                </View>
+
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                    <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Weight: </Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.weight} kg</Text>
+                </View>
+
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                    <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Desired Weight: </Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.weight_goal} kg</Text>
+                </View>
+
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                    <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Phone Number: </Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.phone_number}</Text>
+                </View>
+
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                    <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Gender: </Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.sex}</Text>
+                </View>
+
             </View>
 
-            <View style={{flex:0.3,justifyContent:'flex-start',alignItems:'center'}}>
+            <View style={{flex:0.5,justifyContent:'flex-start',alignItems:'center',}}>
                 <TouchableOpacity style={styles.loginGoogleButton}
 
-                    onPress={()=> this.props.navigation.navigate('EditProfile')}
+                    onPress={()=> this.props.navigation.navigate('EditProfile', {
+                        user_data: this.state.user_data,
+                        email: this.state.user_data.email,
+                        weight: this.state.user_data.weight,
+                        height: this.state.user_data.height,
+                        goal_weight: this.state.user_data.weight,
+                        photo: this.state.user_data.weight
+                    })}
                     >
                     <Text style={styles.loginButtonText}>
                         Edit
@@ -178,8 +235,7 @@ const styles = StyleSheet.create({
     container : {
         height: height*0.5,
     },loginGoogleButton: {
-        shadowColor: 'rgba(0,0,0, .4)', // IOS
-        backgroundColor:theme.primary_color_2,
+        backgroundColor:theme.primary_color,
         shadowOffset: { height: 1, width: 1 }, // IOS
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
@@ -191,5 +247,12 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center'
     },
+    loginButtonText: {
+        textAlign:'center',
+        color:"#FFF",
+        fontWeight: '700',
+        width:"100%",
+        fontSize:moderateScale(15)
+      },  
 
 });
