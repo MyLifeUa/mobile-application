@@ -139,7 +139,7 @@ export default class Login extends React.Component {
     return (
         <View style={{flex:1}}>
             <View
-            style={{backgroundColor:theme.primary_color,flex:1.2, flexDirection:'column' ,justifyContent:'center', alignContent:'center'}}>
+            style={{backgroundColor:theme.primary_color,flex:0.9, flexDirection:'column' ,justifyContent:'center', alignContent:'center'}}>
                 <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center',}}>
                     <Image style={{
                         width: moderateScale(100),
@@ -172,36 +172,36 @@ export default class Login extends React.Component {
             </View>
 
             <View
-            style={{backgroundColor:theme.white,flex:1.3,alignContent:'space-between'}}>
+            style={{backgroundColor:theme.white,flex:1,alignContent:'space-between'}}>
 
                 <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', marginTop:moderateScale(20)}}><Text style={{fontSize:theme.h1,color:theme.primary_color,fontWeight:'bold'}}>User Information</Text></View>
 
-                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:2}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Email: </Text>
                     <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.email}</Text>
                 </View>
 
-                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:2}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Height: </Text>
                     <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.height} cm</Text>
                 </View>
 
-                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:2}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Weight: </Text>
                     <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.weight} kg</Text>
                 </View>
 
-                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:2}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Desired Weight: </Text>
                     <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.weight_goal} kg</Text>
                 </View>
 
-                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:2}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Phone Number: </Text>
                     <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.phone_number}</Text>
                 </View>
 
-                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:4}}>
+                <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center', padding:2}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Gender: </Text>
                     <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.user_data.sex}</Text>
                 </View>
@@ -210,7 +210,6 @@ export default class Login extends React.Component {
 
             <View style={{flex:0.5,justifyContent:'flex-start',alignItems:'center',}}>
                 <TouchableOpacity style={styles.loginGoogleButton}
-
                     onPress={()=> this.props.navigation.navigate('EditProfile', {
                         user_data: this.state.user_data,
                         email: this.state.user_data.email,
@@ -223,6 +222,22 @@ export default class Login extends React.Component {
                     <Text style={styles.loginButtonText}>
                         Edit
                     </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.loginGoogleButtonDoctor}
+
+                    onPress={()=> this.props.navigation.navigate('EditProfile', {
+                        user_data: this.state.user_data,
+                        email: this.state.user_data.email,
+                        weight: this.state.user_data.weight,
+                        height: this.state.user_data.height,
+                        goal_weight: this.state.user_data.weight,
+                        photo: this.state.user_data.weight
+                    })}
+                    >
+                    <Text style={styles.loginButtonText}>
+                        Check Doctor
+                    </Text>
                 </TouchableOpacity>          
             </View>
 
@@ -234,8 +249,22 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
     container : {
         height: height*0.5,
-    },loginGoogleButton: {
+    },
+    loginGoogleButton: {
         backgroundColor:theme.primary_color,
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        elevation: 2, // Android
+        width:moderateScale(150),
+        height:moderateScale(40),
+        margin: 10,
+        borderRadius:20,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    loginGoogleButtonDoctor: {
+        backgroundColor:'#85ba6a',
         shadowOffset: { height: 1, width: 1 }, // IOS
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
