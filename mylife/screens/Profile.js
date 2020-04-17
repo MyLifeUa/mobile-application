@@ -208,7 +208,7 @@ export default class Login extends React.Component {
 
             </View>
 
-            <View style={{flex:0.5,justifyContent:'flex-start',alignItems:'center',}}>
+            <View style={{flex:0.5,justifyContent:'center',alignItems:'center',flexDirection:'row'}}>
                 <TouchableOpacity style={styles.loginGoogleButton}
                     onPress={()=> this.props.navigation.navigate('EditProfile', {
                         user_data: this.state.user_data,
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
         elevation: 2, // Android
-        width:moderateScale(150),
+        width:moderateScale(120),
         height:moderateScale(40),
         margin: 10,
         borderRadius:20,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
         shadowOpacity: 1, // IOS
         shadowRadius: 1, //IOS
         elevation: 2, // Android
-        width:moderateScale(150),
+        width:moderateScale(120),
         height:moderateScale(40),
         margin: 10,
         borderRadius:20,

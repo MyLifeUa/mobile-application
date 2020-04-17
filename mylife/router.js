@@ -199,7 +199,7 @@ const AppNavigatorFinal = createSwitchNavigator(
     Auth: {
       screen: LoginStack
     },
-    AuthLoading: ProfileNavigator
+    AuthLoading: AuthLoadingScreen
   },
   {
     initialRouteName: "AuthLoading"
