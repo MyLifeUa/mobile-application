@@ -1,6 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View,Platform } from "react-native";
+import { StyleSheet, Text, View,Platform, Button } from "react-native";
+
 import Profile from "./screens/Profile";
+import EditProfile from "./screens/EditProfile"
+
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
 
@@ -81,7 +84,20 @@ const StatsNavigator = createStackNavigator(
 const ProfileNavigator = createStackNavigator(
   //Signed In Stack
   {
-    Profile: { screen: Profile }
+    Profile: { screen: Profile },
+    EditProfile: {
+      screen: EditProfile,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: theme.primary_color,
+          marginTop: Platform.OS === "android" ? 0 : 20
+        },
+        headerTitleStyle: {
+          color: "white"
+        },
+        title: "EditProfile"
+      }
+    }
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -92,7 +108,7 @@ const ProfileNavigator = createStackNavigator(
       headerTitleStyle: {
         color: "white"
       },
-      title: "My Life"
+      title: "Profile"
     }),
     tabBarOptions: {
       activeTintColor: "#c73737",
@@ -115,7 +131,7 @@ const FoodLogsNavigator = createStackNavigator(
       headerTitleStyle: {
         color: "white"
       },
-      title: "My Life",
+      title: "Food Logs",
     }),
     
    

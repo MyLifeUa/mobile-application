@@ -25,6 +25,8 @@ import themeStyle from '../constants/theme.style.js';
 const { width, height } = Dimensions.get('screen');
 const API_URL = 'http://mednat.ieeta.pt:8442';
 
+const TOKEN = '4cbab41fb2bd5b2fbf35e307ecc8640e48eeabd8';
+
 //import all the basic component we have used
 
 export default class Register extends React.Component {
@@ -34,8 +36,6 @@ export default class Register extends React.Component {
   }
   state = {
     email:'',
-    first_name:'',
-    last_name:'',
     password:'',
     height :'',
     current_weight:'',
@@ -48,7 +48,15 @@ export default class Register extends React.Component {
   }
 
   componentDidMount(){
-    
+    this.setState({
+        email: this.props.navigation.state.params.user_data.email,
+        height: this.props.navigation.state.params.user_data.height,
+        current_weight: this.props.navigation.state.params.user_data.weight,
+        weight_goal: this.props.navigation.state.params.user_data.weight_goal,
+        sex: this.props.navigation.state.params.user_data.sex,
+        phone_number: this.props.navigation.state.params.user_data.phone_number,
+        //photo: this.props.navigation.state.params.user_data.photo,
+    })
   }
 
   _storeData = async (token) => {
@@ -64,20 +72,21 @@ export default class Register extends React.Component {
 
   makeRegisterRequest(){
       //unsecure way to send a post
-    if (this.state.email=='' || this.state.first_name=='' || this.state.last_name=='' || this.state.password=='' || this.state.height=='' || this.state.current_weight=='' || this.state.weight_goal=='' || this.state.birthday=='Birthday' || this.state.sex=='') {
+    console.log("Mounted")
+    console.log(this.state) 
+    if (this.state.email=='' && this.state.first_name=='' && this.state.last_name=='' && this.state.password=='' && this.state.height=='' && this.state.current_weight=='' && this.state.weight_goal=='' && this.state.birthday=='Birthday' && this.state.sex=='') {
         alert("Fill in the required information!")
     } else {
-        console.log("Fetching:" + `${API_URL}/clients`)
-    fetch(`${API_URL}/clients`, {
-        method: 'POST',
+        console.log("Fetching:" + `${API_URL}/clients/${this.state.email}`)
+    fetch(`${API_URL}/clients/${this.state.email}`, {
+        method: 'PUT',
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          'Authorization': 'Token ' + TOKEN
         },
         body: JSON.stringify({ //change these params later
             email:this.state.email,
-            first_name:this.state.first_name,
-            last_name:this.state.last_name,
             password:this.state.password, //this shouldnt go out as clear text
             height :this.state.height,
             sex: this.state.sex,
@@ -90,13 +99,12 @@ export default class Register extends React.Component {
       }).then((response) => response.json())
       .then((json) => {
             console.log(json);
-            if (json.state == "Error"){
+            if (json.state == "Error" || json.state == false){
             //Credentials incorrect
                 alert(json.message)
             }
             else { 
-                this._storeData(json.token)
-                    
+                //toast, change success                    
                 this.props.navigation.navigate('Profile')
             }
       })
@@ -201,29 +209,12 @@ export default class Register extends React.Component {
             <ScrollView style={{width:'100%', maxHeight:verticalScale(250)}}>
                 <View style={styles.containerScroll}>
 
-                    {/* FN */}
-                    <View style={styles.inputView} >
-                        <TextInput  
-                            style={styles.inputText}
-                            placeholder="First Name" 
-                            placeholderTextColor="#003f5c"
-                            onChangeText={text => this.setState({first_name:text})}/>
-                    </View>
-
-                    {/* LN */}
-                    <View style={styles.inputView} >
-                        <TextInput  
-                            style={styles.inputText}
-                            placeholder="Last Name" 
-                            placeholderTextColor="#003f5c"
-                            onChangeText={text => this.setState({last_name:text})}/>
-                    </View>
 
                     {/* Intro */}
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Email" 
+                            value={this.state.email}
                             placeholderTextColor="#003f5c"
                             onChangeText={text => this.setState({email:text})}/>
                     </View>
@@ -239,16 +230,11 @@ export default class Register extends React.Component {
                     </View>
 
                     {/* Intro */}
-                    <TouchableOpacity onPress={() => this.openDatepicker()} style={styles.inputView}>
-                        <Text style={styles.inputText}>{this.state.birthday}</Text>
-                    </TouchableOpacity>
-
-                    {/* Intro */}
                     {/* Only working for portuguese numbers */}
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Phone Number (optional)" 
+                            value={this.state.phone_number}
                             placeholderTextColor="#003f5c"
                             keyboardType='numeric'
                             onChangeText={(text)=> this.onChanged(text)}
@@ -259,7 +245,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Sex (Ex: M or F)" 
+                            value={this.state.sex}
                             placeholderTextColor="#003f5c"
                             maxLength={1}
                             onChangeText={text => this.setState({sex:text})}/>
@@ -269,7 +255,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Current Height (Ex: 183 (cm))" 
+                            placeholder="Height"
                             placeholderTextColor="#003f5c"
                             maxLength={3}
                             keyboardType={'numeric'}
@@ -280,7 +266,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Current Weight (Ex: 75 (kg))" 
+                            placeholder="Current Weight"
                             placeholderTextColor="#003f5c"
                             maxLength={3}
                             keyboardType={'numeric'}
@@ -291,7 +277,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Weight Goal (Ex: 70 (kg))" 
+                            placeholder="Weight Goal"
                             placeholderTextColor="#003f5c"
                             maxLength={3}
                             keyboardType={'numeric'}
@@ -302,7 +288,7 @@ export default class Register extends React.Component {
             </ScrollView>
 
             <TouchableOpacity onPress={() => this.makeRegisterRequest()} style={styles.loginBtn}>
-                <Text style={styles.loginText}>REGISTER</Text>
+                <Text style={styles.loginText}>Edit Info</Text>
             </TouchableOpacity>
 
         </KeyboardAvoidingView>
