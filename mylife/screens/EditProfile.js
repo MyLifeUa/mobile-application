@@ -48,7 +48,6 @@ export default class Register extends React.Component {
   }
 
   componentDidMount(){
-      /*
     this.setState({
         email: this.props.navigation.state.params.user_data.email,
         height: this.props.navigation.state.params.user_data.height,
@@ -58,7 +57,6 @@ export default class Register extends React.Component {
         phone_number: this.props.navigation.state.params.user_data.phone_number,
         //photo: this.props.navigation.state.params.user_data.photo,
     })
-    */    
   }
 
   _storeData = async (token) => {
@@ -74,6 +72,8 @@ export default class Register extends React.Component {
 
   makeRegisterRequest(){
       //unsecure way to send a post
+    console.log("Mounted")
+    console.log(this.state) 
     if (this.state.email=='' && this.state.first_name=='' && this.state.last_name=='' && this.state.password=='' && this.state.height=='' && this.state.current_weight=='' && this.state.weight_goal=='' && this.state.birthday=='Birthday' && this.state.sex=='') {
         alert("Fill in the required information!")
     } else {
@@ -99,7 +99,7 @@ export default class Register extends React.Component {
       }).then((response) => response.json())
       .then((json) => {
             console.log(json);
-            if (json.state == "Error"){
+            if (json.state == "Error" || json.state == false){
             //Credentials incorrect
                 alert(json.message)
             }
@@ -214,7 +214,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Hello"
+                            value={this.state.email}
                             placeholderTextColor="#003f5c"
                             onChangeText={text => this.setState({email:text})}/>
                     </View>
@@ -230,16 +230,11 @@ export default class Register extends React.Component {
                     </View>
 
                     {/* Intro */}
-                    <TouchableOpacity onPress={() => this.openDatepicker()} style={styles.inputView}>
-                        <Text style={styles.inputText}>{this.state.birthday}</Text>
-                    </TouchableOpacity>
-
-                    {/* Intro */}
                     {/* Only working for portuguese numbers */}
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Phone Number (optional)" 
+                            value={this.state.phone_number}
                             placeholderTextColor="#003f5c"
                             keyboardType='numeric'
                             onChangeText={(text)=> this.onChanged(text)}
@@ -250,7 +245,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Sex (Ex: M or F)" 
+                            value={this.state.sex}
                             placeholderTextColor="#003f5c"
                             maxLength={1}
                             onChangeText={text => this.setState({sex:text})}/>
@@ -260,7 +255,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Current Height (Ex: 183 (cm))" 
+                            placeholder="Height"
                             placeholderTextColor="#003f5c"
                             maxLength={3}
                             keyboardType={'numeric'}
@@ -271,7 +266,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Current Weight (Ex: 75 (kg))" 
+                            placeholder="Current Weight"
                             placeholderTextColor="#003f5c"
                             maxLength={3}
                             keyboardType={'numeric'}
@@ -282,7 +277,7 @@ export default class Register extends React.Component {
                     <View style={styles.inputView} >
                         <TextInput  
                             style={styles.inputText}
-                            placeholder="Weight Goal (Ex: 70 (kg))" 
+                            placeholder="Weight Goal"
                             placeholderTextColor="#003f5c"
                             maxLength={3}
                             keyboardType={'numeric'}
