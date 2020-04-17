@@ -18,6 +18,9 @@ import {
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 
+const TOKEN = '9ada84428a40227eb0b0afbcf028fd2b17bb7615';
+const API = 'http://mednat.ieeta.pt:8442/';
+
 
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
@@ -27,6 +30,7 @@ export default class Login extends React.Component {
     this.user_id = 0;
     this.state = {
         fetched: false,
+        user_email: 'tomascosta@ua.pti',
         measures: {
             currentWeight: null,
             date: null,
@@ -41,7 +45,36 @@ export default class Login extends React.Component {
 
   componentDidMount(){
       //get the info of the user as soon as page loads
-      this.getMeasures()
+      //this.getMeasures()
+      this.getValues()
+  }
+
+  getValues(){
+
+    fetch(`${API}/clients/${this.state.user_email}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + TOKEN 
+
+        }
+      }).then((response) => response.json())
+      .then((json) => {
+            console.log(json);
+            if (json.state == "Error"){
+                alert(json.message)
+            }
+            else { 
+                alert(json)
+                //this.refs.toast.show("Food Log added 💯",DURATION.LENGTH_LONG);
+            }
+      })
+      .catch((error) => {
+          alert("Error adding Food Log.")
+          console.error(error);
+      });
+
   }
 
   getMeasures() {
@@ -92,6 +125,7 @@ export default class Login extends React.Component {
                         width: moderateScale(80),
                         height: moderateScale(80),
                         borderColor:'white',
+                        borderRadius:'50%',
                         resizeMode: 'contain',
                         }} source={require('../assets/tomas.png')} />
                 </View>
@@ -101,17 +135,17 @@ export default class Login extends React.Component {
                 <View style={{flexDirection:'row' ,justifyContent:'space-between', alignContent:'space-between', padding:scale(20)}}>
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Steps</Text>
-                    <Text style={{fontSize:theme.body,color:theme.white}}>861</Text>
+  <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.steps}</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Heartrate</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>54</Text>
+                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.heartRate} bpm</Text>
                         </View>
 
                         <View style={{flexDirection:'column' ,justifyContent:'space-between', alignContent:'space-between'}}>
                             <Text style={{fontSize:theme.header,color:theme.white,fontWeight:'bold'}}>Weight</Text>
-                            <Text style={{fontSize:theme.body,color:theme.white}}>75 kg</Text>
+                            <Text style={{fontSize:theme.body,color:theme.white}}>{this.state.measures.currentWeight} kg</Text>
                         </View>
                 </View>
             </View>
@@ -120,9 +154,21 @@ export default class Login extends React.Component {
             style={{backgroundColor:theme.white,flex:2}}>
                 <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center'}}>
                     <Text style={{fontSize:theme.header,color:theme.primary_color,fontWeight:'bold'}}>Desired Weight: </Text>
-                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>68 kg</Text>
+                    <Text style={{fontSize:theme.body,color:theme.primary_color}}>{this.state.measures.currentWeight} kg</Text>
                 </View>
             </View>
+
+            <View style={{flex:0.3,justifyContent:'flex-start',alignItems:'center'}}>
+                <TouchableOpacity style={styles.loginGoogleButton}
+
+                    onPress={()=> this.props.navigation.navigate('EditProfile')}
+                    >
+                    <Text style={styles.loginButtonText}>
+                        Edit
+                    </Text>
+                </TouchableOpacity>          
+            </View>
+
         </View>
     );
   }
@@ -131,5 +177,19 @@ export default class Login extends React.Component {
 const styles = StyleSheet.create({
     container : {
         height: height*0.5,
-    }
+    },loginGoogleButton: {
+        shadowColor: 'rgba(0,0,0, .4)', // IOS
+        backgroundColor:theme.primary_color_2,
+        shadowOffset: { height: 1, width: 1 }, // IOS
+        shadowOpacity: 1, // IOS
+        shadowRadius: 1, //IOS
+        elevation: 2, // Android
+        width:moderateScale(150),
+        height:moderateScale(40),
+        margin: 10,
+        borderRadius:20,
+        justifyContent:'center',
+        alignItems:'center'
+    },
+
 });

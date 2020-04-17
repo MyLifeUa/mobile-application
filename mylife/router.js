@@ -1,6 +1,9 @@
 import React from "react";
-import { StyleSheet, Text, View,Platform } from "react-native";
+import { StyleSheet, Text, View,Platform, Button } from "react-native";
+
 import Profile from "./screens/Profile";
+import EditProfile from "./screens/EditProfile"
+
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
 
@@ -92,7 +95,16 @@ const ProfileNavigator = createStackNavigator(
       headerTitleStyle: {
         color: "white"
       },
-      title: "My Life"
+      headerRight : () => {
+        <Button
+          onPress={ () => navigation.navigate('EditProfile')}
+          title="Edit"
+          color={theme.white}
+        >
+
+        </Button>
+      },
+      title: "Profile"
     }),
     tabBarOptions: {
       activeTintColor: "#c73737",
@@ -115,7 +127,7 @@ const FoodLogsNavigator = createStackNavigator(
       headerTitleStyle: {
         color: "white"
       },
-      title: "My Life",
+      title: "Food Logs",
     }),
     
    
@@ -183,7 +195,7 @@ const AppNavigatorFinal = createSwitchNavigator(
     Auth: {
       screen: LoginStack
     },
-    AuthLoading: AuthLoadingScreen
+    AuthLoading: ProfileNavigator
   },
   {
     initialRouteName: "AuthLoading"
