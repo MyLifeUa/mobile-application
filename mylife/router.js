@@ -1,99 +1,193 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import Profile from './screens/Profile'
-import Login from './screens/Login'
-import Register from './screens/Register'
-import {
-  
+import React from "react";
+import { StyleSheet, Text, View,Platform } from "react-native";
+import Profile from "./screens/Profile";
+import FoodLogs from "./screens/FoodLog";
+import Stats from "./screens/Stats";
 
-    createAppContainer,
-    createSwitchNavigator,
-    
-  } from 'react-navigation';
-  import { createStackNavigator } from 'react-navigation-stack'
+import Login from "./screens/Login";
+import Register from "./screens/Register";
+import {
+  createAppContainer,
+  createSwitchNavigator,
   
-  
-  const LoginStack = createStackNavigator( //SignedOut Stack
-    {
-      //Defination of Navigaton from home screen
-      Login: { screen: Login ,
-        navigationOptions: {
-            header: null,
-          }
-      },
-      
-  
-    },
-    {
-      //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
-      defaultNavigationOptions: {
-        //Header customization of the perticular Screen
-        
-        headerStyle: {
-          marginTop: Platform.OS === "android" ?  0 : 20  
-        },
-       
+} from "react-navigation";
+
+import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createStackNavigator } from "react-navigation-stack";
+import AuthLoadingScreen from "./components/auth/AuthLoadingScreen";
+import theme from "./constants/theme.style.js";
+import { Ionicons,Foundation } from '@expo/vector-icons';
+import Icon from './components/Icon';
+
+const LoginStack = createStackNavigator(
+  //SignedOut Stack
+  {
+    //Defination of Navigaton from home screen
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null
       }
-      
-    }
-  );
-  
-  
-  
-  const AppNavigator = createStackNavigator( //Signed In Stack
-    {
-      
-      Home: { screen: Profile },
-      
-      
     },
-    {
-      defaultNavigationOptions: ({ navigation }) => ({
+    Register: {
+      screen: Register,
+      navigationOptions: {
         headerStyle: {
-          backgroundColor: "#0096dd",
-          marginTop: Platform.OS === "android" ? 0 : 20,
-        
+          backgroundColor: theme.primary_color,
+          marginTop: Platform.OS === "android" ? 0 : 20
         },
         headerTitleStyle: {
-          color: 'white'
+          color: "white"
         },
-        title:'Intrusion Tracker',
-        
-  
-        
-      }),
-      tabBarOptions: {
-        activeTintColor: '#c73737',
-        inactiveTintColor: 'gray',
-        
-      },
+        title: "Register"
+      }
     }
-  );
-  
-  
-  
-  
-  //For React Navigation 2.+ need to export App only
-  //export default App;
-  //For React Navigation 3.+
-  
-  //Business Mode Routing, mudar nas opçoes
-  const AppNavigatorFinal = createSwitchNavigator(
-      {
-        App:{
-          screen: AppNavigator
-        },
-        
-        Auth:{
-          screen: LoginStack
-        },
-        //AuthLoading: AuthLoadingScreen,
+  },
+  {
+    //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
+    defaultNavigationOptions: {
+      //Header customization of the perticular Screen
 
-  
-    },
-    {
-      initialRouteName: 'App', 
+      headerStyle: {
+        marginTop: Platform.OS === "android" ? 0 : 20
+      }
     }
-  );
-  
-  export default createAppContainer(AppNavigatorFinal);
+  }
+);
+
+const StatsNavigator = createStackNavigator(
+  //Signed In Stack
+  {
+    Stats: { screen: Stats }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: theme.primary_color,
+        marginTop: Platform.OS === "android" ? 0 : 20
+      },
+      headerTitleStyle: {
+        color: "white"
+      },
+      title: "My Life"
+    }),
+    tabBarOptions: {
+      activeTintColor: "#c73737",
+      inactiveTintColor: "gray"
+    }
+  }
+);
+
+const ProfileNavigator = createStackNavigator(
+  //Signed In Stack
+  {
+    Profile: { screen: Profile }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: theme.primary_color,
+        marginTop: Platform.OS === "android" ? 0 : 20
+      },
+      headerTitleStyle: {
+        color: "white"
+      },
+      title: "My Life"
+    }),
+    tabBarOptions: {
+      activeTintColor: "#c73737",
+      inactiveTintColor: "gray"
+    }
+  }
+);
+
+const FoodLogsNavigator = createStackNavigator(
+  //Signed In Stack
+  {
+    FoodLogs: { screen: FoodLogs }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: theme.primary_color,
+        marginTop: Platform.OS === "android" ? 0 : 20
+      },
+      headerTitleStyle: {
+        color: "white"
+      },
+      title: "My Life",
+    }),
+    
+   
+  }
+);
+
+const AppNavigator = createBottomTabNavigator(
+  //Signed In Stack
+  {
+    //Login:{screen: LoginStack},
+    //AdiconarPrato: { screen: AdicionarPratoStack},
+    //PratosRestauranteSide : { screen: PratosRestauranteSideStack},
+    //AreaPessoal: { screen: PessoalStack},
+    //PratoEspecifico: { screen: PratoEspecificoStack }, // alterei Gual
+    FoodLogs: { screen: FoodLogsNavigator,
+      navigationOptions: {
+        tabBarLabel: 'Food Log', 
+        tabBarIcon: ({ tintColor }) => (
+            <Foundation name="book" color={tintColor} size={25} />
+        )
+    }
+    
+    
+    },
+    Home: { screen: ProfileNavigator,
+      navigationOptions: {
+        tabBarLabel: 'Home', 
+        tabBarIcon: ({ tintColor }) => (
+            <Ionicons name="ios-home" color={tintColor} size={25} />
+        )
+    }
+    
+    },
+    Stats: { screen: StatsNavigator,
+      navigationOptions: {
+        tabBarLabel: 'Stats', 
+        tabBarIcon: ({ tintColor }) => (
+            <Ionicons name="md-stats" color={tintColor} size={25} />
+        )
+    }
+    
+    }
+  },
+  {
+    defaultNavigationOptions: ({ navigation }) => ({}),
+    tabBarOptions: {
+      activeTintColor: theme.primary_color,
+      inactiveTintColor: "gray"
+    },
+    
+  }
+);
+
+//For React Navigation 2.+ need to export App only
+//export default App;
+//For React Navigation 3.+
+
+//Business Mode Routing, mudar nas opçoes
+const AppNavigatorFinal = createSwitchNavigator(
+  {
+    App: {
+      screen: AppNavigator
+    },
+
+    Auth: {
+      screen: LoginStack
+    },
+    AuthLoading: AuthLoadingScreen
+  },
+  {
+    initialRouteName: "AuthLoading"
+  }
+);
+
+export default createAppContainer(AppNavigatorFinal);

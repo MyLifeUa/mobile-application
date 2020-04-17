@@ -16,7 +16,7 @@ import {
     Text,
     AsyncStorage,
     KeyboardAvoidingView,
-    Dimensions
+    Dimensions,
 } from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -43,13 +43,24 @@ export default class Register extends React.Component {
     birthday:'Birthdate',
     sex:'',
     phone_number:'',
-    photo:'../assets/tomas.png',
+    photo:'https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg',
     photo_base64:''
   }
 
   componentDidMount(){
     
   }
+
+  _storeData = async (token) => {
+    console.log("Storing Token: "+token)
+    try {
+        await AsyncStorage.setItem('token', token);
+        this.setState({user_token:token})
+  
+    } catch (error) {
+        console.log(error)
+    }
+};
 
   makeRegisterRequest(){
       //unsecure way to send a post
@@ -84,9 +95,8 @@ export default class Register extends React.Component {
                 alert(json.message)
             }
             else { 
-                //Navigate to home screen,  with fields: role, Token, data
-                // So fazer o navigate if json.role == client
-                alert(`Welcome to MyLife, ${this.state.first_name}!`)
+                this._storeData(json.token)
+                    
                 this.props.navigation.navigate('Profile')
             }
       })
@@ -168,16 +178,18 @@ export default class Register extends React.Component {
         <KeyboardAvoidingView style={styles.container} enabled>
             
 
-            <Text style={styles.register_title}>Register</Text>
 
             <View style={{flexDirection:'row' ,justifyContent:'center', alignContent:'center' }}>
                     <Image style={{
-                        width: moderateScale(100),
-                        height: moderateScale(100),
+                        width: moderateScale(200),
+                        height: moderateScale(200),
                         borderColor:'white',
                         resizeMode: 'contain',
+                        borderWidth:2
                         }} source={{uri:this.state.photo}} />
             </View>
+
+            
 
             <TouchableOpacity style={styles.photoButton} onPress={()=>{
                       this.selectPicture()

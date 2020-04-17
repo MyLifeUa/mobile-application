@@ -13,7 +13,8 @@ import {
     TouchableOpacity,
     TextInput,
     Text,
-    Dimensions
+    Dimensions,
+    AsyncStorage
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
@@ -34,6 +35,18 @@ export default class Login extends React.Component {
   componentDidMount(){
     
   }
+
+  _storeData = async (token) => {
+    console.log("Storing Token: "+token)
+    try {
+        await AsyncStorage.setItem('token', token);
+        this.setState({user_token:token})
+  
+    } catch (error) {
+        console.log(error)
+    }
+};
+
 
   makeLoginRequest(){
       //unsecure way to send a post
@@ -60,11 +73,9 @@ export default class Login extends React.Component {
                     alert("Login Credentials are invalid.")
                 }
                 else { 
-                    //Navigate to home screen,  with fields: role, Token, data
-                    // So fazer o navigate if json.role == client
-                    alert(`Welcome to MyLife, ${json.data.first_name} ${json.data.last_name}!`)
-                    console.log(`Role: ${json.role}, with Token: ${json.token}`)
-                    //this.props.navigation.navigate('Profile')
+                    this._storeData(json.token)
+                    
+                    this.props.navigation.navigate('Profile')
                 }
             })
             .catch((error) => {
