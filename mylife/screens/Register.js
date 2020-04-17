@@ -174,8 +174,8 @@ export default class Register extends React.Component {
         this.setState({ phone_number: newText });
     }
 
-    setSelectedGender(gender) {
-        this.setState({
+    async setSelectedGender(gender) {
+        await this.setState({
             sex: gender
         })
     }
