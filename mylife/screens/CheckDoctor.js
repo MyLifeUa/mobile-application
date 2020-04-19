@@ -9,6 +9,7 @@ import {
     Image,
     StyleSheet,
     ScrollView,
+    AsyncStorage,
     TouchableOpacity,
     Text,
     Dimensions
@@ -36,7 +37,7 @@ export default class LoadingScreen extends React.Component {
   }
 
   componentDidMount(){
-    this.getAsyncData()
+    this._retrieveData()
     this.getDoctorInfo()
   }
 
