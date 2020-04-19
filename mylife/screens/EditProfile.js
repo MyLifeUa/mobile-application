@@ -26,7 +26,7 @@ import themeStyle from '../constants/theme.style.js';
 const { width, height } = Dimensions.get('screen');
 const API_URL = 'http://mednat.ieeta.pt:8442';
 
-const TOKEN = '4cbab41fb2bd5b2fbf35e307ecc8640e48eeabd8';
+const TOKEN = '917e31917733ee3a26383d6bd08a641ba5f0ffb3';
 
 //import all the basic component we have used
 

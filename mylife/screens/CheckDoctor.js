@@ -17,61 +17,181 @@ import { moderateScale, verticalScale } from 'react-native-size-matters';
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 
+const API = 'http://mednat.ieeta.pt:8442';
+
 
 export default class LoadingScreen extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
     this.state = {
-        doctor_email : 'vascoramos@ua.pt',
-        doctor_name : 'Vasco Ramos',
-        hospital: 'Hospital de Aveiro'
+        user_token: '',
+        email: 'tiagocmendes@ua.pt',
+        valid_doctor : false,
+        doctor_email : '',
+        doctor_name : '',
+        hospital: '',
+        photo64: '',
     }
   }
 
-  getDoctorInfo(){
+  componentDidMount(){
+    this.getAsyncData()
+    this.getDoctorInfo()
+  }
 
+  _retrieveData = async () => {
+    try {
+      const token = await AsyncStorage.getItem('token');
+      const email = await AsyncStorage.getItem('email');
+
+      if (email !== null && token !== null) {
+        // We have data!!
+        console.log(value);
+        this.setState({
+          email: token,
+          user_token: token
+        })
+      }
+    } catch (error) {
+      // Error retrieving data
+      console.log(error);
+      //testing purposes only
+      this.setState({
+        email: 'tiagocmendes@ua.pt',
+        user_token: '917e31917733ee3a26383d6bd08a641ba5f0ffb3'
+      })
+    }
+  };
+
+  getDoctorInfo(){
+    fetch(`${API}/doctor-patient-association`, {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        "Authorization": "Token " + this.state.user_token 
+      }
+    }).then((response) => response.json())
+    .then((json) => {
+          console.log(json);
+          if (json.state == "Error"){
+              alert(json.message)
+              this.setState({
+                valid_doctor:false
+              })
+          }
+          else { 
+              // Success
+              this.setState({
+                  valid_doctor : true,
+                  doctor_email : json.message.email,
+                  doctor_name : json.message.name,
+                  hospital: json.message.hospital,
+                  photo64: json.message.photo,
+              })
+          }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+  }
+
+  removeDoctor(){
+    fetch(`${API}/doctor-patient-association`, {
+      method: 'DELETE',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        "Authorization": "Token " + this.state.user_token
+      },
+      body: JSON.stringify({
+        client: this.state.email,
+        doctor: this.state.doctor_email
+      })
+    }).then((response) => response.json())
+    .then((json) => {
+          console.log(json);
+          if (json.state == "Error"){
+              alert(json.message)
+              this.setState({
+                valid_doctor:true
+              })
+          }
+          else { 
+              // Success
+              this.setState({
+                  valid_doctor : false,
+              })
+              alert("Sucessfully removed doctor")
+          }
+    })
+    .catch((error) => {
+        alert("Error fetching doctor")
+        console.log(error);
+    });
   }
 
   render() {
-    return (
-      <View>
-        <ScrollView style={styles.container}>
-            <View style={{
-              flex: 2,
-              marginTop: 0.036 * height,
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}>
+    if (this.state.valid_doctor == false) {
+      return (
+        <View>
+          <ScrollView style={styles.container}>
+              <View style={{
+                flex: 2,
+                marginTop: 0.036 * height,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
 
-            < Image style={{
-                width: moderateScale(200),
-                height: moderateScale(200),
-                borderRadius:300,
-                borderColor:theme.black,
-                resizeMode: 'contain',
-              }} source={require('../assets/tomas.png')} />
-
-            <Text style={{fontSize:theme.h1,color:theme.primary_color,fontWeight:'bold'}}>{this.state.doctor_name}</Text>
-
-            <Text style={{fontSize:theme.header,color:theme.primary_color}}>{this.state.doctor_email}</Text>
-            <Text style={{fontSize:theme.header,color:theme.black,fontWeight:'bold'}}>{this.state.hospital}</Text>
-            
-            <View style={{marginTop:verticalScale(2),alignContent:'center',justifyContent:'center'}}>
-            <TouchableOpacity style={styles.loginGoogleButton}
-                    onPress={()=> this.getDoctorInfo()}
-                    >
-                    <Text style={styles.loginButtonText}>
-                        Remove Doctor
-                    </Text>
-                </TouchableOpacity>
-            </View>
-
-            </View>
-
-        </ScrollView>
-      </View>
-    );
+              <Text style={{fontSize:theme.h1,color:theme.primary_color,fontWeight:'bold'}}>No doctor associated</Text>
+              <Text style={{fontSize:theme.header,color:theme.black,fontWeight:'bold'}}>Check back when one is assigned</Text>
+  
+              </View>
+  
+          </ScrollView>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <ScrollView style={styles.container}>
+              <View style={{
+                flex: 2,
+                marginTop: 0.036 * height,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+  
+              < Image style={{
+                  width: moderateScale(200),
+                  height: moderateScale(200),
+                  borderRadius:300,
+                  borderColor:theme.black,
+                  resizeMode: 'contain',
+                }} source={{uri:`data:image/png;base64,${this.state.photo64}`}} />
+  
+              <Text style={{fontSize:theme.h1,color:theme.primary_color,fontWeight:'bold'}}>{this.state.doctor_name}</Text>
+  
+              <Text style={{fontSize:theme.header,color:theme.primary_color}}>{this.state.doctor_email}</Text>
+              <Text style={{fontSize:theme.header,color:theme.black,fontWeight:'bold'}}>{this.state.hospital}</Text>
+              
+              <View style={{marginTop:verticalScale(2),alignContent:'center',justifyContent:'center'}}>
+              <TouchableOpacity style={styles.loginGoogleButton}
+                      onPress={()=> this.removeDoctor()}
+                      >
+                      <Text style={styles.loginButtonText}>
+                          Remove Doctor
+                      </Text>
+                  </TouchableOpacity>
+              </View>
+  
+              </View>
+  
+          </ScrollView>
+        </View>
+      );
+    }
   }
 }
 
