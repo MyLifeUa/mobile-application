@@ -36,16 +36,16 @@ export default class Register extends React.Component {
     super(props);
   }
   state = {
-    email:'',
-    password:'',
-    height :'',
-    current_weight:'',
-    weight_goal:'',
+    email:null,
+    password:null,
+    height :null,
+    current_weight:null,
+    weight_goal:null,
     birthday:'Birthdate',
-    sex:'',
-    phone_number:'',
+    sex:null,
+    phone_number:null,
     photo:'https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg',
-    photo_base64:''
+    photo_base64:null
   }
 
   componentDidMount(){
