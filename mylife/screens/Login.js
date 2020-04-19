@@ -21,6 +21,7 @@ const { width, height } = Dimensions.get('screen');
 const API_URL = 'http://mednat.ieeta.pt:8442';
 
 
+
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
@@ -40,6 +41,7 @@ export default class Login extends React.Component {
     console.log("Storing Token: "+token)
     try {
         await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('email', this.state.email);
         this.setState({user_token:token})
   
     } catch (error) {

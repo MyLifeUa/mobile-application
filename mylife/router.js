@@ -2,7 +2,8 @@ import React from "react";
 import { StyleSheet, Text, View,Platform, Button } from "react-native";
 
 import Profile from "./screens/Profile";
-import EditProfile from "./screens/EditProfile"
+import EditProfile from "./screens/EditProfile";
+import CheckDoctor from "./screens/CheckDoctor";
 
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
@@ -96,6 +97,11 @@ const ProfileNavigator = createStackNavigator(
           color: "white"
         },
         title: "EditProfile"
+      }
+    },
+    CheckDoctor: {screen: CheckDoctor,
+      navigationOptions : {
+        title: "Assigned Doctor"
       }
     }
   },

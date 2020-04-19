@@ -11,6 +11,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Platform,
+    Picker,
     TextInput,
     DatePickerAndroid,
     Text,
@@ -25,7 +26,7 @@ import themeStyle from '../constants/theme.style.js';
 const { width, height } = Dimensions.get('screen');
 const API_URL = 'http://mednat.ieeta.pt:8442';
 
-const TOKEN = '4cbab41fb2bd5b2fbf35e307ecc8640e48eeabd8';
+const TOKEN = '917e31917733ee3a26383d6bd08a641ba5f0ffb3';
 
 //import all the basic component we have used
 
@@ -181,6 +182,13 @@ export default class Register extends React.Component {
         this.setState({ phone_number: newText });
     }
 
+    // made async to wait for it to finish to keep working
+    async setSelectedGender(gender) {
+        await this.setState({
+            sex: gender
+        })
+    }
+
   render() {  
     return (
         <KeyboardAvoidingView style={styles.container} enabled>
@@ -242,14 +250,14 @@ export default class Register extends React.Component {
                     </View>
 
                     {/* Intro */}
-                    <View style={styles.inputView} >
-                        <TextInput  
-                            style={styles.inputText}
-                            value={this.state.sex}
-                            placeholderTextColor="#003f5c"
-                            maxLength={1}
-                            onChangeText={text => this.setState({sex:text})}/>
-                    </View>
+                    <Picker
+                            selectedValue={this.state.sex}
+                            style={styles.inputView}
+                            onValueChange={(itemValue,itemIndex) => this.setSelectedGender(itemValue)}
+                    >
+                            <Picker.Item label="Male" value="Male" />
+                            <Picker.Item label="Female" value="Female" />
+                    </Picker>
 
                     {/* Intro */}
                     <View style={styles.inputView} >

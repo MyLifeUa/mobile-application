@@ -19,7 +19,7 @@ import {
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 
-const TOKEN = '4cbab41fb2bd5b2fbf35e307ecc8640e48eeabd8';
+const TOKEN = '917e31917733ee3a26383d6bd08a641ba5f0ffb3';
 const API = 'http://mednat.ieeta.pt:8442';
 
 
@@ -32,7 +32,7 @@ export default class Login extends React.Component {
     this.state = {
         fetched: false,
         user_data: {
-            email: 'tomascosta@ua.pta',
+            email: 'tiagocmendes@ua.pt',
             height: null,
             weight: null,
             name: null,
@@ -226,13 +226,8 @@ export default class Login extends React.Component {
 
                 <TouchableOpacity style={styles.loginGoogleButtonDoctor}
 
-                    onPress={()=> this.props.navigation.navigate('EditProfile', {
-                        user_data: this.state.user_data,
+                    onPress={()=> this.props.navigation.navigate('CheckDoctor', {
                         email: this.state.user_data.email,
-                        weight: this.state.user_data.weight,
-                        height: this.state.user_data.height,
-                        goal_weight: this.state.user_data.weight,
-                        photo: this.state.user_data.weight
                     })}
                     >
                     <Text style={styles.loginButtonText}>
