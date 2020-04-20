@@ -6,6 +6,8 @@ import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import {
     View,
     Image,
+    Text,
+    AsyncStorage,
     StyleSheet,
     ScrollView,
     Dimensions
@@ -28,24 +30,36 @@ export default class FoodLog extends React.Component {
         /* Parent View */
         <View style={{flex:1, padding:moderateScale(10)}}>
             {/* Day selected */}
-            <View style={{flex:0.1,backgroundColor:'purple'}}>
+            <View style={{flex:0.08,backgroundColor:theme.green,flexDirection:'row',alignContent:'center',justifyContent:'center'}}>
+              {/* Align Vertically*/}
+              <View style={{flexDirection:'column', alignContent:'center',justifyContent:'center'}}>
+                <Text style={{fontSize:theme.header,color:'white',fontWeight:'bold'}}>Today</Text>
+              </View>
             </View>
             {/* Calories intake */}
             <ScrollView style={{flex:2,backgroundColor:'white', marginTop:verticalScale(5),}}>
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'blue'}}>
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+                <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black',fontWeight:'bold'}}>Breakfast</Text>
+
               </View>
 
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'green'}}>
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+                <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black',fontWeight:'bold'}}>Lunch</Text>
+
               </View>
 
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'yellow'}}>
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+                <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black',fontWeight:'bold'}}>Snacks</Text>
+
               </View>
 
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'black'}}>
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+                <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black',fontWeight:'bold'}}>Dinner</Text>
+
               </View>
 
             </ScrollView>
