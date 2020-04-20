@@ -1,10 +1,14 @@
 export default {
     primary_color: "#1D71B8",
+    primary_color_2:"rgb(0, 172, 193)",
     secondary: "#69C8F3",
     tertiary: "#FFE358",
     black: "#1F1F1F",
     white: "#FFFFFF",
     gray: "rgba(113,113,113,1)",
+    red: "#f55a4e",
+    green: "#52ab56",
+    gray2:"#eeeeee",
   
     // global sizes
     base: 16,
