@@ -27,18 +27,30 @@ export default class FoodLog extends React.Component {
     return (
         /* Parent View */
         <View style={{flex:1, padding:moderateScale(10)}}>
-          {/* Scrollview */}
-          <View style={{flex:1}}>
             {/* Day selected */}
-            <View style={{flex:0.2,backgroundColor:'purple'}}>
+            <View style={{flex:0.1,backgroundColor:'purple'}}>
             </View>
-
             {/* Calories intake */}
-            <View style={{flex:2,backgroundColor:'red'}}>
-            </View>
+            <ScrollView style={{flex:2,backgroundColor:'white', marginTop:verticalScale(5),}}>
+              {/* Day selected */}
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'blue'}}>
+              </View>
 
-          </View>
-          <FAB buttonColor={theme.primary_color} iconTextColor="#FFFFFF" onClickAction={() => {this.props.navigation.navigate('FoodLogRegister')}} visible={true} />
+              {/* Day selected */}
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'green'}}>
+              </View>
+
+              {/* Day selected */}
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'yellow'}}>
+              </View>
+
+              {/* Day selected */}
+              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:'black'}}>
+              </View>
+
+            </ScrollView>
+
+          <FAB buttonColor={theme.green} iconTextColor="#FFFFFF" onClickAction={() => {this.props.navigation.navigate('FoodLogRegister')}} visible={true} />
         </View>
     );
   }
