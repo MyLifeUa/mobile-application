@@ -14,7 +14,7 @@ import theme from '../constants/theme.style.js';
 
 //import all the basic component we have used
 
-export default class FoodLog extends React.Component {
+export default class DailyLog extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
