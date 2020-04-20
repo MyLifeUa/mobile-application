@@ -1,27 +1,27 @@
 import React from "react";
-import { StyleSheet, Text, View,Platform, Button } from "react-native";
 
+import { StyleSheet, Text, View,Platform, Button } from "react-native";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import CheckDoctor from "./screens/CheckDoctor";
 
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
+import FoodLogRegister from "./screens/FoodLogRegister";
+import FoodLogRegisterML from "./screens/FoodLogRegisterML";
+import IngredientList from "./screens/IngredientList";
+import MealRegister from "./screens/MealRegister";
 
 import Login from "./screens/Login";
 import Register from "./screens/Register";
-import {
-  createAppContainer,
-  createSwitchNavigator,
-  
-} from "react-navigation";
+import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
-import { createBottomTabNavigator } from 'react-navigation-tabs';
+import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
 import AuthLoadingScreen from "./components/auth/AuthLoadingScreen";
 import theme from "./constants/theme.style.js";
-import { Ionicons,Foundation } from '@expo/vector-icons';
-import Icon from './components/Icon';
+import { Ionicons, Foundation } from "@expo/vector-icons";
+import Icon from "./components/Icon";
 
 const LoginStack = createStackNavigator(
   //SignedOut Stack
@@ -126,7 +126,31 @@ const ProfileNavigator = createStackNavigator(
 const FoodLogsNavigator = createStackNavigator(
   //Signed In Stack
   {
-    FoodLogs: { screen: FoodLogs }
+    //FoodLogs: { screen: FoodLogs },
+    FoodLogRegister: {
+      screen: FoodLogRegister,
+      navigationOptions: {
+        title: "New Food Log"
+      }
+    },
+    FoodLogRegisterML: {
+      screen: FoodLogRegisterML,
+      navigationOptions: {
+        title: "MyLife Food Detector"
+      }
+    },
+    IngredientList: {
+      screen: IngredientList,
+      navigationOptions: {
+        title: "Ingredients"
+      }
+    },
+    MealRegister: {
+      screen: MealRegister,
+      navigationOptions: {
+        header: null
+      }
+    }
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -137,6 +161,7 @@ const FoodLogsNavigator = createStackNavigator(
       headerTitleStyle: {
         color: "white"
       },
+
       title: "Food Logs",
     }),
     
@@ -152,33 +177,32 @@ const AppNavigator = createBottomTabNavigator(
     //PratosRestauranteSide : { screen: PratosRestauranteSideStack},
     //AreaPessoal: { screen: PessoalStack},
     //PratoEspecifico: { screen: PratoEspecificoStack }, // alterei Gual
-    FoodLogs: { screen: FoodLogsNavigator,
+    FoodLogs: {
+      screen: FoodLogsNavigator,
       navigationOptions: {
-        tabBarLabel: 'Food Log', 
+        tabBarLabel: "Food Log",
         tabBarIcon: ({ tintColor }) => (
-            <Foundation name="book" color={tintColor} size={25} />
+          <Foundation name="book" color={tintColor} size={25} />
         )
-    }
-    
-    
+      }
     },
-    Home: { screen: ProfileNavigator,
+    Home: {
+      screen: ProfileNavigator,
       navigationOptions: {
-        tabBarLabel: 'Home', 
+        tabBarLabel: "Home",
         tabBarIcon: ({ tintColor }) => (
-            <Ionicons name="ios-home" color={tintColor} size={25} />
+          <Ionicons name="ios-home" color={tintColor} size={25} />
         )
-    }
-    
+      }
     },
-    Stats: { screen: StatsNavigator,
+    Stats: {
+      screen: StatsNavigator,
       navigationOptions: {
-        tabBarLabel: 'Stats', 
+        tabBarLabel: "Stats",
         tabBarIcon: ({ tintColor }) => (
-            <Ionicons name="md-stats" color={tintColor} size={25} />
+          <Ionicons name="md-stats" color={tintColor} size={25} />
         )
-    }
-    
+      }
     }
   },
   {
@@ -186,8 +210,7 @@ const AppNavigator = createBottomTabNavigator(
     tabBarOptions: {
       activeTintColor: theme.primary_color,
       inactiveTintColor: "gray"
-    },
-    
+    }
   }
 );
 
