@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 import theme from '../constants/theme.style.js';
+import FAB from 'react-native-fab'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 //import all the basic component we have used
@@ -27,7 +28,7 @@ export default class FoodLog extends React.Component {
         /* Parent View */
         <View style={{flex:1, padding:moderateScale(10)}}>
           {/* Scrollview */}
-          <ScrollView>
+          <View style={{flex:1}}>
             {/* Day selected */}
             <View style={{flex:0.2,backgroundColor:'purple'}}>
             </View>
@@ -36,8 +37,8 @@ export default class FoodLog extends React.Component {
             <View style={{flex:2,backgroundColor:'red'}}>
             </View>
 
-          </ScrollView>
-
+          </View>
+          <FAB buttonColor={theme.primary_color} iconTextColor="#FFFFFF" onClickAction={() => {this.props.navigation.navigate('FoodLogRegister')}} visible={true} />
         </View>
     );
   }
