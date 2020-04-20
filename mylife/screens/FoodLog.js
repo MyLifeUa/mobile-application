@@ -1,6 +1,7 @@
 //This is an example code for Bottom Navigation//
 import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import Swiper from 'react-native-swiper';
 //import react in our code.
 import {
     View,
@@ -22,27 +23,9 @@ export default class FoodLog extends React.Component {
 
   render() {
     return (
-        <ScrollView style={{}} contentContainerStyle={{ flexGrow: 1 }}>
-          <View style={{ flex:1}}>
-            <View style={{
-              flex: 2,
-              marginTop: 0.036 * height,
-              alignItems: 'center',
-              justifyContent: 'center',
-           
-            }}>
-
-              < Image style={{
-                width: 250,
-                height: 150,
-                resizeMode: 'contain',
-              }} source={require('../assets/icon.png')} />
-
-            </View>
-            <View style={{ flex: 1, }}>
-            </View>
-          </View>
-        </ScrollView>
+        <View>
+          
+        </View>
     );
   }
 }
