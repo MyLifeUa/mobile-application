@@ -19,7 +19,7 @@ import {
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 
-const TOKEN = '917e31917733ee3a26383d6bd08a641ba5f0ffb3';
+const TOKEN = '7b83a5098f99963e9790712441a57da2ef016d2a';
 const API = 'http://mednat.ieeta.pt:8442';
 
 
@@ -32,7 +32,7 @@ export default class Login extends React.Component {
     this.state = {
         fetched: false,
         user_data: {
-            email: 'tiagocmendes@ua.pt',
+            email: 'tomascosta@ua.pti',
             height: null,
             weight: null,
             name: null,

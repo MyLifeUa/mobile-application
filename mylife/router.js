@@ -126,7 +126,7 @@ const ProfileNavigator = createStackNavigator(
 const FoodLogsNavigator = createStackNavigator(
   //Signed In Stack
   {
-    //FoodLogs: { screen: FoodLogs },
+    FoodLogs: { screen: FoodLogs },
     FoodLogRegister: {
       screen: FoodLogRegister,
       navigationOptions: {

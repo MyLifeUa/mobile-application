@@ -22,8 +22,6 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <LinearGradient colors={['#C73737', '#EE7777']} start={{ x: 0, y: 0.5 }}
-        end={{ x: 1, y: 0.5 }} style={{flex:1}}>
         <ScrollView style={{}} contentContainerStyle={{ flexGrow: 1 }}>
           <View style={{ flex:1}}>
             <View style={{
@@ -45,7 +43,6 @@ export default class Login extends React.Component {
             </View>
           </View>
         </ScrollView>
-      </LinearGradient>
     );
   }
 }
