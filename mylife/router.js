@@ -4,6 +4,7 @@ import { StyleSheet, Text, View,Platform, Button } from "react-native";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import CheckDoctor from "./screens/CheckDoctor";
+import FitbitAuth from "./screens/FitbitAuth";
 
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
@@ -27,12 +28,6 @@ const LoginStack = createStackNavigator(
   //SignedOut Stack
   {
     //Defination of Navigaton from home screen
-    Login: {
-      screen: Login,
-      navigationOptions: {
-        header: null
-      }
-    },
     Register: {
       screen: Register,
       navigationOptions: {
@@ -45,7 +40,21 @@ const LoginStack = createStackNavigator(
         },
         title: "Register"
       }
-    }
+    },
+    FitbitAuth: {
+      screen: FitbitAuth,
+      navigationOptions: {
+        header: null
+      }
+    },
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null
+      }
+    },
+    
+    
   },
   {
     //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
@@ -231,7 +240,7 @@ const AppNavigatorFinal = createSwitchNavigator(
     AuthLoading: AuthLoadingScreen
   },
   {
-    initialRouteName: "AuthLoading"
+    initialRouteName: "Auth"
   }
 );
 
