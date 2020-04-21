@@ -83,7 +83,7 @@ const StatsNavigator = createStackNavigator(
       headerTitleStyle: {
         color: "white"
       },
-      title: "My Life"
+      title: "Stats"
     }),
     tabBarOptions: {
       activeTintColor: "#c73737",
