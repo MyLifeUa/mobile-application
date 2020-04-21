@@ -116,7 +116,6 @@ export default class Register extends React.Component {
   async componentDidMount() {
     await this._retrieveData();
 
-    console.log(this.props.navigation.getParam('checkedIngredients', 'NO a'))
 
     if (!this.state.SharedLoading) {
       this.getIngredients();
