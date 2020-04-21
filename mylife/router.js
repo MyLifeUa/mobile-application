@@ -28,6 +28,12 @@ const LoginStack = createStackNavigator(
   //SignedOut Stack
   {
     //Defination of Navigaton from home screen
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        header: null
+      }
+    },
     Register: {
       screen: Register,
       navigationOptions: {
@@ -47,12 +53,7 @@ const LoginStack = createStackNavigator(
         header: null
       }
     },
-    Login: {
-      screen: Login,
-      navigationOptions: {
-        header: null
-      }
-    },
+    
     
     
   },
@@ -240,7 +241,7 @@ const AppNavigatorFinal = createSwitchNavigator(
     AuthLoading: AuthLoadingScreen
   },
   {
-    initialRouteName: "Auth"
+    initialRouteName: "AuthLoading"
   }
 );
 
