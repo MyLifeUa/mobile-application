@@ -36,7 +36,26 @@ export default class FoodLog extends React.Component {
                 <Text style={{fontSize:theme.header,color:'white',fontWeight:'bold'}}>Today</Text>
               </View>
             </View>
+
+            
             {/* Calories intake */}
+            <View style={{height:verticalScale(100),marginTop:verticalScale(10),backgroundColor:theme.gray2,flexDirection:'column'}}>
+              {/* Calories intake text */}
+              <View style={{ alignContent:'center', justifyContent:'center',flexDirection:'row'}}>
+                <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black',fontWeight:'bold'}}>Calories Intake</Text>
+              </View>
+
+              {/* Calories intake numbers */}
+              <View style={{ alignContent:'space-around', justifyContent:'space-around',flexDirection:'row'}}>
+                <Text style={{padding:moderateScale(10),fontSize:theme.h2,color:'black',fontWeight:'bold'}}>2890</Text>
+                <Text style={{padding:moderateScale(10),fontSize:theme.h2,color:'black'}}>-</Text>
+                <Text style={{padding:moderateScale(10),fontSize:theme.h2,color:'black',fontWeight:'bold'}}>0</Text>
+                <Text style={{padding:moderateScale(10),fontSize:theme.h2,color:'black'}}>=</Text>
+                <Text style={{padding:moderateScale(10),fontSize:theme.h2,color:'black',fontWeight:'bold'}}>2890</Text>
+              </View>
+            </View>
+
+            {/* Scrollview */}
             <ScrollView style={{flex:2,backgroundColor:'white', marginTop:verticalScale(5),}}>
               {/* Day selected */}
               <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
