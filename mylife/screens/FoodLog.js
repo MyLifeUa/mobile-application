@@ -170,6 +170,18 @@ export default class FoodLog extends React.Component {
     }
   }
 
+  renderLeftCalories(){
+    if (this.state.data.calories_left > 0) {
+      return(
+        <Text style={{fontSize:theme.h2,color:'red',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
+      )
+    } else {
+      return(
+        <Text style={{fontSize:theme.h2,color:'green',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
+      )
+    }
+  }
+
   render() {
     return (
         /* Parent View */
@@ -208,7 +220,7 @@ export default class FoodLog extends React.Component {
                 <Text style={{padding:moderateScale(10),fontSize:theme.h2,color:'black'}}>=</Text>
                 
                 <View style={{flexDirection:'column',paddingHorizontal:moderateScale(10)}}>
-                  <Text style={{fontSize:theme.h2,color:'black',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
+                  {this.renderLeftCalories()}
                   <Text style={{marginBottom:moderateScale(30),fontSize:theme.header,color:'black'}}>Missing</Text>
                 </View>
 
