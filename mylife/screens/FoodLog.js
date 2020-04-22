@@ -67,7 +67,7 @@ export default class FoodLog extends React.Component {
 
   async componentDidMount() {
     //await this._retrieveData(); TODO uncomment this
-
+    this.getLogs()
     if (!this.state.SharedLoading) {
       this.getLogs();
     }
@@ -86,7 +86,7 @@ export default class FoodLog extends React.Component {
       })
     }
     //after new value is changes, refresh values
-    //this.getLogs()
+    this.getLogs()
   }
 
 
@@ -147,6 +147,8 @@ export default class FoodLog extends React.Component {
                     data: json.message
                     //if this doesnt work, change to individual attribution
                 })
+                console.log("New state")
+                console.log(this.state.data)
             }
       })
       .catch((error) => {
@@ -165,9 +167,13 @@ export default class FoodLog extends React.Component {
         </View>
       )
     } else {
-      return(
-        <Text style={{padding:moderateScale(10),fontSize:theme.h2,color:'black'}}>Registered meals</Text>
-      )    
+      return meals_array.map( meal => {
+        return(
+          <View style={{flexDirection:'row',alignContent:'flex-start',justifyContent:'flex-start'}}>
+            <Text>{meal.meal_name} + {meal.calories}</Text>
+          </View>
+        )
+      }); 
     }
   }
 
