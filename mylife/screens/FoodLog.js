@@ -73,19 +73,20 @@ export default class FoodLog extends React.Component {
     }
   }
 
-  handleNewLog(flag) {
+  handleNewLog = (flag) => {
+
     // if flag is positive then increment one day, if not decrease
     if (flag==true) {
       this.setState({
-        current_day: moment(this.state.current_day).add(1,"days")
+        current_day: moment(this.state.current_day).add(1,"days").format("YYYY-MM-DD")
       })
     } else {
       this.setState({
-        current_day: moment(this.state.current_day).add(-1,"days")
+        current_day: moment(this.state.current_day).add(-1,"days").format("YYYY-MM-DD")
       })
     }
     //after new value is changes, refresh values
-    this.getLogs()
+    //this.getLogs()
   }
 
 
@@ -187,10 +188,24 @@ export default class FoodLog extends React.Component {
         /* Parent View */
         <View style={{flex:1, padding:moderateScale(10)}}>
             {/* Day selected */}
-            <View style={{flex:0.08,backgroundColor:theme.green,flexDirection:'row',alignContent:'center',justifyContent:'center'}}>
-              {/* Align Vertically*/}
-              <View style={{flexDirection:'column', alignContent:'center',justifyContent:'center'}}>
-                <Text style={{fontSize:theme.header,color:'white',fontWeight:'bold'}}>{this.state.current_day}</Text>
+            <View style={{flex:0.08,backgroundColor:theme.green,flexDirection:'row'}}>
+              <View style={{flex:1,alignContent:'space-around', justifyContent:'space-around',flexDirection:'row'}}>
+                {/* Align Vertically*/}
+                <View style={{flexDirection:'column', alignContent:'center',justifyContent:'center'}}>
+                  <TouchableOpacity onPress={() => this.handleNewLog(false)}>
+                    <Text style={{fontSize:theme.h1,color:'white',fontWeight:'bold'}}>{'<'}</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View style={{flexDirection:'column', alignContent:'center',justifyContent:'center'}}>
+                  <Text style={{fontSize:theme.header,color:'white',fontWeight:'bold'}}>{this.state.current_day}</Text>
+                </View>
+
+                <View style={{flexDirection:'column', alignContent:'center',justifyContent:'center'}}>
+                  <TouchableOpacity onPress={() => this.handleNewLog(true)}>
+                    <Text style={{fontSize:theme.h1,color:'white',fontWeight:'bold'}}>{'>'}</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
             </View>
 
@@ -228,9 +243,9 @@ export default class FoodLog extends React.Component {
             </View>
 
             {/* Scrollview */}
-            <ScrollView style={{flex:2,backgroundColor:'white', marginTop:verticalScale(5),}}>
+            <ScrollView style={{flex:2,backgroundColor:'white', marginTop:verticalScale(10),}}>
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+              <View style={{height:verticalScale(150),marginBottom:verticalScale(5),backgroundColor:theme.gray2}}>
                 <View style={{flexDirection:'row', alignContent:'space-around', justifyContent:'space-around'}}>
                   <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Breakfast</Text>
                   <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black'}}>Total calories: {this.state.data.breakfast.total_calories}</Text>
