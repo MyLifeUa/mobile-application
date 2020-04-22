@@ -17,6 +17,8 @@ import theme from '../constants/theme.style.js';
 import FAB from 'react-native-fab'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+import moment from 'moment'
+
 const API_URL = "http://mednat.ieeta.pt:8442";
 
 //import all the basic component we have used
@@ -58,7 +60,7 @@ export default class FoodLog extends React.Component {
     },
 
       //selected day
-      current_day
+      current_day: moment(new Date()).format("YYYY-MM-DD")
 
     }
   }
@@ -69,6 +71,21 @@ export default class FoodLog extends React.Component {
     if (!this.state.SharedLoading) {
       this.getLogs();
     }
+  }
+
+  handleNewLog(flag) {
+    // if flag is positive then increment one day, if not decrease
+    if (flag==true) {
+      this.setState({
+        current_day: moment(this.state.current_day).add(1,"days")
+      })
+    } else {
+      this.setState({
+        current_day: moment(this.state.current_day).add(-1,"days")
+      })
+    }
+    //after new value is changes, refresh values
+    this.getLogs()
   }
 
 
