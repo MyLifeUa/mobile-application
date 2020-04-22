@@ -52,8 +52,6 @@ export default class Login extends React.Component {
     ]
   };
 
-
-
   render() {
     return (
       <View style={{ flex: 1 }}>
@@ -68,29 +66,33 @@ export default class Login extends React.Component {
         >
           <View
             style={{
-              flex: 1,
-              height: moderateScale(50),
+              flex: 0.2,
+              height: moderateScale(40),
               justifyContent: "center",
               alignItems: "center",
-              marginHorizontal: 30,
-              backgroundColor: theme.primary_color,
-              borderRadius: moderateScale(10),
-              marginTop: 20
+              flexDirection: "row",
+              backgroundColor: theme.primary_color
             }}
           >
+            <MaterialCommunityIcons
+              name={"dumbbell"}
+              size={moderateScale(20)}
+              color="white"
+            />
             <Text
               style={{
                 fontSize: moderateScale(20),
                 fontWeight: "bold",
                 color: theme.white,
-                textAlign: "center"
+                textAlign: "center",
+                marginLeft: 5
               }}
             >
               Body Stats
             </Text>
           </View>
 
-          <View style={{ flex: 1 }}>
+          <View style={{ flex: 1, marginVertical: 10 }}>
             <View
               style={{
                 flexDirection: "row",
@@ -100,7 +102,7 @@ export default class Login extends React.Component {
             >
               <TouchableOpacity
                 style={styles.squareView5}
-                onPress={() => this.makeRegisterRequest()}
+                onPress={() => this.props.navigation.navigate("HeartRateStats")}
               >
                 <View
                   style={{
@@ -243,187 +245,7 @@ export default class Login extends React.Component {
                       color: "white"
                     }}
                   >
-                    Calories
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <View
-            style={{
-              flex: 1,
-              height: moderateScale(50),
-              justifyContent: "center",
-              alignItems: "center",
-              marginHorizontal: 30,
-              backgroundColor: theme.primary_color,
-              borderRadius: moderateScale(10),
-              marginTop: 20
-            }}
-          >
-            <Text
-              style={{
-                fontSize: moderateScale(20),
-                fontWeight: "bold",
-                color: theme.white,
-                textAlign: "center"
-              }}
-            >
-              Nutrients Stats
-            </Text>
-          </View>
-
-          <View style={{ flex: 1 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                height: moderateScale(180),
-                justifyContent: "space-around"
-              }}
-            >
-              <TouchableOpacity style={styles.squareView5}>
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Ionicons
-                    name={"md-heart"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Resting heart rate
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                height: moderateScale(180),
-                justifyContent: "space-around"
-              }}
-            >
-              <TouchableOpacity style={styles.squareView}>
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Ionicons
-                    name={"md-walk"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Steps
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.squareView2}>
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name={"stairs"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Floors
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={{
-                flexDirection: "row",
-                height: moderateScale(180),
-                justifyContent: "space-around"
-              }}
-            >
-              <TouchableOpacity style={styles.squareView2}>
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name={"map-marker-distance"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Distance
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.squareView3}>
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Ionicons
-                    name={"md-flame"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Calories
+                    Calories burned
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -518,7 +340,7 @@ const styles = StyleSheet.create({
     elevation: 4
   },
   squareView5: {
-    flex: 1,
+    flex: 0.8,
     width: moderateScale(150),
     height: moderateScale(150),
     marginVertical: width * 0.03,

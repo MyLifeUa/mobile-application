@@ -56,6 +56,8 @@ export default class Register extends React.Component {
     console.log("Storing Token: "+token)
     try {
         await AsyncStorage.setItem('token', token);
+        await AsyncStorage.setItem('email', this.state.email);
+
         this.setState({user_token:token})
   
     } catch (error) {

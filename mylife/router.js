@@ -1,6 +1,6 @@
 import React from "react";
 
-import { StyleSheet, Text, View,Platform, Button } from "react-native";
+import { StyleSheet, Text, View, Platform, Button } from "react-native";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import CheckDoctor from "./screens/CheckDoctor";
@@ -8,6 +8,7 @@ import FitbitAuth from "./screens/FitbitAuth";
 
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
+import HeartRateStats from "./screens/HeartRateStats";
 import FoodLogRegister from "./screens/FoodLogRegister";
 import FoodLogRegisterML from "./screens/FoodLogRegisterML";
 import IngredientList from "./screens/IngredientList";
@@ -28,6 +29,12 @@ const LoginStack = createStackNavigator(
   //SignedOut Stack
   {
     //Defination of Navigaton from home screen
+    FitbitAuth: {
+      screen: FitbitAuth,
+      navigationOptions: {
+        header: null
+      }
+    },
     Login: {
       screen: Login,
       navigationOptions: {
@@ -47,14 +54,7 @@ const LoginStack = createStackNavigator(
         title: "Register"
       }
     },
-    FitbitAuth: {
-      screen: FitbitAuth,
-      navigationOptions: {
-        header: null
-      }
-    },
-    
-    
+
     
   },
   {
@@ -72,7 +72,13 @@ const LoginStack = createStackNavigator(
 const StatsNavigator = createStackNavigator(
   //Signed In Stack
   {
-    Stats: { screen: Stats }
+    Stats: { screen: Stats },
+    HeartRateStats: {
+      screen: HeartRateStats,
+      navigationOptions: {
+        title: "Resting heart rate"
+      }
+    }
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({
@@ -109,8 +115,9 @@ const ProfileNavigator = createStackNavigator(
         title: "EditProfile"
       }
     },
-    CheckDoctor: {screen: CheckDoctor,
-      navigationOptions : {
+    CheckDoctor: {
+      screen: CheckDoctor,
+      navigationOptions: {
         title: "Assigned Doctor"
       }
     }
@@ -172,10 +179,8 @@ const FoodLogsNavigator = createStackNavigator(
         color: "white"
       },
 
-      title: "Food Logs",
-    }),
-    
-   
+      title: "Food Logs"
+    })
   }
 );
 
@@ -241,7 +246,7 @@ const AppNavigatorFinal = createSwitchNavigator(
     AuthLoading: AuthLoadingScreen
   },
   {
-    initialRouteName: "AuthLoading"
+    initialRouteName: "Auth"
   }
 );
 

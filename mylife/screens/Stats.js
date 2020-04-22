@@ -21,6 +21,7 @@ import {
   ActivityIndicator,
   ScrollView
 } from "react-native";
+import Swiper from 'react-native-swiper'
 const { width, height } = Dimensions.get("screen");
 import theme from "../constants/theme.style.js";
 
@@ -75,23 +76,15 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <TabView
-            navigationState={this.state}
-            renderScene={this._renderScene}
-            onIndexChange={index => this.setState({ index })}
-            initialLayout={{ width: Dimensions.get('window').width }}
-            renderTabBar={props =>
-              <TabBar
-                {...props}
-                renderLabel={this._renderLabel}
-
-                indicatorStyle={{ backgroundColor: theme.primary_color }}
-                style={{ backgroundColor: 'rgba(43,43,43, 1)' }}
-              />
-            }
-          />
-      </View>
+      <Swiper 
+      showsButtons={false}
+      showsPagination={true}
+      
+      loop={false}>
+      <BodyStats navigation={this.props.navigation} />
+      <NutrientsStats />
+        
+      </Swiper>
     );
   }
 }
