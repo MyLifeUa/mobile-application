@@ -35,7 +35,27 @@ export default class FoodLog extends React.Component {
       user_token: '',
 
       //request
-      data_source : null,
+      data : {
+        total_calories: 0,
+        calories_goal: 0,
+        calories_left: 0,
+        breakfast: {
+            total_calories: 0,
+            meals: []
+        },
+        lunch: {
+            total_calories: 0,
+            meals: []
+        },
+        dinner: {
+            total_calories: 0,
+            meals: []
+        },
+        snack: {
+            total_calories: 0,
+            meals: []
+        }
+    },
 
       //selected day
       current_day
@@ -47,7 +67,7 @@ export default class FoodLog extends React.Component {
     //await this._retrieveData(); TODO uncomment this
 
     if (!this.state.SharedLoading) {
-      this.getMeals();
+      this.getLogs();
     }
   }
 
@@ -85,6 +105,38 @@ export default class FoodLog extends React.Component {
       });
     }
   };
+
+  //GET Request
+  getLogs(){
+
+    console.log(`${API_URL}/food-logs/${this.state.current_day}`)
+    fetch(`${API_URL}/food-logs/${this.state.current_day}`, {
+        method: 'GET',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+          "Authorization": "Token " + TOKEN 
+        }
+      }).then((response) => response.json())
+      .then((json) => {
+            console.log(json);
+            if (json.state == "Error"){
+                alert(json.message)
+            }
+            else { 
+                // Success
+                this.setState({
+                    data: json.message
+                    //if this doesnt work, change to individual attribution
+                })
+            }
+      })
+      .catch((error) => {
+          alert("Error adding Food Log.")
+          console.error(error);
+      });
+
+  }
 
   render() {
     return (
