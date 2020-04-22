@@ -17,13 +17,74 @@ import theme from '../constants/theme.style.js';
 import FAB from 'react-native-fab'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
+const API_URL = "http://mednat.ieeta.pt:8442";
+
 //import all the basic component we have used
 
 export default class FoodLog extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
+    this.state = {
+      //refreshes
+      refreshing: false,
+      SharedLoading: true,
+
+      //credentials
+      user_email: '',
+      user_token: '',
+
+      //request
+      data_source : null,
+
+      //selected day
+      current_day
+
+    }
   }
+
+  async componentDidMount() {
+    //await this._retrieveData(); TODO uncomment this
+
+    if (!this.state.SharedLoading) {
+      this.getMeals();
+    }
+  }
+
+
+  _storeData = async token => {
+    console.log("Storing Token: " + token);
+    try {
+      await AsyncStorage.setItem("token", token);
+      this.setState({ user_token: token });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  _retrieveData = async () => {
+    console.log("HELLO");
+
+    try {
+      const value = await AsyncStorage.getItem("token");
+      if (value !== null) {
+        // We have data!!
+        this.setState({
+          SharedLoading: false,
+          user_token: value
+        });
+      } else {
+        this.setState({
+          SharedLoading: false // TODO ELIMINATE THIS
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        SharedLoading: false // TODO ELIMINATE THIS
+      });
+    }
+  };
 
   render() {
     return (
