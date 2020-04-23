@@ -25,6 +25,7 @@ import Modal from "react-native-modal";
 
 import { ScrollView } from "react-native-gesture-handler";
 import themeStyle from "../constants/theme.style.js";
+import moment from "moment";
 const { width, height } = Dimensions.get("screen");
 const API_URL = "http://mednat.ieeta.pt:8442";
 
@@ -40,6 +41,7 @@ export default class Register extends React.Component {
     user_token: "",
     refreshing: false,
     SharedLoading: true,
+    stringDay:"",
     number_of_servings: "",
     day: "Pick a day",
     choosen_type_of_meal: "",
@@ -169,6 +171,7 @@ export default class Register extends React.Component {
               (month + 1).toString() +
               "-" +
               day.toString()
+            
           });
         }
       } catch ({ code, message }) {
@@ -240,7 +243,7 @@ export default class Register extends React.Component {
   }
 
   handleIdentifiedMeal = identifiedFood => {
-    console.log(identifiedFood);
+    this.setState({choosen__meal:identifiedFood["id"]})
   };
 
   handleRefresh = () => {
@@ -402,11 +405,11 @@ export default class Register extends React.Component {
         >
           <View
             style={{
-              flex: 0.3,
+              flex: 0.2,
               justifyContent: "center",
               alignItems: "center",
               padding: 20,
-              width: width
+              width: width,
             }}
           >
             <Text
@@ -423,6 +426,7 @@ export default class Register extends React.Component {
               </Text>
             </Text>
           </View>
+        
 
           <View style={styles.containerScroll}>
             {/* Pick day */}

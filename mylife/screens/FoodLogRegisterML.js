@@ -44,7 +44,7 @@ export default class Register extends React.Component {
     calories: 0,
     carbs: 0,
     fat: 0,
-    responseFood:[],
+    responseFood: [],
     protein: 0,
     user_token: "",
     SharedLoading: true,
@@ -123,7 +123,6 @@ export default class Register extends React.Component {
   async componentDidMount() {
     await this._retrieveData();
     await this.getPermissionAsync();
-
   }
 
   _storeData = async token => {
@@ -161,24 +160,22 @@ export default class Register extends React.Component {
   };
 
   _removeData = async () => {
-    // TODO Remove Fitbit flag 
+    // TODO Remove Fitbit flag
   };
 
   async processResponse(response) {
     const statusCode = response.status;
     const data = response.json();
     const res = await Promise.all([statusCode, data]);
-    return ({
+    return {
       statusCode: res[0],
       responseJson: res[1]
-    });
-  };
+    };
+  }
 
-  async processInvalidToken () {
-    this._removeData()
+  async processInvalidToken() {
+    this._removeData();
     this.props.navigation.navigate("Auth");
-    
-
   }
 
   addFoodRecognition() {
@@ -203,35 +200,35 @@ export default class Register extends React.Component {
           image_b64: this.state.imageBase64
         })
       })
-      .then(this.processResponse)
-      .then(res => {
+        .then(this.processResponse)
+        .then(res => {
+          const { statusCode, responseJson } = res;
 
-        const { statusCode, responseJson } = res;
-
-        if (statusCode==401){
-          this.processInvalidToken()
-
-        }else{
-          console.log(responseJson);
-          if (responseJson.state == "Error") {
-            alert(responseJson.message);
-            this.setState({
-              showViewError: true,
-              Loading: false,
-              showView: false
-            });
+          if (statusCode == 401) {
+            this.processInvalidToken();
           } else {
-            this.setState({
-              showViewError: false,
-              Loading: false,
-              showView: true,
-              identifiedFood: responseJson["message"]["food"],
-              responseFood:responseJson["message"]
-            });
+            console.log(responseJson);
+            if (responseJson.state == "Error") {
+              alert(responseJson.message);
+              this.setState({
+                showViewError: true,
+                Loading: false,
+                showView: false
+              });
+            } else {
+              this.setState({
+                showViewError: false,
+                Loading: false,
+                showView: true,
+                identifiedFood: responseJson["message"]["name"],
+                responseFood: responseJson["message"],
+                calories: responseJson["message"]["calories"],
+                fat: responseJson["message"]["fat"],
+                protein: responseJson["message"]["proteins"],
+                carbs: responseJson["message"]["carbs"]
+              });
+            }
           }
-
-        }
-          
         })
         .catch(error => {
           alert("Error adding Food Log.");
@@ -270,9 +267,11 @@ export default class Register extends React.Component {
   };
 
   goBackWithMeal = () => {
-    this.props.navigation.state.params.handleIdentifiedMeal(this.state.responseFood);
+    this.props.navigation.state.params.handleIdentifiedMeal(
+      this.state.responseFood
+    );
     this.props.navigation.goBack(null);
-  }
+  };
 
   async getMeals() {
     var login_info = "Token " + this.state.user_token;
@@ -344,24 +343,32 @@ export default class Register extends React.Component {
       );
     } else if (showView) {
       return (
-        <View style={{flex:0.35}}>
-          <View style={{ flex: 0.3, justifyContent: "center", marginHorizontal: 10,backgroundColor:theme.primary_color,borderRadius:moderateScale(20) }}>
+        <View style={{ flex: 0.35 }}>
+          <View
+            style={{
+              flex: 0.4,
+              justifyContent: "center",
+              backgroundColor: theme.primary_color
+            }}
+          >
             <Text
               style={{
                 fontSize: moderateScale(17),
-                marginLeft:10,
+                marginLeft: 10,
                 fontWeight: "500",
                 color: themeStyle.white
               }}
             >
+              Identified food :
               <Text
                 style={{
                   fontSize: moderateScale(17),
                   fontWeight: "bold",
-                  color: themeStyle.white,
+                  color: themeStyle.white
                 }}
               >
-                Identified food :  {this.state.identifiedFood}
+                {" "}
+                {this.state.identifiedFood}
               </Text>
             </Text>
           </View>
@@ -369,9 +376,9 @@ export default class Register extends React.Component {
           <View
             style={{
               flexDirection: "row",
-              marginVertical:moderateScale(10),
+              marginVertical: moderateScale(10),
               height: moderateScale(100),
-              justifyContent: "space-around",
+              justifyContent: "space-around"
             }}
           >
             <View style={styles.squareView}>
@@ -498,11 +505,7 @@ export default class Register extends React.Component {
     let { image } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} enabled>
-        <View
-          style={{ flex: 1, width: "100%",justifyContent:"center" }}
-         
-          
-        >
+        <View style={{ flex: 1, width: "100%", justifyContent: "center" }}>
           {/*<View
             style={{
               flex: 0.3,
@@ -533,7 +536,7 @@ export default class Register extends React.Component {
                 alignContent: "center",
                 alignItems: "center",
                 justifyContent: "flex-end",
-                marginTop:10
+                marginTop: 10
               }}
             >
               {image && (
@@ -612,7 +615,7 @@ export default class Register extends React.Component {
               style={{
                 flex: 0.05,
                 justifyContent: "flex-start",
-                alignItems: "center",
+                alignItems: "center"
               }}
             >
               <TouchableOpacity
@@ -718,8 +721,6 @@ export default class Register extends React.Component {
                     
 
                 </View>*/}
-
-          
         </View>
         <Toast
           ref="toast"
@@ -741,13 +742,12 @@ const styles = StyleSheet.create({
     backgroundColor: theme.gray2,
     width: "90%",
     borderRadius: 10,
-    marginVertical:20,
+    marginVertical: 20,
     elevation: 8, // Android
     shadowColor: "rgba(0,0,0, .4)", // IOS
     shadowOffset: { height: 1, width: 1 }, // IOS
     shadowOpacity: 1, // IOS
-    shadowRadius: 1, //IOS
-
+    shadowRadius: 1 //IOS
   },
   squaretext: {
     fontSize: moderateScale(20),
