@@ -96,9 +96,7 @@ export default class Register extends React.Component {
                 alert(json.message)
             }
             else { 
-                this._storeData(json.token)
-                    
-                this.props.navigation.navigate('Profile')
+                this.makeLoginRequest();
             }
       })
       .catch((error) => {
@@ -108,6 +106,41 @@ export default class Register extends React.Component {
     }
     
   }
+
+  makeLoginRequest(){
+    //unsecure way to send a post
+  
+    console.log("Fetching:" + `${API_URL}/login`)
+    fetch(`${API_URL}/login`, {
+        method: 'POST',
+        headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+        username: this.state.email,
+        password: this.state.password,
+        }),
+    })
+    .then((response) => response.json())
+    .then((json) => {
+        console.log(json);
+        if (json.detail != undefined){
+            //Credentials incorrect
+            alert("Login Credentials are invalid.")
+        }
+        else { 
+        this._storeData(json.token)
+            
+        this.props.navigation.navigate('FitbitAuth')
+        }
+    })
+    .catch((error) => {
+        alert("Error fetching login")
+        console.error(error);
+    });
+  
+}
 
   // Get permissions from camera
   getPermissionAsync = async () => {

@@ -4,6 +4,7 @@ import { StyleSheet, Text, View,Platform, Button } from "react-native";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import CheckDoctor from "./screens/CheckDoctor";
+import FitbitAuth from "./screens/FitbitAuth";
 
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
@@ -45,7 +46,16 @@ const LoginStack = createStackNavigator(
         },
         title: "Register"
       }
-    }
+    },
+    FitbitAuth: {
+      screen: FitbitAuth,
+      navigationOptions: {
+        header: null
+      }
+    },
+    
+    
+    
   },
   {
     //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
