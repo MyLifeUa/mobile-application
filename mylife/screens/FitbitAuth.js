@@ -158,7 +158,8 @@ export default class Login extends React.Component {
         code: code,
         grant_type: "authorization_code",
         redirect_uri: redirectUrl,
-        expires_in:"3600"
+        expires_in: "3600"
+
       })
     })
       .then(response => response.json())
@@ -168,7 +169,7 @@ export default class Login extends React.Component {
         this.setState(
           {
             accessToken: json["access_token"],
-            refresToken: json["refresh_token"]
+            refresToken: json["refresh_token"],
           },
           () => {
             this.addToken();

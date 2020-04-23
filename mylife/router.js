@@ -9,6 +9,8 @@ import FitbitAuth from "./screens/FitbitAuth";
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
 import HeartRateStats from "./screens/HeartRateStats";
+import StepsStats from "./screens/StepsStats";
+
 import FoodLogRegister from "./screens/FoodLogRegister";
 import FoodLogRegisterML from "./screens/FoodLogRegisterML";
 import IngredientList from "./screens/IngredientList";
@@ -29,12 +31,6 @@ const LoginStack = createStackNavigator(
   //SignedOut Stack
   {
     //Defination of Navigaton from home screen
-    FitbitAuth: {
-      screen: FitbitAuth,
-      navigationOptions: {
-        header: null
-      }
-    },
     Login: {
       screen: Login,
       navigationOptions: {
@@ -54,6 +50,14 @@ const LoginStack = createStackNavigator(
         title: "Register"
       }
     },
+    FitbitAuth: {
+      screen: FitbitAuth,
+      navigationOptions: {
+        header: null
+      }
+    },
+    
+    
 
     
   },
@@ -77,6 +81,12 @@ const StatsNavigator = createStackNavigator(
       screen: HeartRateStats,
       navigationOptions: {
         title: "Resting heart rate"
+      }
+    },
+    StepsStats: {
+      screen: StepsStats,
+      navigationOptions: {
+        title: "Steps"
       }
     }
   },

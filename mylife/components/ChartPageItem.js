@@ -299,13 +299,13 @@ export default class Register extends React.Component {
   render() {  
     return (
         <View style={{height:moderateScale(80),  borderBottomWidth: 1,borderColor:theme.primary_color}}>
-              <View style={{flex:2,flexDirection:"row",backgroundColor:theme.primary_color_2}}>
+              <View style={{flex:2,flexDirection:"row",backgroundColor:"white"}}>
                 <View style={{flex:0.5,alignItems:"flex-start",justifyContent:"center",paddingLeft:20}}>
-                    <Text style={{fontSize:moderateScale(20),color:theme.white,fontWeight:"bold"}} >{this.props.date}</Text>
+                    <Text style={{fontSize:moderateScale(20),color:theme.primary_color,fontWeight:"bold"}} >{this.props.date}</Text>
                 </View>
                 <View style={{flex:1.5,alignItems:"center",flexDirection:"row",justifyContent:"flex-start",marginLeft:20}}>
-                    <Text style={{fontSize:moderateScale(22),color:theme.white,fontWeight:"600"}} >{this.props.value}</Text>
-                    <Text style={{fontSize:moderateScale(20),color:theme.gray2,fontWeight:"600"}} >  {this.props.metrics}</Text>
+                    <Text style={{fontSize:moderateScale(22),color:theme.primary_color,fontWeight:"600"}} >{this.props.value}</Text>
+                    <Text style={{fontSize:moderateScale(20),color:theme.primary_color,fontWeight:"600"}} >  {this.props.metrics}</Text>
                 </View>
                 
               </View>

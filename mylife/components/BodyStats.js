@@ -136,7 +136,10 @@ export default class Login extends React.Component {
                 justifyContent: "space-around"
               }}
             >
-              <TouchableOpacity style={styles.squareView}>
+              <TouchableOpacity style={styles.squareView}
+                  onPress={() => this.props.navigation.navigate("StepsStats")}
+
+              >
                 <View
                   style={{
                     flex: 1,

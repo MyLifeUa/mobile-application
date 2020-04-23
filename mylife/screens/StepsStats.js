@@ -158,13 +158,13 @@ export default class Login extends React.Component {
     console.log(
       `${API_URL}/health-stats/body/history/` +
         this.state.user_email +
-        `?metric=heart&period=week`
+        `?metric=steps&period=week`
     );
 
     fetch(
       `${API_URL}/health-stats/body/history/` +
         this.state.user_email +
-        `?metric=heart&period=` +
+        `?metric=steps&period=` +
         this.state.choosen_period,
       {
         method: "GET",
@@ -184,12 +184,12 @@ export default class Login extends React.Component {
           if (this.state.choosen_period == "week") {
             let labels = [];
             let chartData = [];
+            let chartDataGoal=[];
             let dataSourceWeek = [];
             for (var i = 0; i < responseJson.message.history.length; i++) {
               console.log(
-                moment(
-                  responseJson["message"]["history"][i]["dateTime"]
-                ).format("D/MM")
+                
+                  responseJson["message"]["goal"]
               );
               labels.push(
                 moment(
@@ -197,6 +197,7 @@ export default class Login extends React.Component {
                 ).format("D/MM")
               );
               chartData.push(responseJson["message"]["history"][i]["value"]);
+              chartDataGoal.push(responseJson["message"]["goal"]);
               dataSourceWeek.push({
                 day: moment(
                   responseJson["message"]["history"][i]["dateTime"]
@@ -210,13 +211,15 @@ export default class Login extends React.Component {
             this.setState({
               Loading: false,
               labels: labels,
-              chartData: [{ data: chartData },],
+              chartData: [{ data: chartData },{ data:chartDataGoal,color:(opacity = 0) => `rgba(245,90,78, ${opacity})`}],
               dataSourceMetrics: dataSourceWeek.reverse()
             });
             console.log(this.state.chartData);
           }else if (this.state.choosen_period == "month") {
             let labels = [];
             let chartData = [];
+            let chartDataGoal=[];
+
             //console.log("Length: "+responseJson.message.history.length/4);
             /*for (var i = 0; i < responseJson.message.history.length; i=i+4) {
               
@@ -232,6 +235,8 @@ export default class Login extends React.Component {
               
               
               chartData.push(responseJson["message"]["history"][i]["value"]);
+              chartDataGoal.push(responseJson["message"]["goal"]);
+
               labels.push(
                 moment(
                   responseJson["message"]["history"][i]["dateTime"]
@@ -245,12 +250,14 @@ export default class Login extends React.Component {
             this.setState({
               Loading: false,
               labels: labels,
-              chartData: [{ data: chartData }],
+              chartData: [{ data: chartData },{ data:chartDataGoal,color:(opacity = 0) => `rgba(245,90,78, ${opacity})`}],
             });
             console.log(this.state.chartData);
           }else if (this.state.choosen_period == "3-months") {
             let labels = [];
             let chartData = [];
+            let chartDataGoal=[];
+
             //console.log("Length: "+responseJson.message.history.length/4);
             /*for (var i = 0; i < responseJson.message.history.length; i=i+12) {
               
@@ -266,6 +273,8 @@ export default class Login extends React.Component {
               
               
               chartData.push(responseJson["message"]["history"][i]["value"]);
+              chartDataGoal.push(responseJson["message"]["goal"]);
+
               labels.push(
                 moment(
                   responseJson["message"]["history"][i]["dateTime"]
@@ -279,7 +288,7 @@ export default class Login extends React.Component {
             this.setState({
               Loading: false,
               labels: labels,
-              chartData: [{ data: chartData }],
+              chartData: [{ data: chartData },{ data:chartDataGoal,color:(opacity = 0) => `rgba(245,90,78, ${opacity})`}],
             });
             console.log(this.state.chartData);
           }
@@ -298,7 +307,7 @@ export default class Login extends React.Component {
       /*Aqui passar: ferias={item.ferias} */
     }
 
-    return <HeartRateItem date={item.day} value={item.value} metrics={"bpm"} />;
+    return <HeartRateItem date={item.day} value={item.value} metrics={"steps"} />;
   };
 
   _listEmptyComponent = () => {
@@ -373,7 +382,7 @@ export default class Login extends React.Component {
           data={{
             labels: this.state.labels,
             datasets: this.state.chartData,
-            legend: ["Heart Rate / Day"] // optional
+            legend: ["Steps / Day", "Goal steps"] // optional
           }}
           width={Dimensions.get("window").width - moderateScale(30)} // from react-native
           height={moderateScale(270)}
@@ -426,10 +435,10 @@ export default class Login extends React.Component {
                 }}
               >
                 <Ionicons
-                  name={"md-heart"}
-                  size={moderateScale(20)}
-                  color={theme.red}
-                />
+                    name={"md-walk"}
+                    size={moderateScale(20)}
+                    color={theme.red}
+                  />
 
                 <Text
                   style={{
@@ -438,7 +447,7 @@ export default class Login extends React.Component {
                     marginLeft: 5
                   }}
                 >
-                  Heart Rate
+                  Steps
                 </Text>
               </View>
               <View
@@ -502,7 +511,7 @@ export default class Login extends React.Component {
             }}
           >
             <Ionicons
-              name={"md-heart"}
+              name={"md-walk"}
               size={moderateScale(20)}
               color={theme.red}
             />
@@ -514,7 +523,7 @@ export default class Login extends React.Component {
                 marginLeft: 5
               }}
             >
-              Heart Rate (Last 7 days)
+              Steps (Last 7 days)
             </Text>
           </View>
           {this.renderList()}
