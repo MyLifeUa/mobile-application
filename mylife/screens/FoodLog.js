@@ -10,12 +10,13 @@ import {
     AsyncStorage,
     StyleSheet,
     ScrollView,
-    Dimensions
+    Dimensions,
+    RefreshControl
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 import theme from '../constants/theme.style.js';
 import FAB from 'react-native-fab'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 
 import moment from 'moment'
 
@@ -72,6 +73,26 @@ export default class FoodLog extends React.Component {
       this.getLogs();
     }
   }
+
+  async processInvalidToken() {
+    this._removeData();
+    this.props.navigation.navigate("Auth");
+  }
+
+  _removeData = async () => {
+    // TODO Remove Fitbit flag
+  };
+
+  async processResponse(response) {
+    const statusCode = response.status;
+    const data = response.json();
+    const res = await Promise.all([statusCode, data]);
+    return {
+      statusCode: res[0],
+      responseJson: res[1]
+    };
+  }
+
 
   handleNewLog = async (flag) => {
 
@@ -148,7 +169,8 @@ export default class FoodLog extends React.Component {
             else { 
                 // Success
                 this.setState({
-                    data: json.message
+                    data: json.message,
+                    refresh: !this.state.refresh
                     //if this doesnt work, change to individual attribution
                 })
                 console.log("New state")
@@ -173,7 +195,7 @@ export default class FoodLog extends React.Component {
     } else {
       return meals_array.map( meal => {
         return(
-          <View style={{flexDirection:'row',alignContent:'flex-start',justifyContent:'flex-start'}}>
+          <View style={{flexDirection:'row',alignContent:'center',justifyContent:'center'}}>
             <Text>{meal.number_of_servings}x {meal.meal_name} with {meal.calories.toFixed(1)} kcal</Text>
           </View>
         )
@@ -184,14 +206,56 @@ export default class FoodLog extends React.Component {
   renderLeftCalories(){
     if (this.state.data.calories_left > 0) {
       return(
-        <Text style={{fontSize:theme.h2,color:'red',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
+        <Text style={{fontSize:theme.h2,color:'green',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
       )
     } else {
       return(
-        <Text style={{fontSize:theme.h2,color:'green',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
+        <Text style={{fontSize:theme.h2,color:'red',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
       )
     }
   }
+
+  //whole flatlist and its components
+  renderList(meal_array) {
+    const { refreshing } = this.state;
+
+    return (
+      <View style={{ flex: 0.7 }}>
+        <FlatList
+          Vertical
+          showsVericalScrollIndicator={false}
+          data={meal_array}
+          extraData={this.state.refresh}
+          ListFooterComponent={this.renderFooterList}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this.handleRefresh}
+            />
+          }
+          renderItem={(item, index) => this.renderItem(item, index)}
+          keyExtractor={val => val.id}
+          initialNumToRender={2}
+        />
+      </View>
+    );
+  }
+
+  renderItem = ({ meal, index }) => {
+    console.log("This is the meal")
+    console.log(meal)
+    console.log(index)
+    return (
+      <View style={{flexDirection:'row',alignContent:'center',justifyContent:'center'}}>
+        <Text>{meal.number_of_servings}x {meal.meal_name} with {meal.calories.toFixed(1)} kcal</Text>
+      </View>
+    );
+  };
+
+  renderFooterList = () => {
+    return <View style={{ paddingVertical: 60 }}></View>;
+  };
+
 
   render() {
     return (
