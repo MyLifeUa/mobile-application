@@ -10,12 +10,13 @@ import {
     AsyncStorage,
     StyleSheet,
     ScrollView,
-    Dimensions
+    Dimensions,
+    RefreshControl
 } from 'react-native';
 const { width, height } = Dimensions.get('screen');
 import theme from '../constants/theme.style.js';
 import FAB from 'react-native-fab'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { TouchableOpacity, FlatList } from 'react-native-gesture-handler';
 
 import moment from 'moment'
 
@@ -34,7 +35,7 @@ export default class FoodLog extends React.Component {
 
       //credentials
       user_email: '',
-      user_token: 'a950f777fcc77d3a109210cedbfca69d7c5a9f8e',
+      user_token: '',
 
       //request
       data : {
@@ -66,27 +67,51 @@ export default class FoodLog extends React.Component {
   }
 
   async componentDidMount() {
-    //await this._retrieveData(); TODO uncomment this
+    await this._retrieveData(); //TODO uncomment this
     this.getLogs()
     if (!this.state.SharedLoading) {
       this.getLogs();
     }
   }
 
-  handleNewLog = (flag) => {
+  async processInvalidToken() {
+    this._removeData();
+    this.props.navigation.navigate("Auth");
+  }
+
+  _removeData = async () => {
+    // TODO Remove Fitbit flag
+  };
+
+  async processResponse(response) {
+    const statusCode = response.status;
+    const data = response.json();
+    const res = await Promise.all([statusCode, data]);
+    return {
+      statusCode: res[0],
+      responseJson: res[1]
+    };
+  }
+
+
+  handleNewLog = async (flag) => {
+
+
 
     // if flag is positive then increment one day, if not decrease
     if (flag==true) {
-      this.setState({
+      await this.setState({
         current_day: moment(this.state.current_day).add(1,"days").format("YYYY-MM-DD")
       })
     } else {
-      this.setState({
+      await this.setState({
         current_day: moment(this.state.current_day).add(-1,"days").format("YYYY-MM-DD")
       })
     }
+    
     //after new value is changes, refresh values
-    this.getLogs()
+    await this.getLogs()
+
   }
 
 
@@ -144,7 +169,8 @@ export default class FoodLog extends React.Component {
             else { 
                 // Success
                 this.setState({
-                    data: json.message
+                    data: json.message,
+                    refresh: !this.state.refresh
                     //if this doesnt work, change to individual attribution
                 })
                 console.log("New state")
@@ -160,18 +186,44 @@ export default class FoodLog extends React.Component {
 
   //takes in meals as an array argument and renders it
   renderScrollMeals(meals_array) {
-    if (meals_array.length == 0) {
+    if (meals_array.length == 0) { 
       return(
-        <View style={{flexDirection:'row',alignContent:'center',justifyContent:'center', marginTop:verticalScale(15)}}>
-          <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black'}}>No registered meals</Text>
+        <View style={{flex:1, flexGrow:1, height:verticalScale(50) ,backgroundColor:'white',borderColor:theme.gray2,borderBottomWidth:4,borderLeftWidth:4,borderRightWidth:4}}>
+            <View style={{flexDirection:'row'}}>
+              <View style={{flexDirection:'column',flex:4,alignContent:'center',justifyContent:'center', paddingHorizontal:moderateScale(5)}}>            
+                <Text style={{fontSize:theme.header}}>No registered meals</Text>
+              </View>
+
+              <View style={{flexDirection:'column', alignContent:'center', justifyContent:'center',paddingHorizontal:moderateScale(5)}}>
+                <Text style={{fontSize:theme.header}}>0</Text>
+              </View>
+
+            </View>
         </View>
       )
     } else {
       return meals_array.map( meal => {
         return(
-          <View style={{flexDirection:'row',alignContent:'flex-start',justifyContent:'flex-start'}}>
-            <Text>{meal.meal_name} + {meal.calories}</Text>
+          /*
+          <View style={{flexDirection:'row',alignContent:'flex-start',justifyContent:'flex-start',paddingLeft:moderateScale(5)}}>
+            <Text style={{fontSize:theme.header}}>{meal.number_of_servings}x {meal.meal_name} with {meal.calories.toFixed(1)} kcal</Text>
           </View>
+          */
+          <View style={{flex:1, flexGrow:1, height:verticalScale(50) ,backgroundColor:'white',borderColor:theme.gray2,borderBottomWidth:4,borderLeftWidth:4,borderRightWidth:4}}>
+            <View style={{flexDirection:'row'}}>
+              <View style={{flexDirection:'column',flex:4,alignContent:'flex-start',justifyContent:'flex-start', paddingHorizontal:moderateScale(5)}}>
+                <Text style={{fontSize:theme.header,fontWeight:'bold'}}>{meal.meal_name}</Text>
+                <Text style={{fontSize:theme.header}}>{meal.meal_category}, {meal.number_of_servings} servings</Text>
+              </View>
+
+              <View style={{flexDirection:'column', alignContent:'center', justifyContent:'center',paddingHorizontal:moderateScale(5)}}>
+                <Text style={{fontSize:theme.header}}>{meal.calories.toFixed(0)}</Text>
+              </View>
+
+            </View>
+          </View>
+
+  
         )
       }); 
     }
@@ -180,7 +232,7 @@ export default class FoodLog extends React.Component {
   renderLeftCalories(){
     if (this.state.data.calories_left > 0) {
       return(
-        <Text style={{fontSize:theme.h2,color:'red',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
+        <Text style={{fontSize:theme.h2,color:'red',fontWeight:'bold'}}>-{this.state.data.calories_left}</Text>
       )
     } else {
       return(
@@ -189,12 +241,13 @@ export default class FoodLog extends React.Component {
     }
   }
 
+
   render() {
     return (
         /* Parent View */
         <View style={{flex:1, padding:moderateScale(10)}}>
             {/* Day selected */}
-            <View style={{flex:0.08,backgroundColor:theme.green,flexDirection:'row'}}>
+            <View style={{flex:0.08,backgroundColor:theme.primary_color_2,flexDirection:'row'}}>
               <View style={{flex:1,alignContent:'space-around', justifyContent:'space-around',flexDirection:'row'}}>
                 {/* Align Vertically*/}
                 <View style={{flexDirection:'column', alignContent:'center',justifyContent:'center'}}>
@@ -220,7 +273,7 @@ export default class FoodLog extends React.Component {
             <View style={{height:verticalScale(100),marginTop:verticalScale(10),backgroundColor:theme.gray2,flexDirection:'column'}}>
               {/* Calories intake text */}
               <View style={{ alignContent:'center', justifyContent:'center',flexDirection:'row'}}>
-                <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black',fontWeight:'bold'}}>Calories Intake</Text>
+                <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Calories Intake</Text>
               </View>
 
               {/* Calories intake numbers */}
@@ -242,61 +295,96 @@ export default class FoodLog extends React.Component {
                 
                 <View style={{flexDirection:'column',paddingHorizontal:moderateScale(10)}}>
                   {this.renderLeftCalories()}
-                  <Text style={{marginBottom:moderateScale(30),fontSize:theme.header,color:'black'}}>Missing</Text>
+                  <Text style={{marginBottom:moderateScale(30),fontSize:theme.header,color:'black'}}>Remaining</Text>
                 </View>
 
               </View>
             </View>
 
             {/* Scrollview */}
-            <ScrollView style={{flex:2,backgroundColor:'white', marginTop:verticalScale(10),}}>
+            <ScrollView 
+              style={{flex:2,backgroundColor:'white', marginTop:verticalScale(10),}}
+              refreshControl={
+                <RefreshControl
+                  refreshing={this.state.refreshing}
+                  onRefresh={this.handleRefresh}
+                />}
+              >
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginBottom:verticalScale(5),backgroundColor:theme.gray2}}>
-                <View style={{flexDirection:'row', alignContent:'space-around', justifyContent:'space-around'}}>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Breakfast</Text>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black'}}>Total calories: {this.state.data.breakfast.total_calories}</Text>
+              <View style={{minHeight:verticalScale(40),flexGrow:2,marginBottom:verticalScale(5),backgroundColor:theme.gray2}}>
+                <View style={{flexDirection:'row'}}>
+                  <View style={{ flex:4,alignContent:'flex-start', justifyContent:'flex-start'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Breakfast</Text>
+                  </View>
+
+                  <View style={{alignContent:'flex-end', justifyContent:'flex-end'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black',fontWeight:'bold'}}>{this.state.data.breakfast.total_calories}</Text>
+                  </View>
                 </View>
                 
-                {this.renderScrollMeals(this.state.data.breakfast.meals)}
+                <View style={{}}>
+                  {this.renderScrollMeals(this.state.data.breakfast.meals)}
+                </View>
 
               </View>
 
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
-                <View style={{flexDirection:'row', alignContent:'space-around', justifyContent:'space-around'}}>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Lunch</Text>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black'}}>Total calories: {this.state.data.lunch.total_calories}</Text>
+              <View style={{minHeight:verticalScale(40),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+                <View style={{flexDirection:'row'}}>
+                  <View style={{ flex:4,alignContent:'flex-start', justifyContent:'flex-start'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Lunch</Text>
+                  </View>
+
+                  <View style={{alignContent:'flex-end', justifyContent:'flex-end'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>{this.state.data.lunch.total_calories}</Text>
+                  </View>
                 </View>
                 
-                {this.renderScrollMeals(this.state.data.lunch.meals)}
+                <View style={{}}>
+                  {this.renderScrollMeals(this.state.data.lunch.meals)}
+                </View>
 
               </View>
 
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
-                <View style={{flexDirection:'row', alignContent:'space-around', justifyContent:'space-around'}}>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Snack</Text>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black'}}>Total calories: {this.state.data.snack.total_calories}</Text>
+              <View style={{minHeight:verticalScale(40),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+                <View style={{flexDirection:'row'}}>
+                  <View style={{ flex:4,alignContent:'flex-start', justifyContent:'flex-start'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Snack</Text>
+                  </View>
+
+                  <View style={{alignContent:'flex-end', justifyContent:'flex-end'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>{this.state.data.snack.total_calories}</Text>
+                  </View>
                 </View>
                 
-                {this.renderScrollMeals(this.state.data.snack.meals)}
+                <View style={{}}>
+                  {this.renderScrollMeals(this.state.data.snack.meals)}
+                </View>
 
               </View>
 
               {/* Day selected */}
-              <View style={{height:verticalScale(150),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
-                <View style={{flexDirection:'row', alignContent:'space-around', justifyContent:'space-around'}}>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Dinner</Text>
-                  <Text style={{padding:moderateScale(10),fontSize:theme.header,color:'black'}}>Total calories: {this.state.data.dinner.total_calories}</Text>
+              <View style={{minHeight:verticalScale(40),marginVertical:verticalScale(5),backgroundColor:theme.gray2}}>
+                <View style={{flexDirection:'row'}}>
+                  <View style={{ flex:4,alignContent:'flex-start', justifyContent:'flex-start'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>Dinner</Text>
+                  </View>
+
+                  <View style={{alignContent:'flex-end', justifyContent:'flex-end'}}>
+                    <Text style={{padding:moderateScale(10),fontSize:theme.h3,color:'black',fontWeight:'bold'}}>{this.state.data.dinner.total_calories}</Text>
+                  </View>
                 </View>
                 
-                {this.renderScrollMeals(this.state.data.dinner.meals)}
+                <View style={{}}>
+                  {this.renderScrollMeals(this.state.data.dinner.meals)}
+                </View>
 
               </View>
 
             </ScrollView>
 
-          <FAB buttonColor={theme.green} iconTextColor="#FFFFFF" onClickAction={() => {this.props.navigation.navigate('FoodLogRegister')}} visible={true} />
+          <FAB buttonColor={theme.primary_color_2} iconTextColor="#FFFFFF" onClickAction={() => {this.props.navigation.navigate('FoodLogRegister')}} visible={true} />
         </View>
     );
   }

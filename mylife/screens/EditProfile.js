@@ -84,19 +84,9 @@ export default class Register extends React.Component {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Token ' + TOKEN
+          'Authorization': 'Token ' + this.state.user_token
         },
-        body: JSON.stringify({ //change these params later
-            email:this.state.email,
-            password:this.state.password, //this shouldnt go out as clear text
-            height :this.state.height,
-            sex: this.state.sex,
-            current_weight:this.state.current_weight,
-            weight_goal:this.state.weight_goal,
-            birth_date:this.state.birthday,
-            phone_number:this.state.phone_number,
-            photo:this.state.photo_base64,
-        }),
+        body: JSON.stringify(this.state),
       }).then((response) => response.json())
       .then((json) => {
             console.log(json);
