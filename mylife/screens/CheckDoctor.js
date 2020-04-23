@@ -27,7 +27,7 @@ export default class LoadingScreen extends React.Component {
     super(props);
     this.state = {
         user_token: '',
-        email: 'tiagocmendes@ua.pt',
+        email: '',
         valid_doctor : false,
         doctor_email : '',
         doctor_name : '',
@@ -36,9 +36,17 @@ export default class LoadingScreen extends React.Component {
     }
   }
 
-  componentDidMount(){
-    this._retrieveData()
+  componentDidMount = async () => {
+    await this._retrieveData()
     this.getDoctorInfo()
+  }
+
+  passData = async () => {
+    await this.setState({
+      user_token: this.props.navigation.state.params.token,
+      email: this.props.navigation.state.params.email
+    })
+
   }
 
   _retrieveData = async () => {
@@ -46,22 +54,17 @@ export default class LoadingScreen extends React.Component {
       const token = await AsyncStorage.getItem('token');
       const email = await AsyncStorage.getItem('email');
 
-      if (email !== null && token !== null) {
-        // We have data!!
-        console.log(value);
         this.setState({
-          email: token,
+          email: email,
           user_token: token
         })
-      }
+
+        console.log("Oh mano, ai vai: ")
+        console.log(this.state)
     } catch (error) {
       // Error retrieving data
       console.log(error);
       //testing purposes only
-      this.setState({
-        email: 'tiagocmendes@ua.pt',
-        user_token: '917e31917733ee3a26383d6bd08a641ba5f0ffb3'
-      })
     }
   };
 
@@ -77,7 +80,7 @@ export default class LoadingScreen extends React.Component {
     .then((json) => {
           console.log(json);
           if (json.state == "Error" || json.message == null){
-              alert(json.message)
+              alert(json.detail)
               this.setState({
                 valid_doctor:false
               })
@@ -114,7 +117,7 @@ export default class LoadingScreen extends React.Component {
     .then((json) => {
           console.log(json);
           if (json.state == "Error"){
-              alert(json.message)
+              alert(json.detail)
               this.setState({
                 valid_doctor:true
               })
@@ -146,7 +149,7 @@ export default class LoadingScreen extends React.Component {
               }}>
 
               <Text style={{fontSize:theme.h1,color:theme.primary_color,fontWeight:'bold'}}>No doctor associated</Text>
-              <Text style={{fontSize:theme.header,color:theme.black,fontWeight:'bold'}}>Check back when one is assigned</Text>
+              <Text style={{fontSize:theme.header,color:theme.black,fontWeight:'bold'}}>Come back when you have a doctor</Text>
   
               </View>
   

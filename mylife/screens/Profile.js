@@ -531,7 +531,8 @@ export default class Login extends React.Component {
             style={styles.loginGoogleButtonDoctor}
             onPress={() =>
               this.props.navigation.navigate("CheckDoctor", {
-                email: this.state.user_data.email
+                email: this.state.user_data.email,
+                token: this.state.user_data.token
               })
             }
           >
