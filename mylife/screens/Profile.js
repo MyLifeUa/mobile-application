@@ -12,6 +12,7 @@ import {
     Text,
     Image,
     StyleSheet,
+    AsyncStorage,
     TouchableOpacity,
     ScrollView,
     Dimensions
@@ -19,7 +20,6 @@ import {
 const { width, height } = Dimensions.get('screen');
 //import all the basic component we have used
 
-const TOKEN = '7b83a5098f99963e9790712441a57da2ef016d2a';
 const API = 'http://mednat.ieeta.pt:8442';
 
 
@@ -32,13 +32,14 @@ export default class Login extends React.Component {
     this.state = {
         fetched: false,
         user_data: {
-            email: 'tomascosta@ua.pti',
+            email: '',
             height: null,
             weight: null,
             name: null,
             phone_number: null,
             sex: '',
             photo: '',
+            token: '',
         },
         fitbit_measures: {
             currentWeight: null,
@@ -52,11 +53,41 @@ export default class Login extends React.Component {
     }
   }
 
-  componentDidMount(){
+  componentDidMount = async () => {
       //get the info of the user as soon as page loads
+      await this._retrieveData()
       //this.getMeasures()
       this.getValues()
   }
+
+  _retrieveData = async () => {
+    console.log("HELLO");
+
+    try {
+      const value = await AsyncStorage.getItem("token");
+      const email_async = await AsyncStorage.getItem("email")
+      if (value !== null) {
+        // We have data!!
+        this.setState({
+          SharedLoading: false,
+          user_data: {
+              token : value,
+              email : email_async
+            }
+
+        });
+      } else {
+        this.setState({
+          SharedLoading: false // TODO ELIMINATE THIS
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        SharedLoading: false // TODO ELIMINATE THIS
+      });
+    }
+  };
 
   getValues(){
 
@@ -66,7 +97,7 @@ export default class Login extends React.Component {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          "Authorization": "Token " + TOKEN 
+          "Authorization": "Token " + this.state.user_data.token
         }
       }).then((response) => response.json())
       .then((json) => {
@@ -92,7 +123,7 @@ export default class Login extends React.Component {
       })
       .catch((error) => {
           alert("Error adding Food Log.")
-          console.error(error);
+          console.log(error);
       });
 
   }
