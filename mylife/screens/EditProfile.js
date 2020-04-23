@@ -36,29 +36,31 @@ export default class Register extends React.Component {
     super(props);
   }
   state = {
+    token:'',
     email:null,
-    password:null,
     height :null,
     current_weight:null,
     weight_goal:null,
     birthday:'Birthdate',
     sex:null,
     phone_number:null,
-    photo:'https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg',
-    photo_base64:null
+    photo_display:'https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg'
   }
 
-  componentDidMount(){
-    this.setState({
+  componentDidMount = async () =>{
+    await this._retrieveToken()
+    await this.setState({
         email: this.props.navigation.state.params.user_data.email,
         height: this.props.navigation.state.params.user_data.height,
         current_weight: this.props.navigation.state.params.user_data.weight,
         weight_goal: this.props.navigation.state.params.user_data.weight_goal,
         sex: this.props.navigation.state.params.user_data.sex,
         phone_number: this.props.navigation.state.params.user_data.phone_number,
-        //photo: this.props.navigation.state.params.user_data.photo,
+        photo: this.props.navigation.state.params.user_data.photo,
     })
   }
+
+  _ret
 
   _storeData = async (token) => {
     console.log("Storing Token: "+token)
@@ -69,7 +71,50 @@ export default class Register extends React.Component {
     } catch (error) {
         console.log(error)
     }
-};
+    };
+
+    _retrieveData = async () => {
+        console.log("HELLO");
+    
+        try {
+          const value = await AsyncStorage.getItem("token");
+          const email_async = await AsyncStorage.getItem("email");
+          if (value !== null) {
+            // We have data!!
+            this.setState({
+              SharedLoading: false,
+              user_data: {
+                token: value,
+                email: email_async
+              }
+            });
+          } else {
+            this.setState({
+              SharedLoading: false // TODO ELIMINATE THIS
+            });
+          }
+        } catch (error) { 
+          console.log(error);
+          this.setState({
+            SharedLoading: false // TODO ELIMINATE THIS
+          });
+        }
+      };
+
+      _retrieveToken = async () => {    
+        try {
+          const value = await AsyncStorage.getItem("token");
+          if (value !== null) {
+            // We have data!!
+            this.setState({
+              SharedLoading: false,
+              token: value
+            });
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
 
   makeRegisterRequest(){
       //unsecure way to send a post
@@ -84,18 +129,19 @@ export default class Register extends React.Component {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
-          'Authorization': 'Token ' + this.state.user_token
+          'Authorization': 'Token ' + this.state.token
         },
         body: JSON.stringify(this.state),
       }).then((response) => response.json())
       .then((json) => {
             console.log(json);
-            if (json.state == "Error" || json.state == false){
+            if (json.message != "Client successfully updated!"){
             //Credentials incorrect
-                alert(json.message)
+                alert("Error updating client!")
             }
             else { 
-                //toast, change success                    
+                //toast, change success  
+                alert("Profile updated successfully")                  
                 this.props.navigation.navigate('Profile')
             }
       })
@@ -129,7 +175,7 @@ export default class Register extends React.Component {
 
     if (!result.cancelled) {
         var base64image = result.base64.replace(/(?:\r\n|\r|\n)/g, '');
-        this.setState({ photo: result.uri,photo_base64:base64image });
+        this.setState({ photo_display: result.uri,photo:base64image });
     }
 
     console.log(this.state)
@@ -193,7 +239,7 @@ export default class Register extends React.Component {
                         borderColor:'white',
                         resizeMode: 'contain',
                         borderWidth:2
-                        }} source={{uri:this.state.photo}} />
+                        }} source={{uri:this.state.photo_display}} />
             </View>
 
             
