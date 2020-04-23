@@ -40,7 +40,7 @@ export default class Login extends React.Component {
         name: null,
         phone_number: null,
         sex: "",
-        photo: "",
+        photo: "https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg",
         token: "",
         steps: "",
         distance: "",
@@ -139,11 +139,10 @@ export default class Login extends React.Component {
               noFitbit = true;
             }
 
-            if (photo == "") {
+            if (photo == "") { //passar para base64
               photo =
                 "https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg";
             } else {
-              photo = `data:image/png;base64,${photo}`;
             }
             console.log
             this.setState({
@@ -320,7 +319,7 @@ export default class Login extends React.Component {
                 borderRadius: 400,
                 resizeMode: "contain"
               }}
-              source={{ uri: this.state.user_data.photo }}
+              source={{ uri: `data:image/png;base64,${this.state.user_data.photo}` }}
             />
           </View>
 
@@ -519,8 +518,9 @@ export default class Login extends React.Component {
                 email: this.state.user_data.email,
                 weight: this.state.user_data.weight,
                 height: this.state.user_data.height,
-                goal_weight: this.state.user_data.weight,
-                photo: this.state.user_data.weight
+                goal_weight: this.state.user_data.weight_goal,
+                photo: this.state.user_data.photo,
+                photo_64: this.state.user_data.photo_64
               })
             }
           >
@@ -531,7 +531,8 @@ export default class Login extends React.Component {
             style={styles.loginGoogleButtonDoctor}
             onPress={() =>
               this.props.navigation.navigate("CheckDoctor", {
-                email: this.state.user_data.email
+                email: this.state.user_data.email,
+                token: this.state.user_data.token
               })
             }
           >
