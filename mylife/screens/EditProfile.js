@@ -174,6 +174,7 @@ export default class Register extends React.Component {
 
     // made async to wait for it to finish to keep working
     async setSelectedGender(gender) {
+        console.log("New gender: " + gender)
         await this.setState({
             sex: gender
         })
@@ -245,8 +246,8 @@ export default class Register extends React.Component {
                             style={styles.inputView}
                             onValueChange={(itemValue,itemIndex) => this.setSelectedGender(itemValue)}
                     >
-                            <Picker.Item label="Male" value="Male" />
-                            <Picker.Item label="Female" value="Female" />
+                            <Picker.Item label="Male" value="M" />
+                            <Picker.Item label="Female" value="F" />
                     </Picker>
 
                     {/* Intro */}

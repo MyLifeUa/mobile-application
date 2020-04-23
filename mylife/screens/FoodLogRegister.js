@@ -144,8 +144,8 @@ export default class Register extends React.Component {
             if (responseJson.state == "Error") {
               alert(responseJson.message);
             } else {
-              this.props.navigation.navigate("FoodLog");
               this.refs.toast.show("Food Log added 💯", DURATION.LENGTH_LONG);
+              this.props.navigation.navigate("FoodLogs");
             }
           }
         })
