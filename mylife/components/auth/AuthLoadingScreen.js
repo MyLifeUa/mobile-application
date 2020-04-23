@@ -25,6 +25,7 @@ import {
   createSwitchNavigator,
   createAppContainer
 } from "react-navigation";
+import theme from "../../constants/theme.style.js";
 export default class AuthLoadingScreen extends React.Component {
   constructor() {
     super();
@@ -104,7 +105,7 @@ export default class AuthLoadingScreen extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <View style={{ marginHorizontal: 10 }}>
+        <View style={{ flex:1,justifyContent:"center",alignItems:"center" }}>
           <Image
             source={require("../../assets/icon.png")}
             style={styles.companyImage}
@@ -120,13 +121,12 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: Platform.OS === "android" ? 0 : 20,
 
-    backgroundColor: "#0096dd"
+    backgroundColor:theme.primary_color,
   },
 
   companyImage: {
-    flex: 1,
-    width: moderateScale(60),
-    height: moderateScale(30),
-    borderRadius: moderateScale(30)
+    width: moderateScale(350),
+    height: moderateScale(350),
+    //borderRadius: moderateScale(30)
   }
 });
