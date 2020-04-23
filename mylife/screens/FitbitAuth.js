@@ -377,7 +377,11 @@ const styles = StyleSheet.create({
   },
 
   loginText: {
-    color: "white"
+    textAlign: "center",
+    color: "#FFF",
+    fontWeight: "700",
+    width: "100%",
+    fontSize: moderateScale(15)
   },
 
   logo_text: {
