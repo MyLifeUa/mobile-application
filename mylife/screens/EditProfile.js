@@ -44,11 +44,13 @@ export default class Register extends React.Component {
     birthday:'Birthdate',
     sex:null,
     phone_number:null,
-    photo_display:'https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg'
+    photo:'https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg'
   }
 
   componentDidMount = async () =>{
     await this._retrieveToken()
+    console.log("What navigation we got:")
+    console.log(this.props.navigation.state.params.user_data)
     await this.setState({
         email: this.props.navigation.state.params.user_data.email,
         height: this.props.navigation.state.params.user_data.height,
@@ -239,7 +241,7 @@ export default class Register extends React.Component {
                         borderColor:'white',
                         resizeMode: 'contain',
                         borderWidth:2
-                        }} source={{uri:this.state.photo_display}} />
+                        }} source={{uri:`data:image/png;base64,${this.state.photo}`}} />
             </View>
 
             
