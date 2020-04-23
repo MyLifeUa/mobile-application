@@ -34,7 +34,7 @@ export default class FoodLog extends React.Component {
 
       //credentials
       user_email: '',
-      user_token: 'a950f777fcc77d3a109210cedbfca69d7c5a9f8e',
+      user_token: '',
 
       //request
       data : {
@@ -66,27 +66,31 @@ export default class FoodLog extends React.Component {
   }
 
   async componentDidMount() {
-    //await this._retrieveData(); TODO uncomment this
+    await this._retrieveData(); //TODO uncomment this
     this.getLogs()
     if (!this.state.SharedLoading) {
       this.getLogs();
     }
   }
 
-  handleNewLog = (flag) => {
+  handleNewLog = async (flag) => {
+
+
 
     // if flag is positive then increment one day, if not decrease
     if (flag==true) {
-      this.setState({
+      await this.setState({
         current_day: moment(this.state.current_day).add(1,"days").format("YYYY-MM-DD")
       })
     } else {
-      this.setState({
+      await this.setState({
         current_day: moment(this.state.current_day).add(-1,"days").format("YYYY-MM-DD")
       })
     }
+    
     //after new value is changes, refresh values
-    this.getLogs()
+    await this.getLogs()
+
   }
 
 
@@ -170,7 +174,7 @@ export default class FoodLog extends React.Component {
       return meals_array.map( meal => {
         return(
           <View style={{flexDirection:'row',alignContent:'flex-start',justifyContent:'flex-start'}}>
-            <Text>{meal.meal_name} + {meal.calories}</Text>
+            <Text>{meal.number_of_servings}x {meal.meal_name} with {meal.calories.toFixed(1)} kcal</Text>
           </View>
         )
       }); 
