@@ -232,7 +232,7 @@ export default class FoodLog extends React.Component {
   renderLeftCalories(){
     if (this.state.data.calories_left > 0) {
       return(
-        <Text style={{fontSize:theme.h2,color:'red',fontWeight:'bold'}}>-{this.state.data.calories_left}</Text>
+        <Text style={{fontSize:theme.h2,color:theme.red,fontWeight:'bold'}}>-{this.state.data.calories_left}</Text>
       )
     } else {
       return(
