@@ -30,7 +30,7 @@ export default class FoodLog extends React.Component {
     super(props);
     this.state = {
       //refreshes
-      refreshing: false,
+      refresh: false,
       SharedLoading: true,
 
       //credentials
@@ -68,7 +68,7 @@ export default class FoodLog extends React.Component {
 
   async componentDidMount() {
     await this._retrieveData(); //TODO uncomment this
-    this.getLogs()
+    //this.getLogs()
     if (!this.state.SharedLoading) {
       this.getLogs();
     }
@@ -170,7 +170,7 @@ export default class FoodLog extends React.Component {
                 // Success
                 this.setState({
                     data: json.message,
-                    refresh: !this.state.refresh
+                    refresh: false
                     //if this doesnt work, change to individual attribution
                 })
                 console.log("New state")
@@ -241,6 +241,18 @@ export default class FoodLog extends React.Component {
     }
   }
 
+  handleRefresh = () => {
+    // Refresh a zona de filtros tambem?
+    this.setState(
+      {
+        refresh: true
+      },
+      () => {
+        this.getLogs()
+      }
+    );
+  };
+
 
   render() {
     return (
@@ -306,7 +318,7 @@ export default class FoodLog extends React.Component {
               style={{flex:2,backgroundColor:'white', marginTop:verticalScale(10),}}
               refreshControl={
                 <RefreshControl
-                  refreshing={this.state.refreshing}
+                  refreshing={this.state.refresh}
                   onRefresh={this.handleRefresh}
                 />}
               >

@@ -5,11 +5,15 @@ import Profile from './screens/Profile'
 import Login from './screens/Login'
 import MealRegister from './screens/MealRegister'
 import AppNavigatorFinal from './router';
+import NavigationService from './components/NavigationService'
 
 export default function App() {
   return (
     <AppNavigatorFinal
-
+      
+      ref={navigatorRef => {
+        NavigationService.setTopLevelNavigator(navigatorRef);
+      }}
       />
   );
 }

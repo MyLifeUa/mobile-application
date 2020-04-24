@@ -12,8 +12,7 @@ import HeartRateStats from "./screens/HeartRateStats";
 import FloorsStats from "./screens/FloorsStats";
 import DistanceStats from "./screens/DistanceStats";
 import CaloriesBurnedStats from "./screens/CaloriesBurnedStats";
-
-
+import HeaderRightNavBar from './components/HeaderRightNavBar'
 
 import StepsStats from "./screens/StepsStats";
 
@@ -61,11 +60,7 @@ const LoginStack = createStackNavigator(
       navigationOptions: {
         header: null
       }
-    },
-    
-    
-
-    
+    }
   },
   {
     //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
@@ -135,7 +130,10 @@ const StatsNavigator = createStackNavigator(
 const ProfileNavigator = createStackNavigator(
   //Signed In Stack
   {
-    Profile: { screen: Profile },
+    Profile: {
+      screen: Profile,
+      navigationOptions: { headerRight: <HeaderRightNavBar /> }
+    },
     EditProfile: {
       screen: EditProfile,
       navigationOptions: {
@@ -280,9 +278,9 @@ const AppNavigatorFinal = createSwitchNavigator(
     AuthLoading: AuthLoadingScreen
   },
   {
-    initialRouteName: "AuthLoading",
-    navigationOptions : {
-      tintColor : "white"
+    initialRouteName: "Auth",
+    navigationOptions: {
+      tintColor: "white"
     }
   }
 );
