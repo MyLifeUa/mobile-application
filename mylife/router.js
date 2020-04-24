@@ -9,6 +9,12 @@ import FitbitAuth from "./screens/FitbitAuth";
 import FoodLogs from "./screens/FoodLog";
 import Stats from "./screens/Stats";
 import HeartRateStats from "./screens/HeartRateStats";
+import FloorsStats from "./screens/FloorsStats";
+import DistanceStats from "./screens/DistanceStats";
+import CaloriesBurnedStats from "./screens/CaloriesBurnedStats";
+
+
+
 import StepsStats from "./screens/StepsStats";
 
 import FoodLogRegister from "./screens/FoodLogRegister";
@@ -81,6 +87,24 @@ const StatsNavigator = createStackNavigator(
       screen: HeartRateStats,
       navigationOptions: {
         title: "Resting heart rate"
+      }
+    },
+    FloorsStats: {
+      screen: FloorsStats,
+      navigationOptions: {
+        title: "Floors"
+      }
+    },
+    DistanceStats: {
+      screen: DistanceStats,
+      navigationOptions: {
+        title: "Distance"
+      }
+    },
+    CaloriesBurnedStats: {
+      screen: CaloriesBurnedStats,
+      navigationOptions: {
+        title: "Calories Burned"
       }
     },
     StepsStats: {

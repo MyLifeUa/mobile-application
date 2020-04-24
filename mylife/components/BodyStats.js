@@ -136,9 +136,9 @@ export default class Login extends React.Component {
                 justifyContent: "space-around"
               }}
             >
-              <TouchableOpacity style={styles.squareView}
-                  onPress={() => this.props.navigation.navigate("StepsStats")}
-
+              <TouchableOpacity
+                style={styles.squareView}
+                onPress={() => this.props.navigation.navigate("StepsStats")}
               >
                 <View
                   style={{
@@ -165,7 +165,10 @@ export default class Login extends React.Component {
                   </Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.squareView2}>
+              <TouchableOpacity
+                style={styles.squareView2}
+                onPress={() => this.props.navigation.navigate("FloorsStats")}
+              >
                 <View
                   style={{
                     flex: 1,
@@ -200,7 +203,10 @@ export default class Login extends React.Component {
                 justifyContent: "space-around"
               }}
             >
-              <TouchableOpacity style={styles.squareView2}>
+              <TouchableOpacity
+                style={styles.squareView2}
+                onPress={() => this.props.navigation.navigate("DistanceStats")}
+              >
                 <View
                   style={{
                     flex: 1,
@@ -226,7 +232,11 @@ export default class Login extends React.Component {
                   </Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.squareView3}>
+              <TouchableOpacity style={styles.squareView3}
+              
+              onPress={() => this.props.navigation.navigate("CaloriesBurnedStats")}
+
+              >
                 <View
                   style={{
                     flex: 1,
