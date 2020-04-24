@@ -80,7 +80,7 @@ export default class LoadingScreen extends React.Component {
     .then((json) => {
           console.log(json);
           if (json.state == "Error" || json.message == null){
-              alert(json.detail)
+              //alert(json.detail)
               this.setState({
                 valid_doctor:false
               })
