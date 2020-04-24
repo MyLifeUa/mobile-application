@@ -21,7 +21,6 @@ import {
   ActivityIndicator,
   ScrollView
 } from "react-native";
-import Swiper from 'react-native-swiper'
 const { width, height } = Dimensions.get("screen");
 import theme from "../constants/theme.style.js";
 
@@ -38,8 +37,7 @@ import { TabView, SceneMap, TabBar, TabViewPage } from "react-native-tab-view";
 import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 
 //import all the basic component we have used
-import BodyStats from "../components/BodyStats";
-import NutrientsStats from "../components/NutrientsStats";
+
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
@@ -54,37 +52,174 @@ export default class Login extends React.Component {
     ]
   };
 
-  _renderScene = ({ route }) => {
-    const { navigation } = this.props;
-
-    switch (route.key) {
-      case "first":
-        return <BodyStats />;
-      case "second":
-        return <NutrientsStats />;
-
-      default:
-        return null;
-    }
-  };
-
-  _renderLabel = ({ route }) => (
-    <Text style={{ fontSize: moderateScale(14), color: "white" }}>
-      {route.title}
-    </Text>
-  );
 
   render() {
     return (
-      <Swiper 
-      showsButtons={false}
-      showsPagination={true}
-      
-      loop={false}>
-      <BodyStats navigation={this.props.navigation} />
-      <NutrientsStats />
-        
-      </Swiper>
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          style={{ flex: 1, width: width }}
+          vertical
+          scrollEnabled
+          scrollEventThrottle={16}
+          contentContainerStyle={{
+            flexGrow: 1
+          }}
+        >
+          <View
+            style={{
+              flex: 0.055,
+              height: moderateScale(40),
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection:"row",
+              backgroundColor: theme.primary_color,
+            }}
+          >
+            <MaterialCommunityIcons
+                    name={"food-apple"}
+                    size={moderateScale(20)}
+                    color="white"
+                  />
+            <Text
+              style={{
+                fontSize: moderateScale(20),
+                fontWeight: "bold",
+                color: theme.white,
+                textAlign: "center",
+                marginLeft:5
+              }}
+            >
+              Nutrients Stats
+            </Text>
+          </View>
+
+          <View style={{ flex: 1,marginVertical:10 }}>
+            
+            <View
+              style={{
+                flexDirection: "row",
+                height: moderateScale(180),
+                justifyContent: "space-around"
+              }}
+            >
+              <TouchableOpacity style={styles.squareView}>
+                <View
+                  style={{
+                    flex: 1,
+                    //flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name={"food"}
+                    size={moderateScale(50)}
+                    color="white"
+                  />
+
+                  <Text
+                    style={{
+                      fontSize: moderateScale(20),
+                      marginTop: 10,
+                      color: "white"
+                    }}
+                  >
+                    Proteins
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.squareView2}>
+                <View
+                  style={{
+                    flex: 1,
+                    //flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name={"food"}
+                    size={moderateScale(50)}
+                    color="white"
+                  />
+
+                  <Text
+                    style={{
+                      fontSize: moderateScale(20),
+                      marginTop: 10,
+                      color: "white"
+                    }}
+                  >
+                    Carbs
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                height: moderateScale(180),
+                justifyContent: "space-around"
+              }}
+            >
+              <TouchableOpacity style={styles.squareView4}>
+                <View
+                  style={{
+                    flex: 1,
+                    //flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name={"food"}
+                    size={moderateScale(50)}
+                    color="white"
+                  />
+
+                  <Text
+                    style={{
+                      fontSize: moderateScale(20),
+                      marginTop: 10,
+                      color: "white"
+                    }}
+                  >
+                    Fats
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.squareView3}>
+                <View
+                  style={{
+                    flex: 1,
+                    //flexDirection: "row",
+                    justifyContent: "center",
+                    alignItems: "center"
+                  }}
+                >
+                  <MaterialCommunityIcons
+                    name={"food"}
+                    size={moderateScale(50)}
+                    color="white"
+                  />
+
+                  <Text
+                    style={{
+                      fontSize: moderateScale(20),
+                      marginTop: 10,
+                      color: "white"
+                    }}
+                  >
+                    Calories
+                  </Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+         
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -110,7 +245,7 @@ const styles = StyleSheet.create({
     marginVertical: width * 0.03,
     marginHorizontal: moderateScale(11),
     borderRadius: moderateScale(10),
-    backgroundColor: theme.primary_color,
+    backgroundColor: theme.green,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
@@ -161,7 +296,7 @@ const styles = StyleSheet.create({
     marginVertical: width * 0.03,
     marginHorizontal: moderateScale(11),
     borderRadius: moderateScale(10),
-    backgroundColor: "#4caf50",
+    backgroundColor: theme.red,
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

@@ -557,8 +557,8 @@ export default class Register extends React.Component {
           style={{ backgroundColor: theme.gray }}
           position="bottom"
           positionValue={100}
-          fadeInDuration={1500}
-          fadeOutDuration={1500}
+          fadeInDuration={500}
+          fadeOutDuration={500}
         />
       </KeyboardAvoidingView>
     );
