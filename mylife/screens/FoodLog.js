@@ -236,7 +236,7 @@ export default class FoodLog extends React.Component {
       )
     } else {
       return(
-        <Text style={{fontSize:theme.h2,color:'green',fontWeight:'bold'}}>{this.state.data.calories_left}</Text>
+        <Text style={{fontSize:theme.h2,color:'green',fontWeight:'bold'}}>{this.state.data.calories_left.toString().split("-")}</Text>
       )
     }
   }
