@@ -15,7 +15,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  ActivityIndicator
+  ActivityIndicator,
+  RefreshControl
 } from "react-native";
 const { width, height } = Dimensions.get("screen");
 //import all the basic component we have used
@@ -31,8 +32,10 @@ export default class Login extends React.Component {
 
     this.state = {
       fetched: false,
+      refreshing: false,
       noFitbit: false,
       Loading: true,
+      SharedLoading:true,
       user_data: {
         email: "",
         height: null,
@@ -57,12 +60,24 @@ export default class Login extends React.Component {
       }
     };
   }
+  _storeData = async token => {
+    console.log("Storing Token: " + token);
+    try {
+      await AsyncStorage.setItem("token", token);
+      this.setState({ user_token: token });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   componentDidMount = async () => {
     //get the info of the user as soon as page loads
     await this._retrieveData();
     //this.getMeasures()
-    this.getValues();
+    if (!this.state.SharedLoading) {
+      this.getValues();
+    }
+
   };
 
   _retrieveData = async () => {
@@ -70,6 +85,8 @@ export default class Login extends React.Component {
 
     try {
       const value = await AsyncStorage.getItem("token");
+      console.log(value);
+
       const email_async = await AsyncStorage.getItem("email");
       if (value !== null) {
         // We have data!!
@@ -108,27 +125,33 @@ export default class Login extends React.Component {
   }
 
   getValues() {
-    console.log(`${API}/clients/${this.state.user_data.email}`);
+    var login_info = "Token " + this.state.user_data.token;
+
+    console.log(login_info);
     fetch(`${API}/clients/${this.state.user_data.email}`, {
       method: "GET",
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
-        Authorization: "Token " + this.state.user_data.token
+        Authorization: login_info
       }
     })
       .then(this.processResponse)
       .then(res => {
+
         let ingredients = [];
 
         const { statusCode, responseJson } = res;
+        console.log(statusCode)
+
 
         if (statusCode == 401) {
+          console.log("INVALID TOKEN")
           this.processInvalidToken();
         } else {
-          console.log(responseJson);
+          //console.log(responseJson);
           if (responseJson.state == "Error") {
-            alert(json.message);
+            //alert(json.message);
           } else {
             // Success
             let noFitbit = false;
@@ -144,7 +167,7 @@ export default class Login extends React.Component {
                 "https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg";
             } else {
             }
-            console.log
+           
             this.setState({
               user_data: {
                 name: responseJson.message.name,
@@ -158,16 +181,20 @@ export default class Login extends React.Component {
                 steps: responseJson.message.steps,
                 distance: responseJson.message.distance,
                 heartRate: responseJson.message.heart_rate,
+                token:responseJson.token
               },
               Loading: false,
+              refreshing:false,
               noFitbit: noFitbit
 
             });
+            this._storeData(responseJson.token);
+
           }
         }
       })
       .catch(error => {
-        alert("Error adding Food Log.");
+        //alert("Error adding Food Log.");
         console.log(error);
       });
   }
@@ -291,7 +318,21 @@ export default class Login extends React.Component {
     }
   }
 
+  handleRefresh = () => {
+    // Refresh a zona de filtros tambem?
+    this.setState(
+      {
+        refreshing: true
+      },
+      () => {
+        this.getValues()
+      }
+    );
+  };
+
   render() {
+    const {  refreshing } = this.state;
+
     return (
       <View style={{ flex: 1 }}>
         <View
@@ -343,12 +384,19 @@ export default class Login extends React.Component {
           {this.renderFitbitMeasures()}
         </View>
 
-        <View
+        <ScrollView
           style={{
             backgroundColor: theme.white,
             flex: 1,
             alignContent: "space-between"
           }}
+
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={this.handleRefresh}
+            />
+          }
         >
           <View
             style={{
@@ -500,7 +548,7 @@ export default class Login extends React.Component {
               {this.state.user_data.sex}
             </Text>
           </View>
-        </View>
+        </ScrollView>
 
         <View
           style={{
