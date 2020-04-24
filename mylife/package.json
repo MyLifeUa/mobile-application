@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^5.2.6",
-    "expo-auth-session": "^1.0.1",
+    "expo-auth-session": "^1.1.0",
     "expo-chart-kit": "^1.2.4",
     "expo-constants": "^8.0.0",
     "expo-image-picker": "^8.1.0",
