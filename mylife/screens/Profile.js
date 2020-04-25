@@ -255,7 +255,8 @@ export default class Login extends React.Component {
                 textAlign: "center"
               }}
             >
-              {this.state.user_data.steps}
+              {parseFloat(this.state.user_data.steps).toFixed(0)}
+              
             </Text>
           </View>
 
@@ -282,7 +283,7 @@ export default class Login extends React.Component {
                 textAlign: "center"
               }}
             >
-              {this.state.user_data.heartRate} bpm
+              {parseFloat(this.state.user_data.heartRate).toFixed(0)} bpm
             </Text>
           </View>
 
@@ -310,7 +311,7 @@ export default class Login extends React.Component {
                 textAlign: "center"
               }}
             >
-              {this.state.user_data.distance} km
+              {parseFloat(this.state.user_data.distance).toFixed(0)} Km
             </Text>
           </View>
         </View>
