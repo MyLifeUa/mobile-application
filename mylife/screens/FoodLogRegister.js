@@ -145,7 +145,8 @@ export default class Register extends React.Component {
               alert(responseJson.message);
             } else {
               this.refs.toast.show("Food Log added 💯", DURATION.LENGTH_LONG);
-              this.props.navigation.navigate("FoodLogs");
+              this.props.navigation.state.params.handleRefreshParent();
+              this.props.navigation.goBack(null);
             }
           }
         })
