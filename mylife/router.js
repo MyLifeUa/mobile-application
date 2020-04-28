@@ -282,7 +282,8 @@ const AppNavigatorFinal = createSwitchNavigator(
   {
     initialRouteName: "AuthLoading",
     navigationOptions : {
-      tintColor : "white"
+      tintColor : "white",
+      headerTintStyle:"#ffffff"
     }
   }
 );
