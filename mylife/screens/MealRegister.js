@@ -416,7 +416,8 @@ export default class Register extends React.Component {
         <View style={styles.container}>
           <ImageBackground
             source={require("../assets/icon.png")}
-            style={{ width: "100%", flex: 0.3 }}
+            style={{ width: "100%", flex: 0.3,    paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
+          }}
           >
             <View
               style={{
@@ -425,7 +426,10 @@ export default class Register extends React.Component {
                 alignItems: "space-around",
                 justifyContent: "space-around",
                 padding: width * 0.03,
-                backgroundColor: "rgba(0,0,0,.55)"
+                backgroundColor: "rgba(0,0,0,.55)",
+                //paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
+
+
               }}
             >
               <View
@@ -783,7 +787,7 @@ const styles = StyleSheet.create({
     marginBottom: 10
   },
   container: {
-    marginTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
+    //paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
     flex: 1,
     //backgroundColor: theme.primary_color,
     alignItems: "center",

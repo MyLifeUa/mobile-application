@@ -1,6 +1,14 @@
 import React from "react";
+import NavigationService from "./components/NavigationService";
 
-import { StyleSheet, Text, View, Platform, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+  Button,
+  TouchableOpacity
+} from "react-native";
 import Profile from "./screens/Profile";
 import EditProfile from "./screens/EditProfile";
 import CheckDoctor from "./screens/CheckDoctor";
@@ -12,8 +20,8 @@ import HeartRateStats from "./screens/HeartRateStats";
 import FloorsStats from "./screens/FloorsStats";
 import DistanceStats from "./screens/DistanceStats";
 import CaloriesBurnedStats from "./screens/CaloriesBurnedStats";
-
-
+import HeaderRightNavBar from "./components/HeaderRightNavBar";
+import HeaderRightNavBarPicture from "./components/HeaderRightNavBarProfilePicture";
 
 import StepsStats from "./screens/StepsStats";
 
@@ -30,7 +38,7 @@ import { createBottomTabNavigator } from "react-navigation-tabs";
 import { createStackNavigator } from "react-navigation-stack";
 import AuthLoadingScreen from "./components/auth/AuthLoadingScreen";
 import theme from "./constants/theme.style.js";
-import { Ionicons, Foundation } from "@expo/vector-icons";
+import { Ionicons, Foundation, AntDesign } from "@expo/vector-icons";
 import Icon from "./components/Icon";
 
 const LoginStack = createStackNavigator(
@@ -46,6 +54,7 @@ const LoginStack = createStackNavigator(
     Register: {
       screen: Register,
       navigationOptions: {
+        headerTintStyle:"#ffffff",
         headerStyle: {
           backgroundColor: theme.primary_color,
           marginTop: Platform.OS === "android" ? 0 : 20
@@ -61,17 +70,13 @@ const LoginStack = createStackNavigator(
       navigationOptions: {
         header: null
       }
-    },
-    
-    
-
-    
+    }
   },
   {
     //For React Navigation 2.+ change defaultNavigationOptions->navigationOptions
     defaultNavigationOptions: {
       //Header customization of the perticular Screen
-
+      headerTintStyle:"#ffffff",
       headerStyle: {
         marginTop: Platform.OS === "android" ? 0 : 20
       }
@@ -82,35 +87,71 @@ const LoginStack = createStackNavigator(
 const StatsNavigator = createStackNavigator(
   //Signed In Stack
   {
-    Stats: { screen: Stats },
+    Stats: {
+      screen: Stats,
+      navigationOptions: { headerRight: <HeaderRightNavBarPicture /> }
+    },
     HeartRateStats: {
       screen: HeartRateStats,
       navigationOptions: {
-        title: "Resting heart rate"
+        title: "Resting heart rate",
+        headerRight: <HeaderRightNavBarPicture />
       }
     },
     FloorsStats: {
       screen: FloorsStats,
       navigationOptions: {
-        title: "Floors"
+        title: "Floors",
+        headerRight: <HeaderRightNavBarPicture />
       }
     },
     DistanceStats: {
       screen: DistanceStats,
       navigationOptions: {
-        title: "Distance"
+        title: "Distance",
+        headerRight: <HeaderRightNavBarPicture />
       }
     },
     CaloriesBurnedStats: {
       screen: CaloriesBurnedStats,
       navigationOptions: {
-        title: "Calories Burned"
+        title: "Calories Burned",
+        headerRight: <HeaderRightNavBarPicture />
       }
     },
     StepsStats: {
       screen: StepsStats,
       navigationOptions: {
-        title: "Steps"
+        title: "Steps",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    Profile: {
+      screen: Profile,
+
+      navigationOptions: {
+        headerRight: <HeaderRightNavBar />,
+        title: "Profile"
+      }
+    },
+    EditProfile: {
+      screen: EditProfile,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: theme.primary_color,
+          marginTop: Platform.OS === "android" ? 0 : 20
+        },
+        headerTintStyle:"#ffffff",
+        headerTitleStyle: {
+          color: "white"
+        },
+        title: "EditProfile"
+      }
+    },
+    CheckDoctor: {
+      screen: CheckDoctor,
+      navigationOptions: {
+        title: "Assigned Doctor"
       }
     }
   },
@@ -120,6 +161,7 @@ const StatsNavigator = createStackNavigator(
         backgroundColor: theme.primary_color,
         marginTop: Platform.OS === "android" ? 0 : 20
       },
+      headerTintStyle:"#ffffff",
       headerTitleStyle: {
         color: "white"
       },
@@ -135,7 +177,87 @@ const StatsNavigator = createStackNavigator(
 const ProfileNavigator = createStackNavigator(
   //Signed In Stack
   {
-    Profile: { screen: Profile },
+    Profile: {
+      screen: Profile,
+      navigationOptions: { headerRight: <HeaderRightNavBar /> }
+    },
+    EditProfile: {
+      screen: EditProfile,
+      navigationOptions: {
+        headerStyle: {
+          backgroundColor: theme.primary_color,
+          marginTop: Platform.OS === "android" ? 0 : 20
+        },
+        headerTintStyle:"#ffffff",
+        headerTitleStyle: {
+          color: "white"
+        },
+        title: "EditProfile"
+      }
+    },
+    CheckDoctor: {
+      screen: CheckDoctor,
+      navigationOptions: {
+        title: "Assigned Doctor"
+      }
+    }
+  },
+  {
+    /*defaultNavigationOptions: ({ navigation }) => ({
+      headerStyle: {
+        backgroundColor: theme.primary_color,
+        marginTop: Platform.OS === "android" ? 0 : 20
+      },
+      headerTitleStyle: {
+        color: "white"
+      },
+      title: "Profile"
+    }),*/
+  }
+);
+
+const FoodLogsNavigator = createStackNavigator(
+  //Signed In Stack
+  {
+    FoodLogs: {
+      screen: FoodLogs,
+      navigationOptions: { headerRight: <HeaderRightNavBarPicture /> }
+    },
+    FoodLogRegister: {
+      screen: FoodLogRegister,
+      navigationOptions: {
+        title: "New Food Log",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    FoodLogRegisterML: {
+      screen: FoodLogRegisterML,
+      navigationOptions: {
+        title: "MyLife Food Detector",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    IngredientList: {
+      screen: IngredientList,
+      navigationOptions: {
+        title: "Ingredients",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    MealRegister: {
+      screen: MealRegister,
+      navigationOptions: {
+        header: null
+      }
+    },
+    Profile: {
+      screen: Profile,
+
+      navigationOptions: {
+        headerRight: <HeaderRightNavBar />,
+        title: "Profile"
+      }
+    },
     EditProfile: {
       screen: EditProfile,
       navigationOptions: {
@@ -157,62 +279,17 @@ const ProfileNavigator = createStackNavigator(
     }
   },
   {
+    initialRouteName: "FoodLogs",
     defaultNavigationOptions: ({ navigation }) => ({
       headerStyle: {
         backgroundColor: theme.primary_color,
+        tintColor: "#ffffff",
         marginTop: Platform.OS === "android" ? 0 : 20
       },
       headerTitleStyle: {
         color: "white"
       },
-      title: "Profile"
-    }),
-    tabBarOptions: {
-      activeTintColor: "#c73737",
-      inactiveTintColor: "gray"
-    }
-  }
-);
-
-const FoodLogsNavigator = createStackNavigator(
-  //Signed In Stack
-  {
-    FoodLogs: { screen: FoodLogs },
-    FoodLogRegister: {
-      screen: FoodLogRegister,
-      navigationOptions: {
-        title: "New Food Log"
-      }
-    },
-    FoodLogRegisterML: {
-      screen: FoodLogRegisterML,
-      navigationOptions: {
-        title: "MyLife Food Detector"
-      }
-    },
-    IngredientList: {
-      screen: IngredientList,
-      navigationOptions: {
-        title: "Ingredients"
-      }
-    },
-    MealRegister: {
-      screen: MealRegister,
-      navigationOptions: {
-        header: null
-      }
-    }
-  },
-  {
-    defaultNavigationOptions: ({ navigation }) => ({
-      headerStyle: {
-        backgroundColor: theme.primary_color,
-        marginTop: Platform.OS === "android" ? 0 : 20
-      },
-      headerTitleStyle: {
-        color: "white"
-      },
-
+      headerTintStyle:"#ffffff",
       title: "Food Logs"
     })
   }
@@ -221,11 +298,6 @@ const FoodLogsNavigator = createStackNavigator(
 const AppNavigator = createBottomTabNavigator(
   //Signed In Stack
   {
-    //Login:{screen: LoginStack},
-    //AdiconarPrato: { screen: AdicionarPratoStack},
-    //PratosRestauranteSide : { screen: PratosRestauranteSideStack},
-    //AreaPessoal: { screen: PessoalStack},
-    //PratoEspecifico: { screen: PratoEspecificoStack }, // alterei Gual
     FoodLogs: {
       screen: FoodLogsNavigator,
       navigationOptions: {
@@ -235,15 +307,39 @@ const AppNavigator = createBottomTabNavigator(
         )
       }
     },
-    Home: {
-      screen: ProfileNavigator,
+
+    AddFoodLog: {
+      screen: FoodLogsNavigator,
       navigationOptions: {
-        tabBarLabel: "Home",
+        tabBarLabel: " ",
         tabBarIcon: ({ tintColor }) => (
-          <Ionicons name="ios-home" color={tintColor} size={25} />
+          <TouchableOpacity
+            style={{
+              height: 80,
+              width: 80,
+              borderRadius: 100,
+              borderWidth: 2,
+              elevation: 6, // Android
+              borderColor: theme.gray2,
+              alignItems: "center",
+              backgroundColor: "white",
+              paddingTop: 15
+            }}
+            onPress={() => NavigationService.navigate("FoodLogRegister")}
+          >
+            <AntDesign
+              name="plus"
+              size={40}
+              color={theme.primary_color}
+              style={{
+                alignContent: "center"
+              }}
+            />
+          </TouchableOpacity>
         )
       }
     },
+
     Stats: {
       screen: StatsNavigator,
       navigationOptions: {
@@ -256,9 +352,10 @@ const AppNavigator = createBottomTabNavigator(
   },
   {
     defaultNavigationOptions: ({ navigation }) => ({}),
+    headerTintStyle:"#ffffff",
     tabBarOptions: {
       activeTintColor: theme.primary_color,
-      inactiveTintColor: "gray"
+      inactiveTintColor: "gray",
     }
   }
 );
