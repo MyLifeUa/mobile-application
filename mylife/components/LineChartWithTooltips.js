@@ -59,11 +59,11 @@ const Tooltip = ({ x, y, textX, textY, stroke, pointStroke, position }) => {
                 </Text>
 
                 <Text
-                    x={tipTxtX}
+                    x={tipTxtX-2}
                     y={tipTxtY + 14}
                     fontSize="12"
                     textAnchor="start">
-                    {textY}
+                    {parseFloat(textY).toFixed(1)}
                 </Text>
             </G>
         </G>
