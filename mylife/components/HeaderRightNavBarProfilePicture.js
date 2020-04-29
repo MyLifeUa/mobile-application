@@ -11,13 +11,18 @@ import {
 } from "react-native";
 import theme from "../constants/theme.style.js";
 import NavigationService from "../components/NavigationService";
+const API_URL = "http://mednat.ieeta.pt:8442";
+import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 
 export default class ActionBarImage extends Component {
   state = {
     dataSource: {},
-    isLoading: false,
-    image:
-    "https://www.brownweinraub.com/wp-content/uploads/2017/09/placeholder.jpg",
+    token: "",
+    email: "",
+    refreshing: false,
+    SharedLoading: true,
+    isLoading: true,
+    image: "",
     data: [
       { name: "João Vasconcelos", type: "0" },
       { name: "Ponto Zero", type: "1" }
@@ -27,99 +32,103 @@ export default class ActionBarImage extends Component {
   };
 
   async componentDidMount() {
-    //this.makeRemoteRequest();
-  }
-  async handleSwitch() {
-    try {
-      await AsyncStorage.setItem("SignedIn", "AppRestaurante");
-      await AsyncStorage.setItem("currentUser", this.state.codigoRestaurante);
-    } catch (error) {
-      // Error saving data
+    await this._retrieveData();
+
+    if (!this.state.SharedLoading) {
+      this.getProfilePic();
     }
-    NavigationService.navigate("AppRestaurante");
   }
 
-  async changeProfile(value) {
-    console.log("Tipo", value.type);
-    const codutilizador = await AsyncStorage.getItem("cod");
-    const codRestaurante = await AsyncStorage.getItem("codRestaurante");
-    if (value.type == 1) {
-      console.log("Adeus");
-      try {
-        await AsyncStorage.setItem("SignedIn", "AppRestaurante");
-        await AsyncStorage.setItem("currentUser", codRestaurante);
-      } catch (error) {
-        console.log(error);
+  async processResponse(response) {
+    const statusCode = response.status;
+    const data = response.json();
+    const res = await Promise.all([statusCode, data]);
+    return {
+      statusCode: res[0],
+      responseJson: res[1]
+    };
+  }
+
+  async processInvalidToken() {
+    NavigationService.navigate("Auth");
+  }
+
+  async getProfilePic() {
+    var login_info = "Token " + this.state.token;
+
+    fetch(`${API_URL}/client-photo/` + this.state.email, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: login_info
       }
-      NavigationService.navigate("AppRestaurante");
-    } else if (value.type == 0) {
-      NavigationService.navigate("AreaPessoal", { userID: codutilizador });
-    }
-  }
+    })
+      .then(this.processResponse)
+      .then(res => {
+        const { statusCode, responseJson } = res;
 
-  async makeRemoteRequest() {
-    const codutilizador = await AsyncStorage.getItem("cod");
-
-    return fetch(
-      "http://www.prato.pt/webservices/get-profile_image.php?idutilizador=" +
-        codutilizador +
-        "&tipo=" +
-        this.props.tipo
-    )
-      .then(response => response.json())
-      .then(responseJson => {
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-
-          errorMessage: ""
-        });
-
-        //console.log(responseJson);
+        if (statusCode == 401) {
+          this.processInvalidToken();
+        } else {
+          this.setState({
+            image: responseJson["message"]["photo"],
+            isLoading: false
+          });
+        }
       })
       .catch(error => {
-        this.setState({
-          isLoading: false,
-          dataSource: [
-            {
-              codutilizador: "90",
-              imagem: "http://www.prato.pt/files/images/placeholder.jpg"
-            }
-          ]
-        });
+        console.log(error);
       });
   }
-  _dropdown_2_renderRow(rowData, rowID, highlighted) {
-    let evenRow = rowID % 2;
-    return (
-      <TouchableOpacity
-        underlayColor="cornflowerblue"
-        onPress={() => {
-          console.log("Clicked");
-        }}
-      >
-        <View style={[styles.dropdown_2_row, { backgroundColor: "white" }]}>
-          <Image
-            style={styles.dropdown_2_image}
-            mode="stretch"
-            source={{ uri: rowData.imagem }}
-          />
-          <Text style={[styles.dropdown_2_row_text, { color: theme.black }]}>
-            {`${rowData.name} `}
-          </Text>
-        </View>
-      </TouchableOpacity>
-    );
-  }
 
-  _dropdown_2_renderButtonText(rowData) {
-    const { name, age } = rowData;
-    return `${name} ▼`;
-  }
+  _storeData = async token => {
+    console.log("Storing Token: " + token);
+    try {
+      await AsyncStorage.setItem("token", token);
+      this.setState({ user_token: token });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  _retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem("token");
+      const email_async = await AsyncStorage.getItem("email");
+      if (value !== null && email_async!==null) {
+        // We have data!!
+        this.setState({
+          SharedLoading: false,
+          token: value,
+          email: email_async
+        });
+      } else {
+        this.setState({
+          SharedLoading: false // TODO ELIMINATE THIS
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        SharedLoading: false // TODO ELIMINATE THIS
+      });
+    }
+  };
 
   render() {
     if (this.state.isLoading) {
-      return <ActivityIndicator size="large" />;
+      return (
+        <View
+          style={{
+            flex: 1,
+            justifyContent: "center",
+            alignItems: "center",
+            marginRight: 15
+          }}
+        >
+          <ActivityIndicator size="large" color={theme.primary_color_2} />
+        </View>
+      );
     } else {
       return (
         <View style={{ flexDirection: "row" }}>
@@ -128,29 +137,9 @@ export default class ActionBarImage extends Component {
               NavigationService.navigate("Profile");
             }}
           >
-            {/* <TouchableOpacity onPress = {()=>{this._dropdown_5 && this._dropdown_5.show();}}>
-            <View style = {{height:40, alignItems:'center',flexDirection:'row'}}>
-                <ModalDropdown 
-                  ref={el => this._dropdown_5 = el}
-                  defaultIndex={0}
-                  renderButtonText={(rowData) => this._dropdown_2_renderButtonText(rowData)}
-
-                  defaultValue={this.state.dataSource[0].name+' ▼'}
-                  options={this.state.dataSource}
-                  onSelect={(index,value) => this.changeProfile(value)}
-                  style={styles.modalPicker2}
-                  renderRow={this._dropdown_2_renderRow.bind(this)}
-                  
-                  textStyle={{fontSize:16,color:'white'}}>
-                  
-              
-                </ModalDropdown>
-            </View>
-          </TouchableOpacity>*/}
-
             <Image
-                  source={{ uri: this.state.image }}
-                  style={{
+              source={{ uri: `data:image/png;base64,${this.state.image}` }}
+              style={{
                 width: 40,
                 height: 40,
                 borderRadius: 40 / 2,

@@ -315,15 +315,15 @@ const AppNavigator = createBottomTabNavigator(
         tabBarIcon: ({ tintColor }) => (
           <TouchableOpacity
             style={{
-              height: 80,
-              width: 80,
+              height: 85,
+              width: 85,
               borderRadius: 100,
               borderWidth: 2,
               elevation: 6, // Android
               borderColor: theme.gray2,
               alignItems: "center",
+              justifyContent:"center",
               backgroundColor: "white",
-              paddingTop: 15
             }}
             onPress={() => NavigationService.navigate("FoodLogRegister")}
           >

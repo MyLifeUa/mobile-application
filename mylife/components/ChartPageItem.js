@@ -304,7 +304,7 @@ export default class Register extends React.Component {
                     <Text style={{fontSize:moderateScale(20),color:theme.primary_color,fontWeight:"bold"}} >{this.props.date}</Text>
                 </View>
                 <View style={{flex:1.5,alignItems:"center",flexDirection:"row",justifyContent:"flex-start",marginLeft:20}}>
-                    <Text style={{fontSize:moderateScale(22),color:theme.primary_color,fontWeight:"600"}} >{parseFloat(this.props.value).toFixed(0)}</Text>
+                    <Text style={{fontSize:moderateScale(22),color:theme.primary_color,fontWeight:"600"}} >{parseFloat(this.props.value).toFixed(1)}</Text>
                     <Text style={{fontSize:moderateScale(20),color:theme.primary_color,fontWeight:"600"}} >  {this.props.metrics}</Text>
                 </View>
                 
