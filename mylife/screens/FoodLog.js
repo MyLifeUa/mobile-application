@@ -775,7 +775,7 @@ export default class FoodLog extends React.Component {
                     fontWeight: "bold"
                   }}
                 >
-                  Snack
+                  Dinner
                 </Text>
               </View>
 
@@ -790,13 +790,13 @@ export default class FoodLog extends React.Component {
                     fontWeight: "bold"
                   }}
                 >
-                  {this.state.data.snack.total_calories}
+                  {this.state.data.dinner.total_calories}
                 </Text>
               </View>
             </View>
-
-            {this.renderMealsComponent(this.state.data.snack.meals)}
+            {this.renderMealsComponent(this.state.data.dinner.meals)}
           </View>
+
 
           {/* Day selected */}
           <View
@@ -826,7 +826,7 @@ export default class FoodLog extends React.Component {
                     fontWeight: "bold"
                   }}
                 >
-                  Dinner
+                  Snack
                 </Text>
               </View>
 
@@ -841,12 +841,14 @@ export default class FoodLog extends React.Component {
                     fontWeight: "bold"
                   }}
                 >
-                  {this.state.data.dinner.total_calories}
+                  {this.state.data.snack.total_calories}
                 </Text>
               </View>
             </View>
-            {this.renderMealsComponent(this.state.data.dinner.meals)}
+
+            {this.renderMealsComponent(this.state.data.snack.meals)}
           </View>
+          
         </ScrollView>
 
         <FAB
