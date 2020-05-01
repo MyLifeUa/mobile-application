@@ -75,21 +75,20 @@ export default class Login extends React.Component {
                 fontWeight: "bold"
               }}
             >
-              User Information
+              Clients Metrics
             </Text>
               
-            <View 
+            
+          </View>
+          <View 
                 style={{    
                     flexDirection: "row",
                     justifyContent: "center",
                     alignContent: "center",
-                    marginTop: moderateScale(20)
                 }}
             >
                 <RNSpeedometer value={12} size={200}/>
             </View>
-          </View>
-
           
       </View>
     );
