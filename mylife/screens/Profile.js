@@ -3,8 +3,11 @@ import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import theme from "../constants/theme.style.js";
 import URIs from "../constants/baseURIs";
+import Swiper from 'react-native-swiper'
 import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import usersList from "../data/users";
+import GaugeMetrics from "../components/GaugeMetrics";
+
 //import react in our code.
 import {
   View,
@@ -385,7 +388,13 @@ export default class Login extends React.Component {
           {this.renderFitbitMeasures()}
         </View>
 
-        <ScrollView
+        <Swiper 
+          showsButtons={false}
+          showsPagination={true}
+          style={{flex:1.3}}
+          loop={false}>
+          <GaugeMetrics navigation={this.props.navigation} />
+          <ScrollView
           style={{
             backgroundColor: theme.white,
             flex: 1,
@@ -550,6 +559,9 @@ export default class Login extends React.Component {
             </Text>
           </View>
         </ScrollView>
+            
+        </Swiper>
+
 
         <View
           style={{
