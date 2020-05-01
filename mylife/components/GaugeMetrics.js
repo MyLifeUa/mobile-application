@@ -77,6 +77,17 @@ export default class Login extends React.Component {
             >
               User Information
             </Text>
+              
+            <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    marginTop: moderateScale(20)
+                }}
+            >
+                <RNSpeedometer value={12} size={200}/>
+            </View>
           </View>
 
           
