@@ -15,6 +15,6 @@ RUN npm install -g
 RUN npm install expo-cli
 
 COPY mylife/ ./
-#RUN npm audit fix
+RUN npm audit fix
 
 CMD ["npm", "run", "start"]

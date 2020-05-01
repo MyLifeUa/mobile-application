@@ -2,6 +2,7 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons, MaterialCommunityIcons } from "@expo/vector-icons";
+import RNSpeedometer from 'react-native-speedometer'
 
 //import react in our code.
 import {
@@ -54,8 +55,31 @@ export default class Login extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 , backgroundColor:'red'}}>
-        <Text>OOOOOLO</Text>
+      <View style={{
+        backgroundColor: theme.white,
+        flex: 1,
+        alignContent: "space-between"
+      }}>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignContent: "center",
+              marginTop: moderateScale(20)
+            }}
+          >
+            <Text
+              style={{
+                fontSize: theme.h1,
+                color: theme.primary_color,
+                fontWeight: "bold"
+              }}
+            >
+              User Information
+            </Text>
+          </View>
+
+          
       </View>
     );
   }

@@ -391,7 +391,7 @@ export default class Login extends React.Component {
         <Swiper 
           showsButtons={false}
           showsPagination={true}
-          style={{flex:1.3}}
+          
           loop={false}>
           <GaugeMetrics navigation={this.props.navigation} />
           <ScrollView
@@ -565,7 +565,7 @@ export default class Login extends React.Component {
 
         <View
           style={{
-            flex: 0.5,
+            flex: 0.3,
             justifyContent: "center",
             alignItems: "center",
             flexDirection: "row"
