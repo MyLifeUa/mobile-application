@@ -434,13 +434,11 @@ export default class Login extends React.Component {
         if (statusCode == 401) {
           this.processInvalidToken();
         } else {
-  
-          let processed_labels = responseJson.message.scale;
-          let min_value = responseJson.message.scale[0]
-          console.log(min_value)
+          //what we got on success
           this.setState({
-            labels_gauge: processed_labels,
-            scale_gauge: responseJson.message.avg_heart_rate
+            labels_array: responseJson.message.scale_sizes,
+            gauge_value: responseJson.message.avg_heart_rate,
+            gauge_label: responseJson.message.label
           })
         }
       })
@@ -538,7 +536,7 @@ export default class Login extends React.Component {
                 showsPagination={true}
                 
                 loop={false}>
-                <GaugeHearthrate navigation={this.props.navigation} value={54}/>
+                <GaugeHearthrate navigation={this.props.navigation} value={this.state.gauge_value} label={this.state.gauge_label} labels_array={this.state.labels_array} />
                 <View style={{flex:1}}>
                   {this.renderChart()}
                 </View>
