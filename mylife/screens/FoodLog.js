@@ -21,7 +21,8 @@ import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import Swipeout from "react-native-swipeout";
 import moment from "moment";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-
+import { ThemeConsumer } from "react-native-elements";
+import {NavigationEvents} from 'react-navigation';
 const API_URL = "http://mednat.ieeta.pt:8442";
 
 //import all the basic component we have used
@@ -70,6 +71,7 @@ export default class FoodLog extends React.Component {
 
   async componentDidMount() {
     await this._retrieveData(); //TODO uncomment this
+    console.log("Im back")
     //this.getLogs()
     if (!this.state.SharedLoading) {
       this.getLogs();
@@ -370,7 +372,16 @@ export default class FoodLog extends React.Component {
     );
   };
 
-  renderMealsComponent = data => {
+  handlePossibleRefresh = () => {
+    let refresh=this.props.navigation.getParam("refresh",null)
+
+    if(refresh){
+      this.handleRefresh()
+    }
+
+  }
+
+  renderMealsComponent = (data,type) => {
     if (this.state.loading) {
       return (
         <View
@@ -398,6 +409,12 @@ export default class FoodLog extends React.Component {
               paddingLeft: moderateScale(10),
               paddingVertical: moderateScale(10)
             }}
+            onPress={() =>
+              this.props.navigation.navigate("FoodLogRegister", {
+                date:this.state.current_day,
+                food_log_type:type
+              })
+            }
           >
             <AntDesign
               name="plus"
@@ -428,6 +445,7 @@ export default class FoodLog extends React.Component {
   render() {
     return (
       /* Parent View */
+      
       <View style={{ flex: 1, padding: moderateScale(10) }}>
         {/* Day selected */}
         <View
@@ -693,7 +711,7 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.breakfast.meals)}
+            {this.renderMealsComponent(this.state.data.breakfast.meals,"Breakfast")}
           </View>
 
           {/* Day selected */}
@@ -744,7 +762,7 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.lunch.meals)}
+            {this.renderMealsComponent(this.state.data.lunch.meals,"Lunch")}
           </View>
 
           {/* Day selected */}
@@ -794,7 +812,8 @@ export default class FoodLog extends React.Component {
                 </Text>
               </View>
             </View>
-            {this.renderMealsComponent(this.state.data.dinner.meals)}
+
+            {this.renderMealsComponent(this.state.data.dinner.meals,"Dinner")}
           </View>
 
 
@@ -846,21 +865,14 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.snack.meals)}
+
+            {this.renderMealsComponent(this.state.data.snack.meals,"Snack")}
           </View>
           
         </ScrollView>
 
-        <FAB
-          buttonColor={theme.primary_color_2}
-          iconTextColor="#FFFFFF"
-          onClickAction={() => {
-            this.props.navigation.navigate("FoodLogRegister",{
-              handleRefreshParent: this.handleRefresh.bind(this)
-            });
-          }}
-          visible={true}
-        />
+        
+        <NavigationEvents onDidFocus={() => this.handlePossibleRefresh()} />
       </View>
     );
   }
