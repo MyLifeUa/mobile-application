@@ -39,7 +39,7 @@ import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 
 //import all the basic component we have used
 
-export default class GaugeMetrics extends React.Component {
+export default class GaugeHearthrate extends React.Component {
   //Detail Screen to show from any Open detail button
   constructor(props) {
     super(props);
@@ -51,11 +51,34 @@ export default class GaugeMetrics extends React.Component {
       { key: "first", title: "Body" },
       { key: "second", title: "Nutrients" }
     ],
+    labels: [
+      {
+        name: 'Excellent',
+        labelColor: '#ff2900',
+        activeBarColor: '#ff2900',
+      },
+      {
+        name: 'Good',
+        labelColor: '#ff5400',
+        activeBarColor: '#ff5400',
+      },
+      {
+        name: 'Average',
+        labelColor: '#f4ab44',
+        activeBarColor: '#f4ab44',
+      },
+      {
+        name: 'Fair',
+        labelColor: '#f2cf1f',
+        activeBarColor: '#f2cf1f',
+      },
+      {
+        name: 'Poor',
+        labelColor: '#14eb6e',
+        activeBarColor: '#14eb6e',
+      },
+    ],
   };
-
-  componentDidMount(){
-    console.log(this.props.labels)
-  }
 
   render() {
     return (
@@ -91,7 +114,7 @@ export default class GaugeMetrics extends React.Component {
                     alignContent: "center",
                 }}
             >
-                <RNSpeedometer labels={this.props.labels} minValue={50} maxValue={130} value={this.props.value} size={200}/>
+                <RNSpeedometer labels={this.state.labels} value={122} size={200}/>
             </View>
           
       </View>
