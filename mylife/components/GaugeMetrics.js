@@ -87,7 +87,7 @@ export default class Login extends React.Component {
                     alignContent: "center",
                 }}
             >
-                <RNSpeedometer value={12} size={200}/>
+                <RNSpeedometer value={122} size={200}/>
             </View>
           
       </View>
