@@ -6,6 +6,9 @@ import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import RNPickerSelect, { defaultStyles } from "react-native-picker-select";
 import HeartRateItem from "../components/ChartPageItem";
 import moment from "moment";
+import Swiper from 'react-native-swiper'
+import GaugeHearthrate from "../components/GaugeHearthrate";
+
 //import react in our code.
 import {
   View,
@@ -407,7 +410,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 0.6 }}>
+        <View style={{ flex: 0.9 }}>
           <View
             style={{
               flex: 1,
@@ -482,12 +485,21 @@ export default class Login extends React.Component {
             </View>
             <View
               style={{
-                flex: 0.8,
+                flex: 1.3,
                 justifyContent: "center",
                 alignItems: "center"
               }}
             >
-              {this.renderChart()}
+              <Swiper 
+                showsButtons={false}
+                showsPagination={true}
+                
+                loop={false}>
+                <GaugeHearthrate navigation={this.props.navigation} value={54}/>
+                <View style={{flex:1}}>
+                  {this.renderChart()}
+                </View>
+              </Swiper>
             </View>
           </View>
         </View>

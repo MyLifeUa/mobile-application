@@ -102,7 +102,7 @@ export default class GaugeHearthrate extends React.Component {
                 fontWeight: "bold"
               }}
             >
-              Clients Metrics
+              Hearthrate Scale
             </Text>
               
             
@@ -114,7 +114,7 @@ export default class GaugeHearthrate extends React.Component {
                     alignContent: "center",
                 }}
             >
-                <RNSpeedometer labels={this.state.labels} value={122} size={200}/>
+                <RNSpeedometer value={122} size={200}/>
             </View>
           
       </View>
