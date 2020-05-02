@@ -138,6 +138,7 @@ export default class Login extends React.Component {
 
     if (!this.state.SharedLoading) {
       this.getHeartStats();
+      this.getHeartrateStats();
     }
   }
 
@@ -406,6 +407,48 @@ export default class Login extends React.Component {
       this.getHeartStats();
     });
   };
+
+  async getHeartrateStats() {
+    var login_info = "Token " + this.state.user_token;
+    console.log(
+      `${API_URL}/health-stats/body/heart-rate/` +
+        this.state.user_email
+    );
+
+    fetch(
+      `${API_URL}/health-stats/body/heart-rate/` +
+        this.state.user_email,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: login_info
+        }
+      }
+    )
+      .then(this.processResponse)
+      .then(res => {
+        const { statusCode, responseJson } = res;
+        console.log("-------------------Hearthrate--------------------")
+        console.log(responseJson)
+        if (statusCode == 401) {
+          this.processInvalidToken();
+        } else {
+  
+          let processed_labels = responseJson.message.scale;
+          let min_value = responseJson.message.scale[0]
+          console.log(min_value)
+          this.setState({
+            labels_gauge: processed_labels,
+            scale_gauge: responseJson.message.avg_heart_rate
+          })
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
 
   render() {
     return (
