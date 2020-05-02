@@ -84,7 +84,11 @@ export default class Login extends React.Component {
     placeholder_2: {
       label: "Pick a meal",
       value: "0"
-    }
+    },
+
+    gauge_label: "Excellent",
+    gauge_value: 48,
+    labels_array: [10,10,10,10,10]
   };
 
   _storeData = async token => {
@@ -165,7 +169,7 @@ export default class Login extends React.Component {
         `?metric=heart&period=week`
     );
 
-    fetch(
+    await fetch(
       `${API_URL}/health-stats/body/history/` +
         this.state.user_email +
         `?metric=heart&period=` +

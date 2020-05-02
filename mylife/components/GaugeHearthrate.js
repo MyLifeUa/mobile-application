@@ -46,11 +46,10 @@ export default class GaugeMetrics extends React.Component {
   }
   n_labels = 5
   state = {
+    value: 50,
+    label: 'Excellent',
+    label_color: '#99ff33',
     index: 0,
-    routes: [
-      { key: "first", title: "Body" },
-      { key: "second", title: "Nutrients" }
-    ],
     labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels]
   };
 
@@ -61,10 +60,31 @@ export default class GaugeMetrics extends React.Component {
     //label done
     console.log("-----------------Incoming Props---------------")
     console.log(this.props)
+    this.setState({
+      value: this.props.value,
+      label: this.props.label
+    })
+    this.calculateDiffRanges(this.props.labels_array)
   }
 
-  calculateDiffRanges(){
+  calculateDiffRanges(labels_sizes_array){
     //returns array from state labels, with 5 values ordered and their flex percentage
+    //labels = [10,2,5,8]
+    //sums all values of the array
+    var sum_array = labels_sizes_array.reduce((a,b) => a + b, 0);
+    var array_degrees = [];
+
+    for (let index = 0; index < labels_sizes_array.length; index++) {
+      const element = labels_sizes_array[index];
+      array_degrees.push((element * 1) / sum_array);
+    }
+    
+    this.setState({
+      labels_sizes: array_degrees
+    })
+    //returns array of degrees
+    console.log("New values")
+    console.log(this.state.labels_sizes)
   }
 
   render() {
@@ -109,17 +129,36 @@ export default class GaugeMetrics extends React.Component {
                 fontWeight: "bold"
               }}
             >
-              Your estimate of 52 is 
+              Your estimate of 
             </Text>
             <Text
               style={{
                 fontSize: theme.body,
-                color: "#80ccff",
+                color: 'gray',
                 fontWeight: "bold",
                 paddingHorizontal: moderateScale(5)
               }}
             >
-               Good
+              {this.state.value}
+            </Text>
+            <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+              }}
+            >
+              is 
+            </Text>
+            <Text
+              style={{
+                fontSize: theme.body,
+                color: this.state.label_color,
+                fontWeight: "bold",
+                paddingHorizontal: moderateScale(5)
+              }}
+            >
+               {this.state.label}
             </Text>
             <Text
               style={{
@@ -144,11 +183,11 @@ export default class GaugeMetrics extends React.Component {
                     overflow: "hidden"
                 }}
             >
-              <View style={{flex:1,backgroundColor:'#bb99ff'}}></View>
-              <View style={{flex:1.5,backgroundColor:'#80ccff'}}></View>
-              <View style={{flex:2,backgroundColor:'#99ffff'}}></View>
-              <View style={{flex:2,backgroundColor:'#d9ffb3'}}></View>
-              <View style={{flex:0.8,backgroundColor:'#99ff33'}}></View>
+              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'#99ff33'}}></View>
+              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'#d9ffb3'}}></View>
+              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'#99ffff'}}></View>
+              <View style={{flex:this.state.labels_sizes[3],backgroundColor:'#80ccff'}}></View>
+              <View style={{flex:this.state.labels_sizes[4],backgroundColor:'#bb99ff'}}></View>
           </View>
       </View>
     );
