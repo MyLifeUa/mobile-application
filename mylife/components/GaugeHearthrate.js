@@ -49,9 +49,17 @@ export default class GaugeMetrics extends React.Component {
     value: null,
     sex:"",
     label: null,
-    label_color: '#99ff33',
+    label_color: "",
     index: 0,
-    labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels]
+    labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels],
+
+    labels_colors: {
+      "Excellent" : "#99ff33",
+      "Good" : "d9ffb3",
+      "Average" : "99ffff" ,
+      "Fair" : "80ccff",
+      "Poor" : "bb99ff"
+    }
   };
 
   componentDidMount(){
@@ -194,7 +202,7 @@ export default class GaugeMetrics extends React.Component {
             <Text
               style={{
                 fontSize: theme.body,
-                color: this.state.label_color,
+                color: this.state.labels_colors[this.state.label],
                 fontWeight: "bold",
                 paddingHorizontal: moderateScale(5)
               }}
@@ -240,6 +248,23 @@ export default class GaugeMetrics extends React.Component {
               <View style={{flex:this.state.labels_sizes[2],backgroundColor:'#99ffff'}}></View>
               <View style={{flex:this.state.labels_sizes[3],backgroundColor:'#80ccff'}}></View>
               <View style={{flex:this.state.labels_sizes[4],backgroundColor:'#bb99ff'}}></View>
+          </View>
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    maxHeight:verticalScale(15),
+
+                }}
+            >
+              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}>|</Text></View>
+              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
+              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
+              <View style={{flex:this.state.labels_sizes[3],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
+              <View style={{flex:this.state.labels_sizes[4],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
           </View>
 
           {/* Legenda */}
