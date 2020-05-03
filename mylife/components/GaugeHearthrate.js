@@ -100,7 +100,7 @@ export default class GaugeMetrics extends React.Component {
                 paddingHorizontal:moderateScale(5)
               }}
             >
-              Men
+              men
             </Text>
       )
     } else if (str=="F"){
@@ -112,7 +112,7 @@ export default class GaugeMetrics extends React.Component {
                 paddingHorizontal:moderateScale(5)
               }}
             >
-              Women
+              women
             </Text>
     } else {
       <Text
@@ -136,7 +136,6 @@ export default class GaugeMetrics extends React.Component {
         alignContent: "space-between",
         paddingHorizontal:moderateScale(15),
         overflow: "hidden",
-        elevation: 2
       }}>
           <View
             style={{
@@ -232,6 +231,7 @@ export default class GaugeMetrics extends React.Component {
                     marginTop:verticalScale(15),
                     maxHeight:verticalScale(15),
                     borderRadius: 10,
+                    elevation: 5,
                     overflow: "hidden"
                 }}
             >
@@ -240,6 +240,91 @@ export default class GaugeMetrics extends React.Component {
               <View style={{flex:this.state.labels_sizes[2],backgroundColor:'#99ffff'}}></View>
               <View style={{flex:this.state.labels_sizes[3],backgroundColor:'#80ccff'}}></View>
               <View style={{flex:this.state.labels_sizes[4],backgroundColor:'#bb99ff'}}></View>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(15),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:'#99ff33',borderRadius: 10,}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Excellent </Text>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(5),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:'#d9ffb3',borderRadius: 10,}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Good </Text>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(5),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:'#99ffff',borderRadius: 10,}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Average </Text>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(5),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:'#80ccff',borderRadius: 10,}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Fair </Text>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(5),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:'#bb99ff',borderRadius: 10,}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Poor </Text>
           </View>
       </View>
     );
