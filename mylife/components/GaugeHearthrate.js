@@ -47,6 +47,7 @@ export default class GaugeMetrics extends React.Component {
   n_labels = 5
   state = {
     value: null,
+    sex:"",
     label: null,
     label_color: '#99ff33',
     index: 0,
@@ -86,6 +87,45 @@ export default class GaugeMetrics extends React.Component {
     //returns array of degrees
     console.log("New values")
     console.log(this.state.labels_sizes)
+  }
+
+  renderName(str) {
+    if (str=="M") {
+      return (
+        <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+                paddingHorizontal:moderateScale(5)
+              }}
+            >
+              Men
+            </Text>
+      )
+    } else if (str=="F"){
+      <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+                paddingHorizontal:moderateScale(5)
+              }}
+            >
+              Women
+            </Text>
+    } else {
+      <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+                paddingHorizontal:moderateScale(5)
+              }}
+            >
+              people
+            </Text>
+    }
   }
 
   render() {
@@ -169,7 +209,17 @@ export default class GaugeMetrics extends React.Component {
                 fontWeight: "bold",
               }}
             >
-               for men your age
+               for
+            </Text>
+            {this.renderName(this.state.sex)}
+            <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+              }}
+            >
+              your age
             </Text>
           </View>
           <View 
