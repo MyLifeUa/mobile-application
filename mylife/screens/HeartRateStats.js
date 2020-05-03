@@ -86,9 +86,10 @@ export default class Login extends React.Component {
       value: "0"
     },
 
-    gauge_label: "Excellent",
-    gauge_value: 48,
-    labels_array: [10,10,10,10,10]
+    gauge_label: "",
+    gauge_value: 0,
+    gauge_sex: "",
+    labels_array: []
   };
 
   _storeData = async token => {
@@ -442,7 +443,8 @@ export default class Login extends React.Component {
           this.setState({
             labels_array: responseJson.message.scale_sizes,
             gauge_value: responseJson.message.avg_heart_rate,
-            gauge_label: responseJson.message.label
+            gauge_label: responseJson.message.label,
+            gauge_sex: responseJson.message.sex
           })
         }
       })
@@ -540,7 +542,7 @@ export default class Login extends React.Component {
                 showsPagination={true}
                 
                 loop={false}>
-                <GaugeHearthrate navigation={this.props.navigation} value={this.state.gauge_value} label={this.state.gauge_label} labels_array={this.state.labels_array} />
+                <GaugeHearthrate navigation={this.props.navigation} sex={this.state.gauge_sex} value={this.state.gauge_value} label={this.state.gauge_label} labels_array={this.state.labels_array} />
                 <View style={{flex:1}}>
                   {this.renderChart()}
                 </View>

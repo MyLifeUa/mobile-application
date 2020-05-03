@@ -46,8 +46,8 @@ export default class GaugeMetrics extends React.Component {
   }
   n_labels = 5
   state = {
-    value: 50,
-    label: 'Excellent',
+    value: null,
+    label: null,
     label_color: '#99ff33',
     index: 0,
     labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels]
@@ -62,7 +62,8 @@ export default class GaugeMetrics extends React.Component {
     console.log(this.props)
     this.setState({
       value: this.props.value,
-      label: this.props.label
+      label: this.props.label,
+      sex: this.props.sex
     })
     this.calculateDiffRanges(this.props.labels_array)
   }
@@ -94,7 +95,8 @@ export default class GaugeMetrics extends React.Component {
         flex: 1,
         alignContent: "space-between",
         paddingHorizontal:moderateScale(15),
-        overflow: "hidden"
+        overflow: "hidden",
+        elevation: 2
       }}>
           <View
             style={{
