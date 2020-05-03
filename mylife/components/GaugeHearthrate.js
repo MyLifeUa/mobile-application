@@ -55,10 +55,10 @@ export default class GaugeMetrics extends React.Component {
 
     labels_colors: {
       "Excellent" : "#99ff33",
-      "Good" : "d9ffb3",
-      "Average" : "99ffff" ,
-      "Fair" : "80ccff",
-      "Poor" : "bb99ff"
+      "Good" : "#d9ffb3",
+      "Average" : "#99ffff" ,
+      "Fair" : "#80ccff",
+      "Poor" : "#bb99ff"
     }
   };
 

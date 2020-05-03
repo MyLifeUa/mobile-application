@@ -61,7 +61,21 @@ export default class Login extends React.Component {
         sedentaryMinutes: null,
         steps: null
       },
-      
+      // increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}
+      /*gauge_increase: 0,
+      prev_week: {},
+      this_week: {},
+      labels_array: [] */
+      gauge_increase: 1800,
+      prev_week: {
+        "value" : 0.1,
+        "label" : "Poor"
+      },
+      this_week: {
+        "value" : 1.9,
+        "label" : "Poor"
+      },
+      labels_array: [2,2,1]
     };
   }
   _storeData = async token => {
@@ -80,6 +94,7 @@ export default class Login extends React.Component {
     //this.getMeasures()
     if (!this.state.SharedLoading) {
       this.getValues();
+      //getMyLifeMetricStats TODO UNCOMMENT THIS
     }
 
   };
@@ -199,6 +214,46 @@ export default class Login extends React.Component {
       })
       .catch(error => {
         //alert("Error adding Food Log.");
+        console.log(error);
+      });
+  }
+
+  async getMyLifeMetricStats() {
+    var login_info = "Token " + this.state.user_data.token;
+    console.log(
+      `${API_URL}/health-stats/my-life/` +
+        this.state.user_data.email
+    );
+
+    fetch(
+      `${API_URL}/health-stats/my-life/` +
+        this.state.user_data.email,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: login_info
+        }
+      }
+    )
+      .then(this.processResponse)
+      .then(res => {
+        const { statusCode, responseJson } = res;
+        console.log("-------------------Hearthrate--------------------")
+        console.log(responseJson)
+        if (statusCode == 401) {
+          this.processInvalidToken();
+        } else {
+          //what we got on success
+          this.setState({
+            gauge_increase: responseJson.message.increase,
+            prev_week: responseJson.message.previous_week,
+            this_week: responseJson.message.current_week,
+            labels_array: responseJson.message.scale_sizes
+          })
+        }
+      })
+      .catch(error => {
         console.log(error);
       });
   }
@@ -394,7 +449,7 @@ export default class Login extends React.Component {
           showsPagination={true}
           
           loop={false}>
-          <GaugeMetrics navigation={this.props.navigation} value={54}/>
+          <GaugeMetrics navigation={this.props.navigation} sex={this.state.user_data.sex} increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}/>
           <View style={{flex:1}}>
             <ScrollView
             style={{

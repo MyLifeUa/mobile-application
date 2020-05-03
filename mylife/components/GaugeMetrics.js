@@ -46,12 +46,30 @@ export default class GaugeMetrics extends React.Component {
   }
   n_labels = 5
   state = {
+    value: null,
+    sex:"",
+    label: null,
+    label_color: "",
     index: 0,
-    routes: [
-      { key: "first", title: "Body" },
-      { key: "second", title: "Nutrients" }
-    ],
-    labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels]
+    labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels],
+
+    labels_colors: {
+      "Excellent" : "#99ff33",
+      "Good" : "#d9ffb3",
+      "Average" : "#99ffff" ,
+      "Fair" : "#80ccff",
+      "Poor" : "#bb99ff"
+    },
+
+    increase: 0,
+    current_week: {
+      "value" : 0,
+      "label" : "Poor"
+    },
+    previous_week: {
+        "value" : 0,
+        "label" : "Poor"
+    }
   };
 
   componentDidMount(){
@@ -59,11 +77,74 @@ export default class GaugeMetrics extends React.Component {
     //array with values
     //value of metric
     //label done
-    console.log(this.props.labels)
+    console.log("-----------------Incoming Props---------------")
+    console.log(this.props)
+    this.setState({
+      sex: this.props.sex,
+      current_week: this.props.this_week,
+      previous_week : this.props.prev_week,
+      increase: this.props.increase
+    })
+    this.calculateDiffRanges(this.props.labels_array)
   }
 
-  calculateDiffRanges(){
+  calculateDiffRanges(labels_sizes_array){
     //returns array from state labels, with 5 values ordered and their flex percentage
+    //labels = [10,2,5,8]
+    //sums all values of the array
+    var sum_array = labels_sizes_array.reduce((a,b) => a + b, 0);
+    var array_degrees = [];
+
+    for (let index = 0; index < labels_sizes_array.length; index++) {
+      const element = labels_sizes_array[index];
+      array_degrees.push((element * 1) / sum_array);
+    }
+    
+    this.setState({
+      labels_sizes: array_degrees
+    })
+    //returns array of degrees
+    console.log("New values")
+    console.log(this.state.labels_sizes)
+  }
+
+  renderName(str) {
+    if (str=="M") {
+      return (
+        <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+                paddingHorizontal:moderateScale(5)
+              }}
+            >
+              men
+            </Text>
+      )
+    } else if (str=="F"){
+      <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+                paddingHorizontal:moderateScale(5)
+              }}
+            >
+              women
+            </Text>
+    } else {
+      <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+                paddingHorizontal:moderateScale(5)
+              }}
+            >
+              people
+            </Text>
+    }
   }
 
   render() {
@@ -73,7 +154,7 @@ export default class GaugeMetrics extends React.Component {
         flex: 1,
         alignContent: "space-between",
         paddingHorizontal:moderateScale(15),
-        overflow: "hidden"
+        overflow: "hidden",
       }}>
           <View
             style={{
@@ -108,17 +189,17 @@ export default class GaugeMetrics extends React.Component {
                 fontWeight: "bold"
               }}
             >
-              Your estimate of 52 is 
+              Your estimate of 
             </Text>
             <Text
               style={{
                 fontSize: theme.body,
-                color: "#80ccff",
+                color: 'gray',
                 fontWeight: "bold",
                 paddingHorizontal: moderateScale(5)
               }}
             >
-               Good
+              {this.state.current_week.value}
             </Text>
             <Text
               style={{
@@ -127,9 +208,56 @@ export default class GaugeMetrics extends React.Component {
                 fontWeight: "bold",
               }}
             >
-               for men your age
+              is 
+            </Text>
+            <Text
+              style={{
+                fontSize: theme.body,
+                color: this.state.labels_colors[this.state.current_week.label],
+                fontWeight: "bold",
+                paddingHorizontal: moderateScale(5)
+              }}
+            >
+               {this.state.current_week.label}
+            </Text>
+            <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+              }}
+            >
+               for
+            </Text>
+            {this.renderName(this.state.sex)}
+            <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+              }}
+            >
+              your age
             </Text>
           </View>
+          <View
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              alignContent: "center",
+            }}
+          >
+            <Text
+              style={{
+                fontSize: theme.body,
+                color: 'gray',
+                fontWeight: "bold",
+              }}
+            >
+              It represents an increase of {this.state.increase}% from last week
+            </Text>
+          </View>
+          
           <View 
                 style={{    
                     flexDirection: "row",
@@ -140,320 +268,82 @@ export default class GaugeMetrics extends React.Component {
                     marginTop:verticalScale(15),
                     maxHeight:verticalScale(15),
                     borderRadius: 10,
+                    elevation: 5,
                     overflow: "hidden"
                 }}
             >
-              <View style={{flex:1,backgroundColor:'#bb99ff'}}></View>
-              <View style={{flex:1.5,backgroundColor:'#80ccff'}}></View>
-              <View style={{flex:2,backgroundColor:'#99ffff'}}></View>
-              <View style={{flex:2,backgroundColor:'#d9ffb3'}}></View>
-              <View style={{flex:0.8,backgroundColor:'#99ff33'}}></View>
+              <View style={{flex:this.state.labels_sizes[0],backgroundColor:this.state.labels_colors["Poor"]}}></View>
+              <View style={{flex:this.state.labels_sizes[1],backgroundColor:this.state.labels_colors["Average"]}}></View>
+              <View style={{flex:this.state.labels_sizes[2],backgroundColor:this.state.labels_colors["Excellent"]}}></View>
           </View>
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    maxHeight:verticalScale(15),
+
+                }}
+            >
+              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}>^</Text></View>
+              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
+              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(15),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:this.state.labels_colors["Poor"],borderRadius: 10,}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Poor </Text>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(5),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:this.state.labels_colors["Average"],borderRadius: 10,}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Average </Text>
+          </View>
+
+          {/* Legenda */}
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(5),
+                    maxHeight:verticalScale(20),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:1,backgroundColor:this.state.labels_colors["Excellent"],borderRadius: 10}}></View>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Excellent </Text>
+          </View>
+
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  photoContainer: {
-    flex: 0.6,
-    alignSelf: "center",
-    backgroundColor: theme.gray2,
-    width: "90%",
-    borderRadius: 10,
-    marginVertical: 20,
-    elevation: 8, // Android
-    shadowColor: "rgba(0,0,0, .4)", // IOS
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 1, // IOS
-    shadowRadius: 1 //IOS
-  },
-  squareView: {
-    flex: 1,
-    width: moderateScale(150),
-    height: moderateScale(150),
-    marginVertical: width * 0.03,
-    marginHorizontal: moderateScale(11),
-    borderRadius: moderateScale(10),
-    backgroundColor: theme.primary_color,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4
-  },
-  squareView2: {
-    flex: 1,
-    width: moderateScale(150),
-    height: moderateScale(150),
-    marginVertical: width * 0.03,
-    marginHorizontal: moderateScale(11),
-    borderRadius: moderateScale(10),
-    backgroundColor: theme.primary_color_2,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4
-  },
-  squareView3: {
-    flex: 1,
-    width: moderateScale(150),
-    height: moderateScale(150),
-    marginVertical: width * 0.03,
-    marginHorizontal: moderateScale(11),
-    borderRadius: moderateScale(10),
-    backgroundColor: "#36A9E1",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4
-  },
-  squareView4: {
-    flex: 1,
-    width: moderateScale(150),
-    height: moderateScale(150),
-    marginVertical: width * 0.03,
-    marginHorizontal: moderateScale(11),
-    borderRadius: moderateScale(10),
-    backgroundColor: "#4caf50",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4
-  },
-  squareView5: {
-    flex: 0.8,
-    width: moderateScale(150),
-    height: moderateScale(150),
-    marginVertical: width * 0.03,
-    marginHorizontal: moderateScale(11),
-    borderRadius: moderateScale(10),
-    backgroundColor: "#ea4744",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4
-  },
-  squareView6: {
-    flex: 1,
-    width: moderateScale(150),
-    height: moderateScale(150),
-    marginVertical: width * 0.03,
-    marginHorizontal: moderateScale(11),
-    borderRadius: moderateScale(10),
-    backgroundColor: "#1cbfd3",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    elevation: 4
-  },
-  squaretext: {
-    fontSize: moderateScale(30),
-    textAlign: "center",
-    width: "100%",
-    color: "white",
-    fontWeight: "bold"
-  },
-  addButton: {
-    shadowColor: "rgba(0,0,0, .4)", // IOS
-    backgroundColor: theme.primary_color_2,
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 1, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 2, // Android
-    width: moderateScale(40),
-    height: moderateScale(40),
-    marginBottom: 20,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  pictureButton: {
-    shadowColor: "rgba(0,0,0, .4)", // IOS
-    backgroundColor: theme.primary_color_2,
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 1, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 2, // Android
-    width: moderateScale(50),
-    height: moderateScale(40),
-    margin: 10,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  loginGoogleButton: {
-    shadowColor: "rgba(0,0,0, .4)", // IOS
-    backgroundColor: theme.primary_color_2,
-    shadowOffset: { height: 1, width: 1 }, // IOS
-    shadowOpacity: 1, // IOS
-    shadowRadius: 1, //IOS
-    elevation: 2, // Android
-    width: moderateScale(170),
-    height: moderateScale(40),
-    margin: 10,
-    borderRadius: 20,
-    justifyContent: "center",
-    alignItems: "center"
-  },
-  loginButtonText: {
-    textAlign: "center",
-    color: "#FFF",
-    fontWeight: "700",
-    width: "100%",
-    fontSize: moderateScale(15)
-  },
-  loginText: {
-    color: "white"
-  },
-  photoText: {
-    color: theme.primary_color
-  },
-  photoButton: {
-    width: "80%",
-    backgroundColor: theme.white,
-    borderRadius: 5,
-    height: 45,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    marginBottom: 10
-  },
-  container: {
-    flex: 1,
-    //backgroundColor: theme.primary_color,
-    alignItems: "center",
-
-    justifyContent: "center"
-  },
-
-  containerScroll: {
-    flex: 0.3,
-    //backgroundColor: theme.black,
-    alignItems: "center",
-    justifyContent: "center"
-  },
-
-  inputView: {
-    width: "80%",
-    backgroundColor: theme.white,
-    color: theme.primary_color,
-    borderColor: theme.primary_color_2,
-    borderWidth: 2,
-    borderRadius: 20,
-    height: 45,
-    marginBottom: 20,
-    justifyContent: "center",
-    padding: 20
-  },
-
-  inputView_2: {
-    flex: 0.6,
-    backgroundColor: theme.white,
-    color: theme.primary_color,
-    borderColor: theme.primary_color_2,
-    borderWidth: 2,
-    borderRadius: 20,
-    height: 45,
-    marginBottom: 20,
-    justifyContent: "center",
-    padding: 20
-  },
-
-  birthday_placeholder: {
-    fontSize: 0.02 * height,
-    paddingHorizontal: 5,
-    paddingVertical: 4,
-    height: height * 0.05,
-    color: "#FFFFFF",
-    fontWeight: "normal",
-    paddingRight: 30 // to ensure the text is never behind the icon
-  },
-
-  inputText: {
-    fontSize: 0.02 * height,
-    paddingHorizontal: 5,
-    paddingVertical: 4,
-    height: height * 0.05,
-    color: "black",
-    fontWeight: "normal",
-    paddingRight: 30 // to ensure the text is never behind the icon
-  },
-
-  forgot: {
-    color: theme.white,
-    fontSize: 14
-  },
-
-  loginBtn: {
-    width: "80%",
-    backgroundColor: "#fb5b5a",
-    borderRadius: 25,
-    height: 45,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 40,
-    marginBottom: 10
-  },
-
-  register_title: {
-    fontSize: theme.h2,
-    color: theme.black,
-    fontWeight: "bold"
-  },
-
-  logo_text: {
-    fontSize: theme.h1,
-    color: theme.white,
-    fontWeight: "bold"
-  },
-
-  icon: {
-    color: "#636e72"
-  }
-});
-
-const pickerSelectStyles = StyleSheet.create({
-  inputIOS: {
-    fontSize: 0.02 * height,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
-    height: height * 0.05,
-
-    color: "black",
-    fontWeight: "normal",
-    paddingRight: 30 // to ensure the text is never behind the icon
-  },
-  inputAndroid: {
-    fontSize: 0.02 * height,
-    paddingHorizontal: 5,
-    paddingVertical: 4,
-    height: height * 0.05,
-    color: "black",
-    fontWeight: "normal",
-    paddingRight: 30 // to ensure the text is never behind the icon
-  }
-});
