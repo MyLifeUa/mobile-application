@@ -193,11 +193,6 @@ export default class GaugeMetrics extends React.Component {
     }
   }
 
-  calculateRelativePosition(underLimit,overLimit,value){
-    let res = ( value * 1 ) / overLimit;
-    return res
-  }
-
   renderIncrease(){
     let value = this.state.increase
     console.log("Value: " + value)

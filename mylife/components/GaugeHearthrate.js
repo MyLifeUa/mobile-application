@@ -52,6 +52,9 @@ export default class GaugeMetrics extends React.Component {
     label_color: "",
     index: 0,
     labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels],
+    
+    range_array : [0,0,0,0],
+    relative_flex: 0,
 
     labels_colors: {
       "Excellent" : "#99ff33",
@@ -75,6 +78,18 @@ export default class GaugeMetrics extends React.Component {
       sex: this.props.sex
     })
     this.calculateDiffRanges(this.props.labels_array)
+    this.calculateRangesArray(this.props.labels_array, this.props.value)
+  }
+
+  componentWillReceiveProps(){
+    //receives 
+    //array with values
+    //value of metric
+    //label done
+    console.log("-----------------Incoming Updated Props---------------")
+    console.log(this.props)
+    this.calculateDiffRanges(this.props.labels_array)
+    this.calculateRangesArray(this.props.labels_array, this.props.value)
   }
 
   calculateDiffRanges(labels_sizes_array){
@@ -95,6 +110,35 @@ export default class GaugeMetrics extends React.Component {
     //returns array of degrees
     console.log("New values")
     console.log(this.state.labels_sizes)
+  }
+
+  calculateRangesArray(arr,inc_value){
+    let smallest_value = parseInt(Object.keys(this.props.scales)[1].toString().substring(0,2)) 
+    console.log("Object keys:")
+    console.log(Object.keys(this.props.scales)[1].toString().substring(0,2))
+
+    let array_ranges = [smallest_value]
+    let scale_values = arr
+
+    let element = 0;
+    let val = 1;
+
+    for (let index = 0; index < scale_values.length; index++) {
+      element = scale_values[index];
+      val = element+array_ranges[index]
+      array_ranges.push(val)
+    }
+
+    console.log("This is the array range:" + array_ranges)
+    console.log("Element: " + val)
+    console.log("Value:" + inc_value)
+
+    let result = ((inc_value - smallest_value) * 1) / val;
+    console.log("ResultOfRange: " + result)
+    this.setState({
+      range_array: array_ranges,
+      relative_flex: result
+    })
   }
 
   renderName(str) {
@@ -229,6 +273,29 @@ export default class GaugeMetrics extends React.Component {
               your age
             </Text>
           </View>
+
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "flex-start",
+                    alignContent: "flex-start",
+                    backgroundColor:'white',
+                    flex:1,
+                    marginTop:verticalScale(5),
+                    maxHeight:verticalScale(15),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:this.state.relative_flex,backgroundColor:'white',flexDirection:'row'}}>
+              </View>
+              <View style={{flex:1-this.state.relative_flex,backgroundColor:'white',flexDirection:'row'}}>
+                <Ionicons 
+                  name={"md-arrow-down"}
+                />
+              </View>
+              
+          </View>
+
           <View 
                 style={{    
                     flexDirection: "row",
@@ -236,7 +303,6 @@ export default class GaugeMetrics extends React.Component {
                     alignContent: "center",
                     backgroundColor:'white',
                     flex:1,
-                    marginTop:verticalScale(15),
                     maxHeight:verticalScale(15),
                     borderRadius: 10,
                     elevation: 5,
@@ -249,23 +315,7 @@ export default class GaugeMetrics extends React.Component {
               <View style={{flex:this.state.labels_sizes[3],backgroundColor:'#80ccff'}}></View>
               <View style={{flex:this.state.labels_sizes[4],backgroundColor:'#bb99ff'}}></View>
           </View>
-          <View 
-                style={{    
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    backgroundColor:'white',
-                    flex:1,
-                    maxHeight:verticalScale(15),
 
-                }}
-            >
-              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}>|</Text></View>
-              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
-              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
-              <View style={{flex:this.state.labels_sizes[3],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
-              <View style={{flex:this.state.labels_sizes[4],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
-          </View>
 
           {/* Legenda */}
           <View 
