@@ -66,13 +66,13 @@ export default class Login extends React.Component {
       prev_week: {},
       this_week: {},
       labels_array: [] */
-      gauge_increase: 1800,
+      gauge_increase: 0,
       prev_week: {
-        "value" : 0.1,
+        "value" : 0,
         "label" : "Poor"
       },
       this_week: {
-        "value" : 1.9,
+        "value" : 0,
         "label" : "Poor"
       },
       labels_array: [2,2,1]

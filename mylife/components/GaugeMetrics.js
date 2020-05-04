@@ -357,7 +357,9 @@ export default class GaugeMetrics extends React.Component {
               <View style={{flex:this.state.relative_flex,backgroundColor:'white',flexDirection:'row'}}>
               </View>
               <View style={{flex:1-this.state.relative_flex,backgroundColor:'white',flexDirection:'row'}}>
-                <Text>|</Text>
+                <Ionicons 
+                  name={"md-arrow-down"}
+                />
               </View>
               
           </View>
