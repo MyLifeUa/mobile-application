@@ -425,7 +425,7 @@ export default class Login extends React.Component {
         this.state.user_email,
       {
         method: "GET",
-        headers: {
+        headers: { 
           "Content-Type": "application/json",
           Authorization: login_info
         }

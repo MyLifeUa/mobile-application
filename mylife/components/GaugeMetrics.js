@@ -44,20 +44,23 @@ export default class GaugeMetrics extends React.Component {
   constructor(props) {
     super(props);
   }
-  n_labels = 5
+  n_labels = 3
   state = {
     value: null,
     sex:"",
     label: null,
     label_color: "",
     index: 0,
-    labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels],
+    labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels],
 
     labels_colors: {
       "Excellent" : "#0FA3B1",
       "Average" : "#B5E2FA" ,
       "Poor" : "#F7A072"
     },
+
+    range_array : [0,0,0,0],
+    relative_flex: 0,
 
     increase: 0,
     current_week: {
@@ -81,9 +84,12 @@ export default class GaugeMetrics extends React.Component {
       sex: this.props.sex,
       current_week: this.props.this_week,
       previous_week : this.props.prev_week,
-      increase: this.props.increase
+      increase: this.props.increase,
+      scale_values: this.props.scale
     })
     this.calculateDiffRanges(this.props.labels_array)
+    this.calculateRangesArray(this.props.labels_array)
+    this.calculateRelativePosition()
   }
 
   calculateDiffRanges(labels_sizes_array){
@@ -104,6 +110,21 @@ export default class GaugeMetrics extends React.Component {
     //returns array of degrees
     console.log("New values")
     console.log(this.state.labels_sizes)
+  }
+
+  calculateRangesArray(arr){
+    let array_ranges = [0]
+    let scale_values = arr
+
+    for (let index = 0; index < scale_values.length; index++) {
+      const element = scale_values[index];
+      array_ranges.push(element+array_ranges[index])
+    }
+
+    console.log("This is the array range:" + array_ranges)
+    this.setState({
+      range_array: array_ranges
+    })
   }
 
   renderName(str) {
@@ -136,7 +157,7 @@ export default class GaugeMetrics extends React.Component {
               style={{
                 fontSize: theme.body,
                 color: 'gray',
-                fontWeight: "bold",
+                fontWeight: "bold", 
                 paddingHorizontal:moderateScale(5)
               }}
             >
@@ -145,19 +166,9 @@ export default class GaugeMetrics extends React.Component {
     }
   }
 
-
-  renderArrowAndLabel(label,range,bool){
-    if (bool) {
-      return(
-        <View
-          style={{marginBottom:verticalScale(10),}}
-        >
-          <Text>^</Text>
-          <Text>1.9</Text>
-          <Text>Poor</Text>
-        </View>
-      )
-    }
+  calculateRelativePosition(underLimit,overLimit,value){
+    let res = ( value * 1 ) / overLimit;
+    return res
   }
 
   render() {
@@ -280,6 +291,30 @@ export default class GaugeMetrics extends React.Component {
                     flex:1,
                     marginTop:verticalScale(15),
                     maxHeight:verticalScale(15),
+                    overflow: "hidden"
+                }}
+            >
+              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',flexDirection:'row'}}>
+                <Text style={{flex:1.9}}></Text>
+                <Text style={{flex:0.1}}>|</Text>
+              </View>
+              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',flexDirection:'row'}}>
+                <Text style={{flex:1}}></Text>
+                <Text style={{flex:1}}>|</Text>
+              </View>
+              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white'}}>
+
+              </View>
+          </View>
+
+          <View 
+                style={{    
+                    flexDirection: "row",
+                    justifyContent: "center",
+                    alignContent: "center",
+                    backgroundColor:'white',
+                    flex:1,
+                    maxHeight:verticalScale(15),
                     borderRadius: 10,
                     elevation: 5,
                     overflow: "hidden"
@@ -289,6 +324,7 @@ export default class GaugeMetrics extends React.Component {
               <View style={{flex:this.state.labels_sizes[1],backgroundColor:this.state.labels_colors["Average"]}}></View>
               <View style={{flex:this.state.labels_sizes[2],backgroundColor:this.state.labels_colors["Excellent"]}}></View>
           </View>
+
           <View 
                 style={{    
                     flexDirection: "row",
@@ -296,18 +332,22 @@ export default class GaugeMetrics extends React.Component {
                     alignContent: "center",
                     backgroundColor:'white',
                     flex:1,
-                    maxHeight:verticalScale(50),
+                    maxHeight:verticalScale(20),
 
                 }}
             >
-              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}>
-                {this.renderArrowAndLabel("","",true)}
+              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',alignContent:'flex-start',justifyContent:'flex-start',flexDirection:'row'}}>
+                {/*this.renderArrowAndLabel("","",true)*/}
+              <Text>{this.state.range_array[0]}</Text>
               </View>
-              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}>
-
+              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',alignContent:'flex-start',justifyContent:'flex-start',flexDirection:'row'}}>
+                <Text>{this.state.range_array[1]}</Text>
               </View>
-              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}>
-
+              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'flex-start',justifyContent:'flex-start',flexDirection:'row'}}>
+                <Text>{this.state.range_array[2]}</Text>
+              </View>
+              <View style={{alignContent:'flex-start',justifyContent:'flex-start',flexDirection:'row'}}>
+                <Text>{this.state.range_array[3]}</Text>
               </View>
           </View>
 
@@ -325,7 +365,7 @@ export default class GaugeMetrics extends React.Component {
                 }}
             >
               <View style={{flex:1,backgroundColor:this.state.labels_colors["Poor"],borderRadius: 10,}}></View>
-              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Poor </Text>
+              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}>Poor</Text>
           </View>
 
           {/* Legenda */}
