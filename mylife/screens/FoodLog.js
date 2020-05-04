@@ -12,12 +12,12 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity
 } from "react-native";
 const { width, height } = Dimensions.get("screen");
 import theme from "../constants/theme.style.js";
 import FAB from "react-native-fab";
-import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import Swipeout from "react-native-swipeout";
 import moment from "moment";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
@@ -179,6 +179,7 @@ export default class FoodLog extends React.Component {
             loading: false
             //if this doesnt work, change to individual attribution
           });
+
           console.log("New state");
           console.log(this.state.data);
         }
@@ -816,7 +817,6 @@ export default class FoodLog extends React.Component {
             {this.renderMealsComponent(this.state.data.dinner.meals,"Dinner")}
           </View>
 
-
           {/* Day selected */}
           <View
             style={{
@@ -868,8 +868,23 @@ export default class FoodLog extends React.Component {
 
             {this.renderMealsComponent(this.state.data.snack.meals,"Snack")}
           </View>
-          
         </ScrollView>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() =>
+            this.props.navigation.navigate("Nutrients", {
+              date: this.state.current_day,
+            })
+          }
+        >
+          <AntDesign
+                  name={"piechart"}
+                  size={moderateScale(30)}
+                  color={"white"}
+                />
+        </TouchableOpacity>
+
+
 
         
         <NavigationEvents onDidFocus={() => this.handlePossibleRefresh()} />
@@ -878,4 +893,28 @@ export default class FoodLog extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  addButton: {
+    shadowColor: "rgba(0,0,0, .4)", // IOS
+    backgroundColor: theme.primary_color_2,
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    elevation: 2, // Android
+    width: moderateScale(70),
+    height: moderateScale(70),
+    right: 30,
+    bottom: 30,
+    borderRadius: 40,
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  loginButtonText: {
+    textAlign: "center",
+    color: "#FFF",
+    fontWeight: "700",
+    width: "100%",
+    fontSize: moderateScale(25)
+  }
+});
