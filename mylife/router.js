@@ -26,6 +26,8 @@ import HeaderRightNavBarPicture from "./components/HeaderRightNavBarProfilePictu
 import StepsStats from "./screens/StepsStats";
 
 import FoodLogRegister from "./screens/FoodLogRegister";
+import Nutrients from "./screens/Nutrients";
+
 import FoodLogRegisterML from "./screens/FoodLogRegisterML";
 import IngredientList from "./screens/IngredientList";
 import MealRegister from "./screens/MealRegister";
@@ -88,7 +90,7 @@ const StatsNavigator = createStackNavigator(
   //Signed In Stack
   {
     Stats: {
-      screen: Stats,
+      screen: Stats, //CHANGE
       navigationOptions: { headerRight: <HeaderRightNavBarPicture /> }
     },
     HeartRateStats: {
@@ -222,6 +224,13 @@ const FoodLogsNavigator = createStackNavigator(
     FoodLogs: {
       screen: FoodLogs,
       navigationOptions: { headerRight: <HeaderRightNavBarPicture /> }
+    },
+    Nutrients: {
+      screen: Nutrients,
+      navigationOptions: {
+        title: "Nutrients",
+        headerRight: <HeaderRightNavBarPicture />
+      }
     },
     FoodLogRegister: {
       screen: FoodLogRegister,
