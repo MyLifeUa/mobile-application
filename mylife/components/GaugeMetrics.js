@@ -54,11 +54,9 @@ export default class GaugeMetrics extends React.Component {
     labels_sizes : [1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels, 1/this.n_labels],
 
     labels_colors: {
-      "Excellent" : "#99ff33",
-      "Good" : "#d9ffb3",
-      "Average" : "#99ffff" ,
-      "Fair" : "#80ccff",
-      "Poor" : "#bb99ff"
+      "Excellent" : "#0FA3B1",
+      "Average" : "#B5E2FA" ,
+      "Poor" : "#F7A072"
     },
 
     increase: 0,
@@ -147,6 +145,21 @@ export default class GaugeMetrics extends React.Component {
     }
   }
 
+
+  renderArrowAndLabel(label,range,bool){
+    if (bool) {
+      return(
+        <View
+          style={{marginBottom:verticalScale(10),}}
+        >
+          <Text>^</Text>
+          <Text>1.9</Text>
+          <Text>Poor</Text>
+        </View>
+      )
+    }
+  }
+
   render() {
     return (
       <View style={{
@@ -171,7 +184,7 @@ export default class GaugeMetrics extends React.Component {
                 fontWeight: "bold"
               }}
             >
-              Heart Rate
+              MyLife Metric
             </Text>
           </View>
           <View
@@ -283,13 +296,19 @@ export default class GaugeMetrics extends React.Component {
                     alignContent: "center",
                     backgroundColor:'white',
                     flex:1,
-                    maxHeight:verticalScale(15),
+                    maxHeight:verticalScale(50),
 
                 }}
             >
-              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}>^</Text></View>
-              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
-              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}><Text style={{fontSize:theme.h2,fontWeight:'bold',color:theme.gray}}></Text></View>
+              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}>
+                {this.renderArrowAndLabel("","",true)}
+              </View>
+              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}>
+
+              </View>
+              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'center',justifyContent:'center',flexDirection:'row'}}>
+
+              </View>
           </View>
 
           {/* Legenda */}

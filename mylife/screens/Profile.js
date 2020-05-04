@@ -218,6 +218,7 @@ export default class Login extends React.Component {
       });
   }
 
+
   async getMyLifeMetricStats() {
     var login_info = "Token " + this.state.user_data.token;
     console.log(
@@ -249,7 +250,8 @@ export default class Login extends React.Component {
             gauge_increase: responseJson.message.increase,
             prev_week: responseJson.message.previous_week,
             this_week: responseJson.message.current_week,
-            labels_array: responseJson.message.scale_sizes
+            labels_array: responseJson.message.scale_sizes,
+            scale_values: responseJson.message.scale
           })
         }
       })
@@ -449,7 +451,7 @@ export default class Login extends React.Component {
           showsPagination={true}
           
           loop={false}>
-          <GaugeMetrics navigation={this.props.navigation} sex={this.state.user_data.sex} increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}/>
+          <GaugeMetrics navigation={this.props.navigation} sex={this.state.user_data.sex} scale={this.state.scale_values} increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}/>
           <View style={{flex:1}}>
             <ScrollView
             style={{
