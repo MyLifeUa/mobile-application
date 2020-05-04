@@ -91,6 +91,24 @@ export default class GaugeMetrics extends React.Component {
     this.calculateRangesArray(this.props.labels_array, this.props.this_week.value)
   }
 
+  componentWillReceiveProps(){
+    //receives 
+    //array with values
+    //value of metric
+    //label done
+    console.log("-----------------Incoming Props---------------")
+    console.log(this.props)
+    this.setState({
+      sex: this.props.sex,
+      current_week: this.props.this_week,
+      previous_week : this.props.prev_week,
+      increase: this.props.increase,
+      scale_values: this.props.scale
+    })
+    this.calculateDiffRanges(this.props.labels_array)
+    this.calculateRangesArray(this.props.labels_array, this.props.this_week.value)
+  }
+
   calculateDiffRanges(labels_sizes_array){
     //returns array from state labels, with 5 values ordered and their flex percentage
     //labels = [10,2,5,8]
@@ -136,6 +154,7 @@ export default class GaugeMetrics extends React.Component {
   }
 
   renderName(str) {
+    console.log("Sex is:" + str)
     if (str=="M") {
       return (
         <Text
@@ -337,12 +356,8 @@ export default class GaugeMetrics extends React.Component {
             >
               <View style={{flex:this.state.relative_flex,backgroundColor:'white',flexDirection:'row'}}>
               </View>
-              <View style={{flex:1-this.state.relative_flex,backgroundColor:'white',flexDirection:'row',marginRight:moderateScale(5)}}>
-                <Ionicons
-                  name={"md-arrow-down"}
-                  size={moderateScale(16)}
-                  color={theme.black}
-                />
+              <View style={{flex:1-this.state.relative_flex,backgroundColor:'white',flexDirection:'row'}}>
+                <Text>|</Text>
               </View>
               
           </View>
@@ -386,7 +401,7 @@ export default class GaugeMetrics extends React.Component {
               <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white',alignContent:'flex-start',justifyContent:'flex-start',flexDirection:'row'}}>
                 <Text>{this.state.range_array[2]}</Text>
               </View>
-              <View style={{alignContent:'flex-start',justifyContent:'flex-start',flexDirection:'row'}}>
+              <View style={{alignContent:'flex-end',justifyContent:'flex-end',flexDirection:'row'}}>
                 <Text>{this.state.range_array[3]}</Text>
               </View>
           </View>

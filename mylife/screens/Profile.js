@@ -94,7 +94,7 @@ export default class Login extends React.Component {
     //this.getMeasures()
     if (!this.state.SharedLoading) {
       this.getValues();
-      //getMyLifeMetricStats TODO UNCOMMENT THIS
+      this.getMyLifeMetricStats(); //TODO UNCOMMENT THIS
     }
 
   };
@@ -222,12 +222,12 @@ export default class Login extends React.Component {
   async getMyLifeMetricStats() {
     var login_info = "Token " + this.state.user_data.token;
     console.log(
-      `${API_URL}/health-stats/my-life/` +
+      `${API}/health-stats/my-life/` +
         this.state.user_data.email
     );
 
     fetch(
-      `${API_URL}/health-stats/my-life/` +
+      `${API}/health-stats/my-life/` +
         this.state.user_data.email,
       {
         method: "GET",
@@ -251,7 +251,8 @@ export default class Login extends React.Component {
             prev_week: responseJson.message.previous_week,
             this_week: responseJson.message.current_week,
             labels_array: responseJson.message.scale_sizes,
-            scale_values: responseJson.message.scale
+            scale_values: responseJson.message.scale,
+            scale_sex: responseJson.message.sex
           })
         }
       })
@@ -451,7 +452,7 @@ export default class Login extends React.Component {
           showsPagination={true}
           
           loop={false}>
-          <GaugeMetrics navigation={this.props.navigation} sex={this.state.user_data.sex} scale={this.state.scale_values} increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}/>
+          <GaugeMetrics navigation={this.props.navigation} sex={this.state.scale_sex} scale={this.state.scale_values} increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}/>
           <View style={{flex:1}}>
             <ScrollView
             style={{
