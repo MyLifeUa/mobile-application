@@ -88,8 +88,7 @@ export default class GaugeMetrics extends React.Component {
       scale_values: this.props.scale
     })
     this.calculateDiffRanges(this.props.labels_array)
-    this.calculateRangesArray(this.props.labels_array)
-    this.calculateRelativePosition()
+    this.calculateRangesArray(this.props.labels_array, this.props.this_week.value)
   }
 
   calculateDiffRanges(labels_sizes_array){
@@ -112,18 +111,27 @@ export default class GaugeMetrics extends React.Component {
     console.log(this.state.labels_sizes)
   }
 
-  calculateRangesArray(arr){
+  calculateRangesArray(arr,inc_value){
     let array_ranges = [0]
     let scale_values = arr
 
+    let element;
+    let val;
+
     for (let index = 0; index < scale_values.length; index++) {
-      const element = scale_values[index];
-      array_ranges.push(element+array_ranges[index])
+      element = scale_values[index];
+      val = element+array_ranges[index]
+      array_ranges.push(val)
     }
 
     console.log("This is the array range:" + array_ranges)
+    console.log("Element: " + val)
+
+    let result = (inc_value * 1) / val;
+    console.log("ResultOfRange: " + result)
     this.setState({
-      range_array: array_ranges
+      range_array: array_ranges,
+      relative_flex: result
     })
   }
 
@@ -169,6 +177,56 @@ export default class GaugeMetrics extends React.Component {
   calculateRelativePosition(underLimit,overLimit,value){
     let res = ( value * 1 ) / overLimit;
     return res
+  }
+
+  renderIncrease(){
+    let value = this.state.increase
+    console.log("Value: " + value)
+    if (value>0) {
+      return(
+        <View style={{flexDirection:'row'}}>
+                <Ionicons
+                  style={{                    marginTop: verticalScale(2),
+                  }}
+                  name={"md-trending-up"}
+                  size={theme.h1}
+                  color={theme.green}
+                />
+                <Text
+                  style={{
+                    fontSize: theme.h2,
+                    color: theme.green,
+                    fontWeight: "bold",
+                    paddingHorizontal: moderateScale(5)
+                  }}
+                >
+                   {this.state.increase}%
+                </Text>
+        </View>
+      )
+    } else {
+      return(
+        <View style={{flexDirection:'row'}}>
+                <Ionicons
+                  style={{                    marginTop: verticalScale(2),
+                  }}
+                  name={"md-trending-down"}
+                  size={theme.h1}
+                  color={theme.red}
+                />
+                <Text
+                  style={{
+                    fontSize: theme.h2,
+                    color: theme.red,
+                    fontWeight: "bold",
+                    paddingHorizontal: moderateScale(5)
+                  }}
+                >
+                   {this.state.increase}%
+                </Text>
+        </View>
+      )
+    }
   }
 
   render() {
@@ -264,47 +322,29 @@ export default class GaugeMetrics extends React.Component {
               your age
             </Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: theme.body,
-                color: 'gray',
-                fontWeight: "bold",
-              }}
-            >
-              It represents an increase of {this.state.increase}% from last week
-            </Text>
-          </View>
           
           <View 
                 style={{    
                     flexDirection: "row",
-                    justifyContent: "center",
-                    alignContent: "center",
+                    justifyContent: "flex-start",
+                    alignContent: "flex-start",
                     backgroundColor:'white',
                     flex:1,
-                    marginTop:verticalScale(15),
+                    marginTop:verticalScale(5),
                     maxHeight:verticalScale(15),
                     overflow: "hidden"
                 }}
             >
-              <View style={{flex:this.state.labels_sizes[0],backgroundColor:'white',flexDirection:'row'}}>
-                <Text style={{flex:1.9}}></Text>
-                <Text style={{flex:0.1}}>|</Text>
+              <View style={{flex:this.state.relative_flex,backgroundColor:'white',flexDirection:'row'}}>
               </View>
-              <View style={{flex:this.state.labels_sizes[1],backgroundColor:'white',flexDirection:'row'}}>
-                <Text style={{flex:1}}></Text>
-                <Text style={{flex:1}}>|</Text>
+              <View style={{flex:1-this.state.relative_flex,backgroundColor:'white',flexDirection:'row',marginRight:moderateScale(5)}}>
+                <Ionicons
+                  name={"md-arrow-down"}
+                  size={moderateScale(16)}
+                  color={theme.black}
+                />
               </View>
-              <View style={{flex:this.state.labels_sizes[2],backgroundColor:'white'}}>
-
-              </View>
+              
           </View>
 
           <View 
@@ -350,56 +390,90 @@ export default class GaugeMetrics extends React.Component {
                 <Text>{this.state.range_array[3]}</Text>
               </View>
           </View>
+          
 
-          {/* Legenda */}
-          <View 
-                style={{    
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    backgroundColor:'white',
-                    flex:1,
-                    marginTop:verticalScale(15),
-                    maxHeight:verticalScale(20),
-                    overflow: "hidden"
-                }}
-            >
-              <View style={{flex:1,backgroundColor:this.state.labels_colors["Poor"],borderRadius: 10,}}></View>
-              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}>Poor</Text>
-          </View>
+          <View style={{flexDirection:'row',flex:1}}>
+            {/* Legenda */}
+            <View style={{flexDirection:'column',flex:2}}>
+              <View 
+                    style={{    
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        backgroundColor:'white',
+                        flex:1,
+                        marginTop:verticalScale(15),
+                        maxHeight:verticalScale(20),
+                        overflow: "hidden"
+                    }}
+                >
+                  <View style={{flex:1,backgroundColor:this.state.labels_colors["Poor"],borderRadius: 10,}}></View>
+                  <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Poor</Text>
+              </View>
 
-          {/* Legenda */}
-          <View 
-                style={{    
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    backgroundColor:'white',
-                    flex:1,
-                    marginTop:verticalScale(5),
-                    maxHeight:verticalScale(20),
-                    overflow: "hidden"
-                }}
-            >
-              <View style={{flex:1,backgroundColor:this.state.labels_colors["Average"],borderRadius: 10,}}></View>
-              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Average </Text>
-          </View>
+              {/* Legenda */}
+              <View 
+                    style={{    
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        backgroundColor:'white',
+                        flex:1,
+                        marginTop:verticalScale(5),
+                        maxHeight:verticalScale(20),
+                        overflow: "hidden"
+                    }}
+                >
+                  <View style={{flex:1,backgroundColor:this.state.labels_colors["Average"],borderRadius: 10,}}></View>
+                  <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Average </Text>
+              </View>
 
-          {/* Legenda */}
-          <View 
-                style={{    
-                    flexDirection: "row",
-                    justifyContent: "center",
-                    alignContent: "center",
-                    backgroundColor:'white',
-                    flex:1,
-                    marginTop:verticalScale(5),
-                    maxHeight:verticalScale(20),
-                    overflow: "hidden"
+              {/* Legenda */}
+              <View 
+                    style={{    
+                        flexDirection: "row",
+                        justifyContent: "center",
+                        alignContent: "center",
+                        backgroundColor:'white',
+                        flex:1,
+                        marginTop:verticalScale(5),
+                        maxHeight:verticalScale(20),
+                        overflow: "hidden"
+                    }}
+                >
+                  <View style={{flex:1,backgroundColor:this.state.labels_colors["Excellent"],borderRadius: 10}}></View>
+                  <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Excellent </Text>
+              </View>
+            </View>
+
+            <View style={{flexDirection:'column',flex:2,marginTop:verticalScale(20)}}>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignContent: "center",
                 }}
-            >
-              <View style={{flex:1,backgroundColor:this.state.labels_colors["Excellent"],borderRadius: 10}}></View>
-              <Text style={{flex:5, paddingHorizontal:moderateScale(10)}}> Excellent </Text>
+              >
+                {this.renderIncrease()}
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  alignContent: "center",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: theme.body,
+                    color: 'gray',
+                    fontWeight: "bold",
+                  }}
+                >
+                  Since last week
+                </Text>
+              </View>
+            </View>
           </View>
 
       </View>
