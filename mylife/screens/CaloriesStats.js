@@ -156,15 +156,15 @@ export default class Login extends React.Component {
   async getHeartStats() {
     var login_info = "Token " + this.state.user_token;
     console.log(
-      `${API_URL}/health-stats/body/history/` +
+      `${API_URL}/health-stats/nutrients/history/` +
         this.state.user_email +
-        `?metric=steps&period=week`
+        `?metric=calories&period=week`
     );
 
     fetch(
-      `${API_URL}/health-stats/body/history/` +
+      `${API_URL}/health-stats/nutrients/history/` +
         this.state.user_email +
-        `?metric=steps&period=` +
+        `?metric=calories&period=` +
         this.state.choosen_period,
       {
         method: "GET",
@@ -181,6 +181,8 @@ export default class Login extends React.Component {
         if (statusCode == 401) {
           this.processInvalidToken();
         } else {
+            console.log("WE GOT THIS")
+            console.log(responseJson.message.history)
           if (this.state.choosen_period == "week") {
             let labels = [];
             let chartData = [];
@@ -307,7 +309,7 @@ export default class Login extends React.Component {
       /*Aqui passar: ferias={item.ferias} */
     }
 
-    return <HeartRateItem date={item.day} value={item.value} metrics={"steps"} />;
+    return <HeartRateItem date={item.day} value={item.value} metrics={"calories"} />;
   };
 
   _listEmptyComponent = () => {
