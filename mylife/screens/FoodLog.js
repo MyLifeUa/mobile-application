@@ -12,16 +12,17 @@ import {
   ScrollView,
   Dimensions,
   ActivityIndicator,
-  RefreshControl
+  RefreshControl,
+  TouchableOpacity
 } from "react-native";
 const { width, height } = Dimensions.get("screen");
 import theme from "../constants/theme.style.js";
 import FAB from "react-native-fab";
-import { TouchableOpacity, FlatList } from "react-native-gesture-handler";
 import Swipeout from "react-native-swipeout";
 import moment from "moment";
 import { Ionicons, AntDesign } from "@expo/vector-icons";
-
+import { ThemeConsumer } from "react-native-elements";
+import {NavigationEvents} from 'react-navigation';
 const API_URL = "http://mednat.ieeta.pt:8442";
 
 //import all the basic component we have used
@@ -70,6 +71,7 @@ export default class FoodLog extends React.Component {
 
   async componentDidMount() {
     await this._retrieveData(); //TODO uncomment this
+    console.log("Im back")
     //this.getLogs()
     if (!this.state.SharedLoading) {
       this.getLogs();
@@ -177,6 +179,7 @@ export default class FoodLog extends React.Component {
             loading: false
             //if this doesnt work, change to individual attribution
           });
+
           console.log("New state");
           console.log(this.state.data);
         }
@@ -370,7 +373,16 @@ export default class FoodLog extends React.Component {
     );
   };
 
-  renderMealsComponent = data => {
+  handlePossibleRefresh = () => {
+    let refresh=this.props.navigation.getParam("refresh",null)
+
+    if(refresh){
+      this.handleRefresh()
+    }
+
+  }
+
+  renderMealsComponent = (data,type) => {
     if (this.state.loading) {
       return (
         <View
@@ -398,6 +410,12 @@ export default class FoodLog extends React.Component {
               paddingLeft: moderateScale(10),
               paddingVertical: moderateScale(10)
             }}
+            onPress={() =>
+              this.props.navigation.navigate("FoodLogRegister", {
+                date:this.state.current_day,
+                food_log_type:type
+              })
+            }
           >
             <AntDesign
               name="plus"
@@ -428,6 +446,7 @@ export default class FoodLog extends React.Component {
   render() {
     return (
       /* Parent View */
+      
       <View style={{ flex: 1, padding: moderateScale(10) }}>
         {/* Day selected */}
         <View
@@ -693,7 +712,7 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.breakfast.meals)}
+            {this.renderMealsComponent(this.state.data.breakfast.meals,"Breakfast")}
           </View>
 
           {/* Day selected */}
@@ -744,7 +763,7 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.lunch.meals)}
+            {this.renderMealsComponent(this.state.data.lunch.meals,"Lunch")}
           </View>
 
           {/* Day selected */}
@@ -794,9 +813,9 @@ export default class FoodLog extends React.Component {
                 </Text>
               </View>
             </View>
-            {this.renderMealsComponent(this.state.data.dinner.meals)}
-          </View>
 
+            {this.renderMealsComponent(this.state.data.dinner.meals,"Dinner")}
+          </View>
 
           {/* Day selected */}
           <View
@@ -846,24 +865,56 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.snack.meals)}
-          </View>
-          
-        </ScrollView>
 
-        <FAB
-          buttonColor={theme.primary_color_2}
-          iconTextColor="#FFFFFF"
-          onClickAction={() => {
-            this.props.navigation.navigate("FoodLogRegister",{
-              handleRefreshParent: this.handleRefresh.bind(this)
-            });
-          }}
-          visible={true}
-        />
+            {this.renderMealsComponent(this.state.data.snack.meals,"Snack")}
+          </View>
+        </ScrollView>
+        <TouchableOpacity
+          style={styles.addButton}
+          onPress={() =>
+            this.props.navigation.navigate("Nutrients", {
+              date: this.state.current_day,
+            })
+          }
+        >
+          <AntDesign
+                  name={"piechart"}
+                  size={moderateScale(30)}
+                  color={"white"}
+                />
+        </TouchableOpacity>
+
+
+
+        
+        <NavigationEvents onDidFocus={() => this.handlePossibleRefresh()} />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  addButton: {
+    shadowColor: "rgba(0,0,0, .4)", // IOS
+    backgroundColor: theme.primary_color_2,
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    elevation: 2, // Android
+    width: moderateScale(70),
+    height: moderateScale(70),
+    right: 30,
+    bottom: 30,
+    borderRadius: 40,
+    position: "absolute",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  loginButtonText: {
+    textAlign: "center",
+    color: "#FFF",
+    fontWeight: "700",
+    width: "100%",
+    fontSize: moderateScale(25)
+  }
+});
