@@ -44,7 +44,7 @@ export default class Register extends React.Component {
     colesterol: false,
     weight_goal:'',
     birthday:'Birthdate',
-    sex:'',
+    sex:'M',
     phone_number:'',
     photo:'https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg',
     photo_base64:''
