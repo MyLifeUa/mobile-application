@@ -82,7 +82,7 @@ export default class Login extends React.Component {
       
       loop={false}>
       <BodyStats navigation={this.props.navigation} />
-      <NutrientsStats />
+      <NutrientsStats navigation={this.props.navigation} />
         
       </Swiper>
     );

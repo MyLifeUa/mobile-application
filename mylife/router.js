@@ -25,6 +25,12 @@ import HeaderRightNavBarPicture from "./components/HeaderRightNavBarProfilePictu
 
 import StepsStats from "./screens/StepsStats";
 
+//nutrients
+import ProteinsStats from "./screens/ProteinsStats";
+import CarbsStats from "./screens/CarbsStats";
+import FatsStats from "./screens/FatsStats";
+import CaloriesStats from "./screens/CaloriesStats";
+
 import FoodLogRegister from "./screens/FoodLogRegister";
 import Nutrients from "./screens/Nutrients";
 
@@ -125,6 +131,35 @@ const StatsNavigator = createStackNavigator(
       screen: StepsStats,
       navigationOptions: {
         title: "Steps",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    //nutrients part
+    ProteinsStats: {
+      screen: ProteinsStats,
+      navigationOptions: {
+        title: "Proteins",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    CarbsStats: {
+      screen: CarbsStats,
+      navigationOptions: {
+        title: "Carbs",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    FatsStats: {
+      screen: FatsStats,
+      navigationOptions: {
+        title: "Fats",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    CaloriesStats: {
+      screen: CaloriesStats,
+      navigationOptions: {
+        title: "Calories",
         headerRight: <HeaderRightNavBarPicture />
       }
     },
