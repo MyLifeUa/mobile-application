@@ -384,7 +384,7 @@ export default class Login extends React.Component {
           data={{
             labels: this.state.labels,
             datasets: this.state.chartData,
-            legend: ["Steps / Day", "Goal steps"] // optional
+            legend: ["Calories / Day", "Goal Calories"] // optional
           }}
           width={Dimensions.get("window").width - moderateScale(30)} // from react-native
           height={moderateScale(270)}
@@ -436,8 +436,8 @@ export default class Login extends React.Component {
                   marginLeft: 10
                 }}
               >
-                <Ionicons
-                    name={"md-walk"}
+                <MaterialCommunityIcons
+                    name={"food"}
                     size={moderateScale(20)}
                     color={theme.red}
                   />
@@ -449,7 +449,7 @@ export default class Login extends React.Component {
                     marginLeft: 5
                   }}
                 >
-                  Steps
+                  Calories
                 </Text>
               </View>
               <View
@@ -525,7 +525,7 @@ export default class Login extends React.Component {
                 marginLeft: 5
               }}
             >
-              Steps (Last 7 days)
+              Calories (Last 7 days)
             </Text>
           </View>
           {this.renderList()}

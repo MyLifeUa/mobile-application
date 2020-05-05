@@ -156,15 +156,15 @@ export default class Login extends React.Component {
   async getHeartStats() {
     var login_info = "Token " + this.state.user_token;
     console.log(
-      `${API_URL}/health-stats/body/history/` +
+      `${API_URL}/health-stats/nutrients/history/` +
         this.state.user_email +
-        `?metric=steps&period=week`
+        `?metric=fat&period=week`
     );
 
     fetch(
-      `${API_URL}/health-stats/body/history/` +
+      `${API_URL}/health-stats/nutrients/history/` +
         this.state.user_email +
-        `?metric=steps&period=` +
+        `?metric=fat&period=` +
         this.state.choosen_period,
       {
         method: "GET",
@@ -307,7 +307,7 @@ export default class Login extends React.Component {
       /*Aqui passar: ferias={item.ferias} */
     }
 
-    return <HeartRateItem date={item.day} value={item.value} metrics={"steps"} />;
+    return <HeartRateItem date={item.day} value={item.value} metrics={"fats"} />;
   };
 
   _listEmptyComponent = () => {
@@ -382,7 +382,7 @@ export default class Login extends React.Component {
           data={{
             labels: this.state.labels,
             datasets: this.state.chartData,
-            legend: ["Steps / Day", "Goal steps"] // optional
+            legend: ["Fats / Day", "Goal fats"] // optional
           }}
           width={Dimensions.get("window").width - moderateScale(30)} // from react-native
           height={moderateScale(270)}
@@ -447,7 +447,7 @@ export default class Login extends React.Component {
                     marginLeft: 5
                   }}
                 >
-                  Steps
+                  Fats
                 </Text>
               </View>
               <View
@@ -510,11 +510,11 @@ export default class Login extends React.Component {
               paddingLeft: 10
             }}
           >
-            <Ionicons
-              name={"md-walk"}
-              size={moderateScale(20)}
-              color={theme.red}
-            />
+            <MaterialCommunityIcons
+                    name={"food"}
+                    size={moderateScale(20)}
+                    color={theme.red}
+                  />
 
             <Text
               style={{
@@ -523,7 +523,7 @@ export default class Login extends React.Component {
                 marginLeft: 5
               }}
             >
-              Steps (Last 7 days)
+              Fats (Last 7 days)
             </Text>
           </View>
           {this.renderList()}

@@ -156,15 +156,15 @@ export default class Login extends React.Component {
   async getHeartStats() {
     var login_info = "Token " + this.state.user_token;
     console.log(
-      `${API_URL}/health-stats/body/history/` +
+      `${API_URL}/health-stats/nutrients/history/` +
         this.state.user_email +
-        `?metric=steps&period=week`
+        `?metric=carbs&period=week`
     );
 
     fetch(
-      `${API_URL}/health-stats/body/history/` +
+      `${API_URL}/health-stats/nutrients/history/` +
         this.state.user_email +
-        `?metric=steps&period=` +
+        `?metric=carbs&period=` +
         this.state.choosen_period,
       {
         method: "GET",
@@ -307,7 +307,7 @@ export default class Login extends React.Component {
       /*Aqui passar: ferias={item.ferias} */
     }
 
-    return <HeartRateItem date={item.day} value={item.value} metrics={"steps"} />;
+    return <HeartRateItem date={item.day} value={item.value} metrics={"carbs"} />;
   };
 
   _listEmptyComponent = () => {
@@ -382,7 +382,7 @@ export default class Login extends React.Component {
           data={{
             labels: this.state.labels,
             datasets: this.state.chartData,
-            legend: ["Steps / Day", "Goal steps"] // optional
+            legend: ["Carbs / Day", "Goal Carbs"] // optional
           }}
           width={Dimensions.get("window").width - moderateScale(30)} // from react-native
           height={moderateScale(270)}
@@ -434,8 +434,8 @@ export default class Login extends React.Component {
                   marginLeft: 10
                 }}
               >
-                <Ionicons
-                    name={"md-walk"}
+                <MaterialCommunityIcons
+                    name={"food"}
                     size={moderateScale(20)}
                     color={theme.red}
                   />
@@ -447,7 +447,7 @@ export default class Login extends React.Component {
                     marginLeft: 5
                   }}
                 >
-                  Steps
+                  Carbs
                 </Text>
               </View>
               <View
@@ -523,7 +523,7 @@ export default class Login extends React.Component {
                 marginLeft: 5
               }}
             >
-              Steps (Last 7 days)
+              Carbs (Last 7 days)
             </Text>
           </View>
           {this.renderList()}
