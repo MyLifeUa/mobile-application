@@ -6,6 +6,9 @@ import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import RNPickerSelect, { defaultStyles } from "react-native-picker-select";
 import HeartRateItem from "../components/ChartPageItem";
 import moment from "moment";
+import Swiper from 'react-native-swiper'
+import GaugeHearthrate from "../components/GaugeHearthrate";
+
 //import react in our code.
 import {
   View,
@@ -70,6 +73,7 @@ export default class Login extends React.Component {
     ],
     checkedIngredients: new Map(),
     choosen_period: "week",
+    scales : {},
     type_of_meal: [
       { label: "Month", value: "month" },
       { label: "3 Months", value: "3-months" }
@@ -81,7 +85,12 @@ export default class Login extends React.Component {
     placeholder_2: {
       label: "Pick a meal",
       value: "0"
-    }
+    },
+
+    gauge_label: "",
+    gauge_value: 0,
+    gauge_sex: "",
+    labels_array: []
   };
 
   _storeData = async token => {
@@ -135,6 +144,7 @@ export default class Login extends React.Component {
 
     if (!this.state.SharedLoading) {
       this.getHeartStats();
+      this.getHeartrateStats();
     }
   }
 
@@ -161,7 +171,7 @@ export default class Login extends React.Component {
         `?metric=heart&period=week`
     );
 
-    fetch(
+    await fetch(
       `${API_URL}/health-stats/body/history/` +
         this.state.user_email +
         `?metric=heart&period=` +
@@ -404,10 +414,52 @@ export default class Login extends React.Component {
     });
   };
 
+  async getHeartrateStats() {
+    var login_info = "Token " + this.state.user_token;
+    console.log(
+      `${API_URL}/health-stats/body/heart-rate/` +
+        this.state.user_email
+    );
+
+    fetch(
+      `${API_URL}/health-stats/body/heart-rate/` +
+        this.state.user_email,
+      {
+        method: "GET",
+        headers: { 
+          "Content-Type": "application/json",
+          Authorization: login_info
+        }
+      }
+    )
+      .then(this.processResponse)
+      .then(res => {
+        const { statusCode, responseJson } = res;
+        console.log("-------------------Hearthrate--------------------")
+        console.log(responseJson)
+        if (statusCode == 401) {
+          this.processInvalidToken();
+        } else {
+          //what we got on success
+          this.setState({
+            labels_array: responseJson.message.scale_sizes,
+            scales: responseJson.message.scale,
+            gauge_value: responseJson.message.avg_heart_rate,
+            gauge_label: responseJson.message.label,
+            gauge_sex: responseJson.message.sex
+          })
+        }
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  }
+
+
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 0.6 }}>
+        <View style={{ flex: 0.9 }}>
           <View
             style={{
               flex: 1,
@@ -482,12 +534,21 @@ export default class Login extends React.Component {
             </View>
             <View
               style={{
-                flex: 0.8,
+                flex: 1.3,
                 justifyContent: "center",
                 alignItems: "center"
               }}
             >
-              {this.renderChart()}
+              <Swiper 
+                showsButtons={false}
+                showsPagination={true}
+                
+                loop={false}>
+                <GaugeHearthrate navigation={this.props.navigation} scales={this.state.scales} sex={this.state.gauge_sex} value={this.state.gauge_value} label={this.state.gauge_label} labels_array={this.state.labels_array} />
+                <View style={{flex:1}}>
+                  {this.renderChart()}
+                </View>
+              </Swiper>
             </View>
           </View>
         </View>

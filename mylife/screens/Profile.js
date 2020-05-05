@@ -3,8 +3,11 @@ import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import theme from "../constants/theme.style.js";
 import URIs from "../constants/baseURIs";
+import Swiper from 'react-native-swiper'
 import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 import usersList from "../data/users";
+import GaugeMetrics from "../components/GaugeMetrics";
+
 //import react in our code.
 import {
   View,
@@ -57,7 +60,22 @@ export default class Login extends React.Component {
         heartRate: null,
         sedentaryMinutes: null,
         steps: null
-      }
+      },
+      // increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}
+      /*gauge_increase: 0,
+      prev_week: {},
+      this_week: {},
+      labels_array: [] */
+      gauge_increase: 0,
+      prev_week: {
+        "value" : 0,
+        "label" : "Poor"
+      },
+      this_week: {
+        "value" : 0,
+        "label" : "Poor"
+      },
+      labels_array: [2,2,1]
     };
   }
   _storeData = async token => {
@@ -76,6 +94,7 @@ export default class Login extends React.Component {
     //this.getMeasures()
     if (!this.state.SharedLoading) {
       this.getValues();
+      this.getMyLifeMetricStats(); //TODO UNCOMMENT THIS
     }
 
   };
@@ -195,6 +214,49 @@ export default class Login extends React.Component {
       })
       .catch(error => {
         //alert("Error adding Food Log.");
+        console.log(error);
+      });
+  }
+
+
+  async getMyLifeMetricStats() {
+    var login_info = "Token " + this.state.user_data.token;
+    console.log(
+      `${API}/health-stats/my-life/` +
+        this.state.user_data.email
+    );
+
+    fetch(
+      `${API}/health-stats/my-life/` +
+        this.state.user_data.email,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: login_info
+        }
+      }
+    )
+      .then(this.processResponse)
+      .then(res => {
+        const { statusCode, responseJson } = res;
+        console.log("-------------------Hearthrate--------------------")
+        console.log(responseJson)
+        if (statusCode == 401) {
+          this.processInvalidToken();
+        } else {
+          //what we got on success
+          this.setState({
+            gauge_increase: responseJson.message.increase,
+            prev_week: responseJson.message.previous_week,
+            this_week: responseJson.message.current_week,
+            labels_array: responseJson.message.scale_sizes,
+            scale_values: responseJson.message.scale,
+            scale_sex: responseJson.message.sex
+          })
+        }
+      })
+      .catch(error => {
         console.log(error);
       });
   }
@@ -385,209 +447,220 @@ export default class Login extends React.Component {
           {this.renderFitbitMeasures()}
         </View>
 
-        <ScrollView
-          style={{
-            backgroundColor: theme.white,
-            flex: 1,
-            alignContent: "space-between"
-          }}
-
-          refreshControl={
-            <RefreshControl
-              refreshing={refreshing}
-              onRefresh={this.handleRefresh}
-            />
-          }
-        >
-          <View
+        <Swiper 
+          showsButtons={false}
+          showsPagination={true}
+          
+          loop={false}>
+          <GaugeMetrics navigation={this.props.navigation} sex={this.state.scale_sex} scale={this.state.scale_values} increase={this.state.gauge_increase} prev_week={this.state.prev_week} this_week={this.state.this_week} labels_array={this.state.labels_array}/>
+          <View style={{flex:1}}>
+            <ScrollView
             style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-              marginTop: moderateScale(20)
+              backgroundColor: theme.white,
+              flex: 1,
+              alignContent: "space-between"
             }}
-          >
-            <Text
-              style={{
-                fontSize: theme.h1,
-                color: theme.primary_color,
-                fontWeight: "bold"
-              }}
-            >
-              User Information
-            </Text>
-          </View>
 
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-              padding: 2
-            }}
-          >
-            <Text
-              style={{
-                fontSize: theme.header,
-                color: theme.primary_color,
-                fontWeight: "bold"
-              }}
-            >
-              Email:{" "}
-            </Text>
-            <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
-              {this.state.user_data.email}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-              padding: 2
-            }}
-          >
-            <Text
-              style={{
-                fontSize: theme.header,
-                color: theme.primary_color,
-                fontWeight: "bold"
-              }}
-            >
-              Height:{" "}
-            </Text>
-            <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
-              {this.state.user_data.height} cm
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-              padding: 2
-            }}
-          >
-            <Text
-              style={{
-                fontSize: theme.header,
-                color: theme.primary_color,
-                fontWeight: "bold"
-              }}
-            >
-              Weight:{" "}
-            </Text>
-            <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
-              {this.state.user_data.weight} kg
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-              padding: 2
-            }}
-          >
-            <Text
-              style={{
-                fontSize: theme.header,
-                color: theme.primary_color,
-                fontWeight: "bold"
-              }}
-            >
-              Desired Weight:{" "}
-            </Text>
-            <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
-              {this.state.user_data.weight_goal} kg
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-              padding: 2
-            }}
-          >
-            <Text
-              style={{
-                fontSize: theme.header,
-                color: theme.primary_color,
-                fontWeight: "bold"
-              }}
-            >
-              Phone Number:{" "}
-            </Text>
-            <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
-              {this.state.user_data.phone_number}
-            </Text>
-          </View>
-
-          <View
-            style={{
-              flexDirection: "row",
-              justifyContent: "center",
-              alignContent: "center",
-              padding: 2
-            }}
-          >
-            <Text
-              style={{
-                fontSize: theme.header,
-                color: theme.primary_color,
-                fontWeight: "bold"
-              }}
-            >
-              Gender:{" "}
-            </Text>
-            <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
-              {this.state.user_data.sex}
-            </Text>
-          </View>
-        </ScrollView>
-
-        <View
-          style={{
-            flex: 0.5,
-            justifyContent: "center",
-            alignItems: "center",
-            flexDirection: "row"
-          }}
-        >
-          <TouchableOpacity
-            style={styles.loginGoogleButton}
-            onPress={() =>
-              this.props.navigation.navigate("EditProfile", {
-                user_data: this.state.user_data,
-                email: this.state.user_data.email,
-                weight: this.state.user_data.weight,
-                height: this.state.user_data.height,
-                goal_weight: this.state.user_data.weight_goal,
-                photo: this.state.user_data.photo,
-                photo_64: this.state.user_data.photo_64
-              })
+            refreshControl={
+              <RefreshControl
+                refreshing={refreshing}
+                onRefresh={this.handleRefresh}
+              />
             }
           >
-            <Text style={styles.loginButtonText}>Edit</Text>
-          </TouchableOpacity>
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                marginTop: moderateScale(20)
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: theme.h1,
+                  color: theme.primary_color,
+                  fontWeight: "bold"
+                }}
+              >
+                User Information
+              </Text>
+            </View>
 
-          <TouchableOpacity
-            style={styles.loginGoogleButtonDoctor}
-            onPress={() =>
-              this.props.navigation.navigate("CheckDoctor", {
-                email: this.state.user_data.email,
-                token: this.state.user_data.token
-              })
-            }
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                padding: 2
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: theme.header,
+                  color: theme.primary_color,
+                  fontWeight: "bold"
+                }}
+              >
+                Email:{" "}
+              </Text>
+              <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
+                {this.state.user_data.email}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                padding: 2
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: theme.header,
+                  color: theme.primary_color,
+                  fontWeight: "bold"
+                }}
+              >
+                Height:{" "}
+              </Text>
+              <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
+                {this.state.user_data.height} cm
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                padding: 2
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: theme.header,
+                  color: theme.primary_color,
+                  fontWeight: "bold"
+                }}
+              >
+                Weight:{" "}
+              </Text>
+              <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
+                {this.state.user_data.weight} kg
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                padding: 2
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: theme.header,
+                  color: theme.primary_color,
+                  fontWeight: "bold"
+                }}
+              >
+                Desired Weight:{" "}
+              </Text>
+              <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
+                {this.state.user_data.weight_goal} kg
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                padding: 2
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: theme.header,
+                  color: theme.primary_color,
+                  fontWeight: "bold"
+                }}
+              >
+                Phone Number:{" "}
+              </Text>
+              <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
+                {this.state.user_data.phone_number}
+              </Text>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "center",
+                alignContent: "center",
+                padding: 2
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: theme.header,
+                  color: theme.primary_color,
+                  fontWeight: "bold"
+                }}
+              >
+                Gender:{" "}
+              </Text>
+              <Text style={{ fontSize: theme.body, color: theme.primary_color }}>
+                {this.state.user_data.sex}
+              </Text>
+            </View>
+          </ScrollView>
+          <View
+            style={{
+              flex: 0.3,
+              justifyContent: "center",
+              alignItems: "center",
+              flexDirection: "row"
+            }}
           >
-            <Text style={styles.loginButtonText}>Check Doctor</Text>
-          </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.loginGoogleButton}
+              onPress={() =>
+                this.props.navigation.navigate("EditProfile", {
+                  user_data: this.state.user_data,
+                  email: this.state.user_data.email,
+                  weight: this.state.user_data.weight,
+                  height: this.state.user_data.height,
+                  goal_weight: this.state.user_data.weight_goal,
+                  photo: this.state.user_data.photo,
+                  photo_64: this.state.user_data.photo_64
+                })
+              }
+            >
+              <Text style={styles.loginButtonText}>Edit</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.loginGoogleButtonDoctor}
+              onPress={() =>
+                this.props.navigation.navigate("CheckDoctor", {
+                  email: this.state.user_data.email,
+                  token: this.state.user_data.token
+                })
+              }
+            >
+              <Text style={styles.loginButtonText}>Check Doctor</Text>
+            </TouchableOpacity>
+          </View>
         </View>
+        </Swiper>
+
+
+        
       </View>
     );
   }
