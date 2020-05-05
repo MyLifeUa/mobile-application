@@ -186,7 +186,6 @@ export default class Login extends React.Component {
                 "https://www.healthredefine.com/wp-content/uploads/2018/02/person-placeholder.jpg";
             } else {
             }
-           
             this.setState({
               user_data: {
                 name: responseJson.message.name,
