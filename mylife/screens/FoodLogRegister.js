@@ -404,6 +404,13 @@ export default class Register extends React.Component {
     });
   };
 
+  handleNavigationBarcode = () => {
+    this.setState({ modalFlag: false });
+    this.props.navigation.navigate("FoodLogRegisterBarcodeScanner", {
+      handleIdentifiedMeal: this.handleIdentifiedMeal.bind(this)
+    });
+  };
+
   renderModalAddnewMeal() {
     const { modalFlag } = this.state;
 
@@ -575,7 +582,7 @@ export default class Register extends React.Component {
           >
             <TouchableOpacity
               style={styles.addButton}
-              onPress={() => this.setState({ modalFlag: true })}
+              onPress={() => this.handleNavigationBarcode()}
             >
               <MaterialCommunityIcons
                 name="barcode-scan"
