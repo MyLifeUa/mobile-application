@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import theme from '../constants/theme.style.js';
 import { scale,verticalScale, moderateScale } from 'react-native-size-matters';
-import { Icon } from 'react-native-elements'
+import { Icon, CheckBox } from 'react-native-elements'
 
 //import react in our code.
 import {
@@ -40,6 +40,8 @@ export default class Register extends React.Component {
     password:'',
     height :'',
     current_weight:'',
+    diabetic: false,
+    colesterol: false,
     weight_goal:'',
     birthday:'Birthdate',
     sex:'',
@@ -71,6 +73,21 @@ export default class Register extends React.Component {
         alert("Fill in the required information!")
     } else {
         console.log("Fetching:" + `${API_URL}/clients`)
+        console.log(JSON.stringify({ //change these params later
+            email:this.state.email,
+            first_name:this.state.first_name,
+            last_name:this.state.last_name,
+            password:this.state.password, //this shouldnt go out as clear text
+            height :this.state.height,
+            sex: this.state.sex,
+            has_high_colesterol: this.state.colesterol,
+            is_diabetic: this.state.diabetic,
+            current_weight:this.state.current_weight,
+            weight_goal:this.state.weight_goal,
+            birth_date:this.state.birthday,
+            phone_number:this.state.phone_number,
+            photo:this.state.photo_base64,
+        }))
     fetch(`${API_URL}/clients`, {
         method: 'POST',
         headers: {
@@ -84,6 +101,8 @@ export default class Register extends React.Component {
             password:this.state.password, //this shouldnt go out as clear text
             height :this.state.height,
             sex: this.state.sex,
+            has_high_colesterol: this.state.colesterol,
+            is_diabetic: this.state.diabetic,
             current_weight:this.state.current_weight,
             weight_goal:this.state.weight_goal,
             birth_date:this.state.birthday,
@@ -341,9 +360,25 @@ export default class Register extends React.Component {
                             onChangeText={text => this.setState({weight_goal:text})}/>
                     </View>
 
+
+                    <CheckBox
+                            style={styles.inputView} 
+                            title='Are you diabetic?'
+                            checked={this.state.diabetic}
+                            onPress={() => this.setState({diabetic: !this.state.diabetic})}
+                            />
+                    
+                    <CheckBox
+                            style={styles.inputView} 
+                            title='Do you have high colesterol?'
+                            checked={this.state.colesterol}
+                            onPress={() => this.setState({colesterol: !this.state.colesterol})}
+                            />
+                    
+
                 </View>
             </ScrollView>
-
+ 
             <TouchableOpacity onPress={() => this.makeRegisterRequest()} style={styles.loginBtn}>
                 <Text style={styles.loginText}>REGISTER</Text>
             </TouchableOpacity>
