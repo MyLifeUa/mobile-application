@@ -20,9 +20,9 @@ import theme from "../constants/theme.style.js";
 import FAB from "react-native-fab";
 import Swipeout from "react-native-swipeout";
 import moment from "moment";
-import { Ionicons, AntDesign } from "@expo/vector-icons";
+import { Ionicons, AntDesign, FontAwesome5 } from "@expo/vector-icons";
 import { ThemeConsumer } from "react-native-elements";
-import {NavigationEvents} from 'react-navigation';
+import { NavigationEvents } from "react-navigation";
 const API_URL = "http://mednat.ieeta.pt:8442";
 
 //import all the basic component we have used
@@ -36,6 +36,11 @@ export default class FoodLog extends React.Component {
       refresh: false,
       loading: true,
       SharedLoading: true,
+
+      feedback_type: "",
+      feedback_message: "",
+      feedback_good: true,
+      feedback_day: "",
 
       //credentials
       user_email: "",
@@ -71,7 +76,7 @@ export default class FoodLog extends React.Component {
 
   async componentDidMount() {
     await this._retrieveData(); //TODO uncomment this
-    console.log("Im back")
+    console.log("Im back");
     //this.getLogs()
     if (!this.state.SharedLoading) {
       this.getLogs();
@@ -103,6 +108,11 @@ export default class FoodLog extends React.Component {
     if (flag == true) {
       await this.setState({
         loading: true,
+        refresh: true,
+        feedback_type: "",
+        feedback_message: "",
+        feedback_good: true,
+        feedback_day: "",
         current_day: moment(this.state.current_day)
           .add(1, "days")
           .format("YYYY-MM-DD")
@@ -110,6 +120,11 @@ export default class FoodLog extends React.Component {
     } else {
       await this.setState({
         loading: true,
+        refresh: true,
+        feedback_type: "",
+        feedback_message: "",
+        feedback_good: true,
+        feedback_day: "",
 
         current_day: moment(this.state.current_day)
           .add(-1, "days")
@@ -365,7 +380,11 @@ export default class FoodLog extends React.Component {
     // Refresh a zona de filtros tambem?
     this.setState(
       {
-        refresh: true
+        refresh: true,
+        feedback_type: "",
+        feedback_message: "",
+        feedback_good: true,
+        feedback_day: ""
       },
       () => {
         this.getLogs();
@@ -373,16 +392,129 @@ export default class FoodLog extends React.Component {
     );
   };
 
-  handlePossibleRefresh = () => {
-    let refresh=this.props.navigation.getParam("refresh",null)
+  handleAlerts = () => {
+    let alerts = this.props.navigation.getParam("alerts", null);
+    let day = this.props.navigation.getParam("day", "");
+    let type = this.props.navigation.getParam("type", "");
+    this.props.navigation.setParams({ showAlerts: false });
 
-    if(refresh){
-      this.handleRefresh()
+    let showAlerts = this.props.navigation.getParam("showAlerts", false);
+
+    console.log("Alerts ", showAlerts);
+
+    if (alerts != null && day == this.state.current_day && showAlerts) {
+      if (alerts["bad"].length != 0) {
+        this.setState({
+          feedback_type: type,
+          feedback_message: alerts["bad"][0],
+          feedback_good: false,
+          feedback_day: day
+        });
+      } else if (alerts["good"].length != 0) {
+        this.setState({
+          feedback_type: type,
+          feedback_message: alerts["good"][0],
+          feedback_good: true,
+          feedback_day: day
+        });
+      }
+    }
+  };
+
+  handlePossibleRefresh = () => {
+    let refresh = this.props.navigation.getParam("refresh", null);
+
+    if (refresh) {
+      this.handleRefresh();
     }
 
-  }
+    this.handleAlerts();
+  };
 
-  renderMealsComponent = (data,type) => {
+  renderFeedback = type => {
+    if (
+      type == this.state.feedback_type &&
+      this.state.feedback_day == this.state.current_day
+    ) {
+      if (!this.state.feedback_good) {
+        return (
+          <View
+            style={{
+              flex: 4,
+              alignContent: "flex-start",
+              justifyContent: "flex-start",
+              backgroundColor: "white",
+              marginHorizontal: 5,
+              borderRadius: 10,
+              flexDirection: "row",
+              paddingLeft: moderateScale(10),
+              paddingVertical: moderateScale(5)
+            }}
+          >
+            <FontAwesome5
+              name="sad-tear"
+              size={moderateScale(15)}
+              color={theme.red}
+              style={{
+                alignContent: "center",
+                alignSelf: "center"
+              }}
+            />
+
+            <Text
+              style={{
+                margin: moderateScale(5),
+                fontSize: theme.h4,
+                color: theme.red,
+                fontWeight: "bold"
+              }}
+            >
+              {this.state.feedback_message}
+            </Text>
+          </View>
+        );
+      } else {
+        return (
+          <View
+            style={{
+              flex: 4,
+              alignContent: "flex-start",
+              justifyContent: "flex-start",
+              backgroundColor: "white",
+              marginHorizontal: 5,
+              borderRadius: 10,
+              flexDirection: "row",
+              paddingLeft: moderateScale(10),
+              paddingVertical: moderateScale(5)
+            }}
+          >
+            <FontAwesome5
+              name="smile"
+              size={moderateScale(15)}
+              color={theme.green}
+              style={{
+                alignContent: "center",
+                alignSelf: "center"
+              }}
+            />
+
+            <Text
+              style={{
+                margin: moderateScale(5),
+                fontSize: theme.h4,
+                color: theme.green,
+                fontWeight: "bold"
+              }}
+            >
+              {this.state.feedback_message}
+            </Text>
+          </View>
+        );
+      }
+    }
+  };
+
+  renderMealsComponent = (data, type) => {
     if (this.state.loading) {
       return (
         <View
@@ -400,6 +532,7 @@ export default class FoodLog extends React.Component {
       return (
         <View>
           <View style={{}}>{this.renderScrollMeals(data)}</View>
+          {this.renderFeedback(type)}
           <TouchableOpacity
             style={{
               flex: 4,
@@ -412,8 +545,8 @@ export default class FoodLog extends React.Component {
             }}
             onPress={() =>
               this.props.navigation.navigate("FoodLogRegister", {
-                date:this.state.current_day,
-                food_log_type:type
+                date: this.state.current_day,
+                food_log_type: type
               })
             }
           >
@@ -446,7 +579,7 @@ export default class FoodLog extends React.Component {
   render() {
     return (
       /* Parent View */
-      
+
       <View style={{ flex: 1, padding: moderateScale(10) }}>
         {/* Day selected */}
         <View
@@ -712,7 +845,10 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.breakfast.meals,"Breakfast")}
+            {this.renderMealsComponent(
+              this.state.data.breakfast.meals,
+              "Breakfast"
+            )}
           </View>
 
           {/* Day selected */}
@@ -763,7 +899,7 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.lunch.meals,"Lunch")}
+            {this.renderMealsComponent(this.state.data.lunch.meals, "Lunch")}
           </View>
 
           {/* Day selected */}
@@ -814,7 +950,7 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-            {this.renderMealsComponent(this.state.data.dinner.meals,"Dinner")}
+            {this.renderMealsComponent(this.state.data.dinner.meals, "Dinner")}
           </View>
 
           {/* Day selected */}
@@ -826,7 +962,8 @@ export default class FoodLog extends React.Component {
               borderColor: theme.gray2,
               backgroundColor: theme.gray2,
               borderRadius: 10,
-              elevation: 2
+              elevation: 2,
+              marginBottom: verticalScale(60)
             }}
           >
             <View style={{ flexDirection: "row" }}>
@@ -865,28 +1002,24 @@ export default class FoodLog extends React.Component {
               </View>
             </View>
 
-
-            {this.renderMealsComponent(this.state.data.snack.meals,"Snack")}
+            {this.renderMealsComponent(this.state.data.snack.meals, "Snack")}
           </View>
         </ScrollView>
         <TouchableOpacity
           style={styles.addButton}
           onPress={() =>
             this.props.navigation.navigate("Nutrients", {
-              date: this.state.current_day,
+              date: this.state.current_day
             })
           }
         >
           <AntDesign
-                  name={"piechart"}
-                  size={moderateScale(30)}
-                  color={"white"}
-                />
+            name={"piechart"}
+            size={moderateScale(30)}
+            color={"white"}
+          />
         </TouchableOpacity>
 
-
-
-        
         <NavigationEvents onDidFocus={() => this.handlePossibleRefresh()} />
       </View>
     );
