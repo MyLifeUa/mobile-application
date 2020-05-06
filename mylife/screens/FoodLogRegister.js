@@ -272,9 +272,9 @@ export default class Register extends React.Component {
             if (responseJson.state == "Error") {
               alert(responseJson.message);
             } else {
-              this.refs.toast.show("Food Log added 💯", DURATION.LENGTH_LONG);
+              //this.refs.toast.show("Food Log added 💯", DURATION.LENGTH_LONG);
 
-              this.props.navigation.navigate("FoodLogs", { refresh: true });
+              this.props.navigation.navigate("FoodLogs", { refresh: true,alerts: responseJson["alerts"],day:this.state.day,type:this.state.choosen_type_of_meal,showAlerts:true });
             }
           }
         })
