@@ -339,7 +339,7 @@ export default class Register extends React.Component {
               <TextInput
                 style={styles.inputText}
                 placeholder="Calories (cal)"
-                maxLength={3}
+                maxLength={6}
                 keyboardType={"numeric"}
                 returnKeyType="next"
                 onSubmitEditing={() => this.proteinsInput.focus()}
@@ -351,7 +351,7 @@ export default class Register extends React.Component {
               <TextInput
                 style={styles.inputText}
                 placeholder="Proteins (g)"
-                maxLength={3}
+                maxLength={6}
                 keyboardType={"numeric"}
                 returnKeyType="next"
                 onSubmitEditing={() => this.fatInput.focus()}
@@ -363,7 +363,7 @@ export default class Register extends React.Component {
               <TextInput
                 style={styles.inputText}
                 placeholder="Fat (g)"
-                maxLength={3}
+                maxLength={6}
                 keyboardType={"numeric"}
                 returnKeyType="next"
                 onSubmitEditing={() => this.carbsInput.focus()}
@@ -375,7 +375,7 @@ export default class Register extends React.Component {
               <TextInput
                 style={styles.inputText}
                 placeholder="Carbs (g)"
-                maxLength={3}
+                maxLength={6}
                 keyboardType={"numeric"}
                 returnKeyType="done"
                 onSubmitEditing={() => this.addIngredient()}

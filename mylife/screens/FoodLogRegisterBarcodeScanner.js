@@ -7,7 +7,8 @@ import { Entypo, Ionicons } from "@expo/vector-icons";
 import Toast, { DURATION } from "react-native-easy-toast";
 import * as ImagePicker from "expo-image-picker";
 import * as Permissions from "expo-permissions";
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import { BarCodeScanner } from "expo-barcode-scanner";
+import { Camera } from "expo-camera";
 //import react in our code.
 import {
   View,
@@ -21,6 +22,7 @@ import {
   KeyboardAvoidingView,
   Dimensions,
   Image,
+  Animated,
   ActivityIndicator
 } from "react-native";
 
@@ -38,7 +40,17 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
   }
   state = {
     Loading: false,
-    showView: false,
+    showView: true,
+    scanned: false,
+    hasCameraPermission: null,
+    barcode: null,
+    animationLineHeight: {
+      x: 0,
+      y: 0,
+      width: 0,
+      height: 0
+    },
+    focusLineAnimation: new Animated.Value(0),
     showViewError: false,
     identifiedFood: "",
     calories: 0,
@@ -73,12 +85,24 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
     }
   };
 
+  animateLine = () => {
+    Animated.sequence([
+      Animated.timing(this.state.focusLineAnimation, {
+        toValue: 1,
+        duration: 1000
+      }),
+
+      Animated.timing(this.state.focusLineAnimation, {
+        toValue: 0,
+        duration: 1000
+      })
+    ]).start(this.animateLine);
+  };
+
   getPermissionAsync = async () => {
-    if (Platform.OS === "ios") {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== "granted") {
-        alert("Desculpe, precisamos de acesso a camara para tirar fotos!");
-      }
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    if (status !== "granted") {
+      alert("We need to acces your camera to scan barcodes!");
     }
   };
   // get from galery
@@ -123,6 +147,7 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
   async componentDidMount() {
     await this._retrieveData();
     await this.getPermissionAsync();
+    this.animateLine();
   }
 
   _storeData = async token => {
@@ -180,7 +205,7 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
 
   addFoodRecognition() {
     var login_info = "Token " + this.state.user_token;
-    if (this.state.imageBase64 == "") {
+    if (this.state.barcode == null) {
       alert("Fill in the required information!");
     } else {
       this.setState({
@@ -188,17 +213,13 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
         Loading: true,
         showView: false
       });
-      fetch(`${API_URL}/image-classification`, {
-        method: "POST",
+      fetch(`${API_URL}/barcode-classification?barcode=${this.state.barcode}`, {
+        method: "GET",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json",
           Authorization: login_info
-        },
-        body: JSON.stringify({
-          //change these params later
-          image_b64: this.state.imageBase64
-        })
+        }
       })
         .then(this.processResponse)
         .then(res => {
@@ -208,16 +229,20 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
             this.processInvalidToken();
           } else {
             console.log(responseJson);
-            if (responseJson.state == "Error") {
+            {
+              if (responseJson.state == "Error") {
               alert(responseJson.message);
               this.setState({
                 showViewError: true,
                 Loading: false,
+                scanned:true,
+
                 showView: false
               });
             } else {
               this.setState({
                 showViewError: false,
+                scanned:true,
                 Loading: false,
                 showView: true,
                 identifiedFood: responseJson["message"]["name"],
@@ -227,6 +252,7 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
                 protein: responseJson["message"]["proteins"],
                 carbs: responseJson["message"]["carbs"]
               });
+            }
             }
           }
         })
@@ -377,7 +403,7 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
             style={{
               flexDirection: "row",
               marginVertical: moderateScale(10),
-              height: moderateScale(100),
+              height: moderateScale(90),
               justifyContent: "space-around"
             }}
           >
@@ -484,16 +510,17 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
           </View>
           <View
             style={{
-              flex: 0.3,
+              flex: 0.6,
               justifyContent: "flex-start",
-              alignItems: "center"
+              alignItems: "center",
+              marginBottom:10
             }}
           >
             <TouchableOpacity
               style={styles.loginGoogleButton}
               onPress={() => this.goBackWithMeal()}
             >
-              <Text style={styles.loginButtonText}>Add Meal to Food Log</Text>
+              <Text style={styles.loginButtonText}>Add Item to Food Log</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -501,112 +528,126 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
     }
   }
 
+  getPermissionsAsync = async () => {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA);
+    const isPermissionGranted = status === "granted";
+    console.log(isPermissionGranted);
+    setCameraPermission(isPermissionGranted);
+  };
+
+  handleBarCodeScanned = ({ type, data }) => {
+    this.setState({ scanned: true, barcode: data });
+  };
+
+  renderAnimation = () => {
+    if (!this.state.scanned) {
+      return (
+        <Animated.View
+          style={[
+            styles.animationLineStyle,
+            {
+              transform: [
+                {
+                  translateY: this.state.focusLineAnimation.interpolate({
+                    inputRange: [0, 1],
+                    outputRange: [0, this.state.animationLineHeight.height]
+                  })
+                }
+              ]
+            }
+          ]}
+        />
+      );
+    }
+  };
+
+  renderRescan = () => {
+    if (this.state.scanned) {
+      return (
+        <TouchableOpacity
+          onPress={() => this.setState({ scanned: false })}
+          style={styles.rescanIconContainer}
+        >
+          <Image
+            source={require("../assets/rescan.png")}
+            style={{ width: 50, height: 50 }}
+          />
+        </TouchableOpacity>
+      );
+    }
+  };
+
   render() {
     let { image } = this.state;
     return (
       <KeyboardAvoidingView style={styles.container} enabled>
         <View style={{ flex: 1, width: "100%", justifyContent: "center" }}>
-          {/*<View
-            style={{
-              flex: 0.3,
-              justifyContent: "center",
-              alignItems: "center",
-              padding: 20,
-              width: width
-            }}
-          >
-            <Text
-              style={{
-                fontSize: moderateScale(20),
-                fontWeight: "600",
-                width: "100%",
-                textAlign: "center"
-              }}
-            >
-              Food Recognition 📷
-              <Text style={{ color: "#0096dd", fontWeight: "bold" }}>
-                {this.state.name}
-              </Text>
-            </Text>
-          </View>*/}
           <View style={styles.photoContainer}>
             <View
               style={{
-                flex: 0.6,
+                flex: 0.7,
                 alignContent: "center",
                 alignItems: "center",
                 justifyContent: "flex-end",
-                marginTop: 10
               }}
             >
-              <BarCodeScanner
-        //onBarCodeScanned={this.statescanned ? undefined : handleBarCodeScanned}
-        style={StyleSheet.absoluteFillObject}
-      />
-            </View>
-            <View style={{ flex: 0.15, flexDirection: "row" }}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.pictureButton}
-                  onPress={this._pickImage}
-                >
+              <Camera
+                onBarCodeScanned={
+                  this.state.scanned ? undefined : this.handleBarCodeScanned
+                }
+                style={StyleSheet.absoluteFillObject}
+              />
+
+              <View style={styles.overlay}>
+                <View style={styles.unfocusedContainer}></View>
+
+                <View style={styles.middleContainer}>
+                  <View style={styles.unfocusedContainer}></View>
                   <View
-                    style={{
-                      flex: 2,
-                      flexDirection: "row",
-                      justifyContent: "center",
-                      alignItems: "center"
-                    }}
+                    onLayout={e =>
+                      this.setState({
+                        animationLineHeight: {
+                          x: e.nativeEvent.layout.x,
+                          y: e.nativeEvent.layout.y,
+                          height: e.nativeEvent.layout.height,
+                          width: e.nativeEvent.layout.width
+                        }
+                      })
+                    }
+                    style={styles.focusedContainer}
                   >
-                    <Ionicons
-                      name="md-photos"
-                      size={moderateScale(20)}
-                      style={{
-                        color: "white",
-                        width: moderateScale(20),
-                        height: moderateScale(20)
-                      }}
-                    >
-                      {" "}
-                    </Ionicons>
+                    {this.renderAnimation()}
+                    {this.renderRescan()}
                   </View>
-                </TouchableOpacity>
-              </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center"
-                }}
-              >
-                <TouchableOpacity
-                  style={styles.pictureButton}
-                  onPress={this.takePicture}
-                >
-                  <Entypo
-                    name="camera"
-                    size={moderateScale(20)}
-                    style={{
-                      color: "white",
-                      width: moderateScale(20),
-                      height: moderateScale(20)
-                    }}
-                  >
-                    {" "}
-                  </Entypo>
-                </TouchableOpacity>
+                  <View style={styles.unfocusedContainer}></View>
+                </View>
+                <View style={styles.unfocusedContainer}>
+                  <Text style={{ textAlign: "center", color: "white" }}>
+                    Point your camera at a barcode
+                  </Text>
+                </View>
               </View>
             </View>
             <View
               style={{
-                flex: 0.05,
-                justifyContent: "flex-start",
+                flex: 0.15,
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <View style={styles.inputView}>
+                <TextInput
+                  style={styles.inputText}
+                  value={this.state.barcode}
+                  placeholder="Enter barcode here"
+                  onChangeText={text => this.setState({ barcode: text })}
+                />
+              </View>
+            </View>
+            <View
+              style={{
+                flex: 0.15,
+                justifyContent: "center",
                 alignItems: "center"
               }}
             >
@@ -614,105 +655,15 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
                 style={styles.loginGoogleButton}
                 onPress={() => this.addFoodRecognition()}
               >
-                <Text style={styles.loginButtonText}>Identify Food</Text>
+                <Text style={styles.loginButtonText}>Identify Item</Text>
               </TouchableOpacity>
             </View>
           </View>
 
+          {/* {scanned && (
+        <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
+      )} */}
           {this.renderIdentifiedFoodView()}
-
-          {/*<View style={styles.containerScroll}>
-
-                    
-                    <TouchableOpacity onPress={() => this.openDatepicker()} style={styles.inputView}>
-                        <Text style={styles.inputText}>{this.state.day}</Text>
-                    </TouchableOpacity>
-
-                    
-                    <View style={styles.inputView} >
-                        <RNPickerSelect
-                            placeholder={this.state.placeholder_1}
-                            
-                            items={this.state.type_of_meal}
-                            onValueChange={value => {
-                                this.setState({
-                                choosen_type_of_meal: value,
-                                })
-
-                            }}
-
-                            style={{
-                                ...pickerSelectStyles,
-                                iconContainer: {
-                                top: 10,
-                                right: 12,
-                                },
-                            }}
-                            value={this.state.choosen_type_of_meal}
-                            useNativeAndroidPickerStyle={false}
-                            textInputProps={{ underlineColor: 'yellow' }}
-                            Icon={() => {
-                                return <Ionicons name="md-arrow-down" size={18} style={styles.icon} />;
-                            }}
-                        />
-                    </View>
-
-                    
-                    <View style={styles.inputView} >
-                        <TextInput  
-                            style={styles.inputText}
-                            placeholder="Number of servings" 
-                            
-                            maxLength={3}
-                            keyboardType={'numeric'}
-                            onChangeText={text => this.setState({number_of_servings:text})}/>
-                    </View>
-                    <View style={{flexDirection: 'row',justifyContent:'center',alignItems:'center'}}>
-                        <View style={styles.inputView_2} >
-                            <RNPickerSelect
-                                placeholder={this.state.placeholder_2}
-                                
-                                items={this.state.meals}
-                                onValueChange={value => {
-                                    this.setState({
-                                    choosen__meal: value,
-                                    })
-
-                                }}
-
-                                style={{
-                                    ...pickerSelectStyles,
-                                    iconContainer: {
-                                    top: 10,
-                                    right: 2,
-                                    },
-                                }}
-                                value={this.state.choosen__meal}
-                                useNativeAndroidPickerStyle={false}
-                                textInputProps={{ underlineColor: 'yellow' }}
-                                Icon={() => {
-                                    return <Ionicons name="md-arrow-down" size={18} style={styles.icon} />;
-                                }}
-                            />
-                        </View>
-                        <View style={{flex:0.15,justifyContent:'flex-start',alignItems:'center',marginLeft:moderateScale(20)}}>
-  
-                            <TouchableOpacity style={styles.addButton}
-
-                                //onPress={()=> this.makeRegisterRequest()}
-                                >
-                                <Text style={styles.loginButtonText}>
-                                    +
-                                </Text>
-                            </TouchableOpacity>
-                
-                        </View>
-
-
-                  </View>
-                    
-
-                </View>*/}
         </View>
         <Toast
           ref="toast"
@@ -728,8 +679,44 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    position: "relative"
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    borderWidth: 1
+  },
+  unfocusedContainer: {
+    flex: 1,
+    backgroundColor: "rgba(0,0,0,0.7)",
+    justifyContent: "center"
+  },
+
+  middleContainer: {
+    flexDirection: "row",
+    flex: 6
+  },
+
+  focusedContainer: {
+    flex: 8
+  },
+  animationLineStyle: {
+    height: 2,
+    width: "100%",
+    backgroundColor: "red"
+  },
+  rescanIconContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center"
+  },
   photoContainer: {
-    flex: 0.6,
+    flex: 0.7,
     alignSelf: "center",
     backgroundColor: theme.gray2,
     width: "90%",
@@ -802,7 +789,6 @@ const styles = StyleSheet.create({
     elevation: 2, // Android
     width: moderateScale(170),
     height: moderateScale(40),
-    margin: 10,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center"
@@ -853,9 +839,8 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     height: 45,
-    marginBottom: 20,
-    justifyContent: "center",
-    padding: 20
+    paddingLeft: 20,
+    justifyContent: "center"
   },
 
   inputView_2: {
@@ -883,8 +868,7 @@ const styles = StyleSheet.create({
 
   inputText: {
     fontSize: 0.02 * height,
-    paddingHorizontal: 5,
-    paddingVertical: 4,
+
     height: height * 0.05,
     color: "black",
     fontWeight: "normal",
