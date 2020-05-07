@@ -22,7 +22,7 @@ import DistanceStats from "./screens/DistanceStats";
 import CaloriesBurnedStats from "./screens/CaloriesBurnedStats";
 import HeaderRightNavBar from "./components/HeaderRightNavBar";
 import HeaderRightNavBarPicture from "./components/HeaderRightNavBarProfilePicture";
-
+import FoodLogRegisterBarcodeScanner from "./screens/FoodLogRegisterBarcodeScanner";
 import StepsStats from "./screens/StepsStats";
 
 //nutrients
@@ -278,6 +278,13 @@ const FoodLogsNavigator = createStackNavigator(
       screen: FoodLogRegisterML,
       navigationOptions: {
         title: "MyLife Food Detector",
+        headerRight: <HeaderRightNavBarPicture />
+      }
+    },
+    FoodLogRegisterBarcodeScanner: {
+      screen: FoodLogRegisterBarcodeScanner,
+      navigationOptions: {
+        title: "MyLife Barcode Scanner",
         headerRight: <HeaderRightNavBarPicture />
       }
     },
