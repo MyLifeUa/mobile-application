@@ -40,7 +40,7 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
   }
   state = {
     Loading: false,
-    showView: true,
+    showView: false,
     scanned: false,
     hasCameraPermission: null,
     barcode: null,
@@ -257,7 +257,7 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
           }
         })
         .catch(error => {
-          alert("Error adding Food Log.");
+          
           this.setState({
             showViewError: true,
             Loading: false,
