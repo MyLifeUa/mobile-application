@@ -37,6 +37,7 @@ import { TabView, SceneMap, TabBar, TabViewPage } from "react-native-tab-view";
 import { scale, verticalScale, moderateScale } from "react-native-size-matters";
 
 //import all the basic component we have used
+const API_URL = "http://mednat.ieeta.pt:8442";
 
 export default class Login extends React.Component {
   //Detail Screen to show from any Open detail button
@@ -46,27 +47,115 @@ export default class Login extends React.Component {
 
   state = {
     index: 0,
+    user_token: "",
+    user_email: "",
+    isLoading: true,
+    hasFitbit: true,
     routes: [
       { key: "first", title: "Body" },
       { key: "second", title: "Nutrients" }
     ]
   };
 
+  _storeData = async token => {
+    console.log("Storing Token: " + token);
+    try {
+      await AsyncStorage.setItem("token", token);
+      this.setState({ user_token: token });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  _retrieveData = async () => {
+    console.log("HELLO");
+
+    try {
+      const value = await AsyncStorage.getItem("token");
+      const email = await AsyncStorage.getItem("email");
+      console.log(email);
+
+      if (value !== null && email !== null) {
+        // We have data!!
+        this.setState({
+          SharedLoading: false,
+          user_token: value,
+          user_email: email
+        });
+      } else {
+        this.setState({
+          SharedLoading: false // TODO ELIMINATE THIS
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      this.setState({
+        SharedLoading: false // TODO ELIMINATE THIS
+      });
+    }
+  };
+
+  async componentDidMount() {
+    await this._retrieveData();
+
+    if (!this.state.SharedLoading) {
+      this.getFitbitInfo();
+    }
+  }
+
+  async processResponse(response) {
+    const statusCode = response.status;
+    const data = response.json();
+    const res = await Promise.all([statusCode, data]);
+    return {
+      statusCode: res[0],
+      responseJson: res[1]
+    };
+  }
+
+  async processInvalidToken() {
+    this.props.navigation.navigate("Auth");
+  }
+
+  async getFitbitInfo() {
+    var login_info = "Token " + this.state.user_token;
+    console.log(
+      `${API_URL}/health-stats/body/heart-rate/` + this.state.user_email
+    );
+
+    fetch(`${API_URL}/health-stats/body/heart-rate/` + this.state.user_email, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: login_info
+      }
+    })
+      .then(this.processResponse)
+      .then(res => {
+        const { statusCode, responseJson } = res;
+        console.log(responseJson);
+
+        if (statusCode == 401) {
+          this.processInvalidToken();
+        } else if (statusCode == 400) {
+          this.setState({ hasFitbit: false, isLoading: false });
+        } else {
+          this.setState({ hasFitbit: true, isLoading: false });
+        }
+      })
+      .catch(error => {
+        console.log(error);
+        //this._storeData(responseJson.token);
+      });
+  }
+
   render() {
-    return (
-      <View style={{ flex: 1 }}>
-        <ScrollView
-          style={{ flex: 1, width: width }}
-          vertical
-          scrollEnabled
-          scrollEventThrottle={16}
-          contentContainerStyle={{
-            flexGrow: 1
-          }}
-        >
+    if (this.state.isLoading) {
+      return (
+        <View style={{ flex: 1 }}>
           <View
             style={{
-              flex: 0.2,
+              flex: 0.085,
               height: moderateScale(40),
               justifyContent: "center",
               alignItems: "center",
@@ -91,186 +180,349 @@ export default class Login extends React.Component {
               Body Stats
             </Text>
           </View>
-
-          <View style={{ flex: 1, marginVertical: 10 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                height: moderateScale(180),
-                justifyContent: "space-around"
+          <View
+            style={{
+              flex: 1,
+              justifyContent: "center",
+              alignItems: "center"
+            }}
+          >
+            <ActivityIndicator size="large" color={theme.primary_color} />
+          </View>
+        </View>
+      );
+    } else {
+      if (this.state.hasFitbit) {
+        return (
+          <View style={{ flex: 1 }}>
+            <ScrollView
+              style={{ flex: 1, width: width }}
+              vertical
+              scrollEnabled
+              scrollEventThrottle={16}
+              contentContainerStyle={{
+                flexGrow: 1
               }}
             >
-              <TouchableOpacity
-                style={styles.squareView5}
-                onPress={() => this.props.navigation.navigate("HeartRateStats")}
+              <View
+                style={{
+                  flex: 0.2,
+                  height: moderateScale(40),
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexDirection: "row",
+                  backgroundColor: theme.primary_color
+                }}
               >
-                <View
+                <MaterialCommunityIcons
+                  name={"dumbbell"}
+                  size={moderateScale(20)}
+                  color="white"
+                />
+                <Text
                   style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center"
+                    fontSize: moderateScale(20),
+                    fontWeight: "bold",
+                    color: theme.white,
+                    textAlign: "center",
+                    marginLeft: 5
                   }}
                 >
-                  <Ionicons
-                    name={"md-heart"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
+                  Body Stats
+                </Text>
+              </View>
 
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
+              <View style={{ flex: 1, marginVertical: 10 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    height: moderateScale(180),
+                    justifyContent: "space-around"
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.squareView5}
+                    onPress={() =>
+                      this.props.navigation.navigate("HeartRateStats")
+                    }
                   >
-                    Resting heart rate
-                  </Text>
+                    <View
+                      style={{
+                        flex: 1,
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Ionicons
+                        name={"md-heart"}
+                        size={moderateScale(50)}
+                        color="white"
+                      />
+
+                      <Text
+                        style={{
+                          fontSize: moderateScale(20),
+                          marginTop: 10,
+                          color: "white"
+                        }}
+                      >
+                        Resting heart rate
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
                 </View>
-              </TouchableOpacity>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    height: moderateScale(180),
+                    justifyContent: "space-around"
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.squareView}
+                    onPress={() => this.props.navigation.navigate("StepsStats")}
+                  >
+                    <View
+                      style={{
+                        flex: 1,
+                        //flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Ionicons
+                        name={"md-walk"}
+                        size={moderateScale(50)}
+                        color="white"
+                      />
+
+                      <Text
+                        style={{
+                          fontSize: moderateScale(20),
+                          marginTop: 10,
+                          color: "white"
+                        }}
+                      >
+                        Steps
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.squareView2}
+                    onPress={() =>
+                      this.props.navigation.navigate("FloorsStats")
+                    }
+                  >
+                    <View
+                      style={{
+                        flex: 1,
+                        //flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name={"stairs"}
+                        size={moderateScale(50)}
+                        color="white"
+                      />
+
+                      <Text
+                        style={{
+                          fontSize: moderateScale(20),
+                          marginTop: 10,
+                          color: "white"
+                        }}
+                      >
+                        Floors
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{
+                    flexDirection: "row",
+                    height: moderateScale(180),
+                    justifyContent: "space-around"
+                  }}
+                >
+                  <TouchableOpacity
+                    style={styles.squareView2}
+                    onPress={() =>
+                      this.props.navigation.navigate("DistanceStats")
+                    }
+                  >
+                    <View
+                      style={{
+                        flex: 1,
+                        //flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <MaterialCommunityIcons
+                        name={"map-marker-distance"}
+                        size={moderateScale(50)}
+                        color="white"
+                      />
+
+                      <Text
+                        style={{
+                          fontSize: moderateScale(20),
+                          marginTop: 10,
+                          color: "white"
+                        }}
+                      >
+                        Distance
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.squareView3}
+                    onPress={() =>
+                      this.props.navigation.navigate("CaloriesBurnedStats")
+                    }
+                  >
+                    <View
+                      style={{
+                        flex: 1,
+                        //flexDirection: "row",
+                        justifyContent: "center",
+                        alignItems: "center"
+                      }}
+                    >
+                      <Ionicons
+                        name={"md-flame"}
+                        size={moderateScale(50)}
+                        color="white"
+                      />
+
+                      <Text
+                        style={{
+                          fontSize: moderateScale(20),
+                          marginTop: 10,
+                          color: "white"
+                        }}
+                      >
+                        Calories burned
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </ScrollView>
+          </View>
+        );
+      } else {
+        return (
+          <View style={{ flex: 1 }}>
+            <View
+              style={{
+                flex: 0.085,
+                height: moderateScale(40),
+                justifyContent: "center",
+                alignItems: "center",
+                flexDirection: "row",
+                backgroundColor: theme.primary_color
+              }}
+            >
+              <MaterialCommunityIcons
+                name={"dumbbell"}
+                size={moderateScale(20)}
+                color="white"
+              />
+              <Text
+                style={{
+                  fontSize: moderateScale(20),
+                  fontWeight: "bold",
+                  color: theme.white,
+                  textAlign: "center",
+                  marginLeft: 5
+                }}
+              >
+                Body Stats
+              </Text>
             </View>
             <View
               style={{
-                flexDirection: "row",
-                height: moderateScale(180),
-                justifyContent: "space-around"
+                flex: 0.5,
+                justifyContent: "flex-end",
+                alignItems: "center"
               }}
             >
-              <TouchableOpacity
-                style={styles.squareView}
-                onPress={() => this.props.navigation.navigate("StepsStats")}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Ionicons
-                    name={"md-walk"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Steps
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.squareView2}
-                onPress={() => this.props.navigation.navigate("FloorsStats")}
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name={"stairs"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Floors
-                  </Text>
-                </View>
-              </TouchableOpacity>
+              <Image
+                style={{
+                  width: moderateScale(350),
+                  height: moderateScale(250),
+                  resizeMode: "contain"
+                }}
+                source={require("../assets/fitbit-mylife.png")}
+              />
             </View>
-
             <View
               style={{
-                flexDirection: "row",
-                height: moderateScale(180),
-                justifyContent: "space-around"
+                flex: 0.2,
+                justifyContent: "flex-start",
+                marginHorizontal: 10
+              }}
+            >
+              <Text
+                style={{
+                  color: theme.black,
+                  fontSize: moderateScale(20),
+                  fontWeight: "400",
+                  textAlign: "center",
+                  marginHorizontal: 5
+                }}
+              >
+                Sorry, you need to connect a Fitbit tracker to MyLife to access
+                this feature.
+              </Text>
+            </View>
+            <View
+              style={{
+                flex: 0.2,
+                marginVertical: 10,
+                justifyContent: "flex-start",
+                alignItems: "center"
               }}
             >
               <TouchableOpacity
-                style={styles.squareView2}
-                onPress={() => this.props.navigation.navigate("DistanceStats")}
+                style={styles.connectFitbit}
+                onPress={() => this.props.navigation.navigate("FitbitAuth")}
               >
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <MaterialCommunityIcons
-                    name={"map-marker-distance"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Distance
-                  </Text>
-                </View>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.squareView3}
-              
-              onPress={() => this.props.navigation.navigate("CaloriesBurnedStats")}
-
-              >
-                <View
-                  style={{
-                    flex: 1,
-                    //flexDirection: "row",
-                    justifyContent: "center",
-                    alignItems: "center"
-                  }}
-                >
-                  <Ionicons
-                    name={"md-flame"}
-                    size={moderateScale(50)}
-                    color="white"
-                  />
-
-                  <Text
-                    style={{
-                      fontSize: moderateScale(20),
-                      marginTop: 10,
-                      color: "white"
-                    }}
-                  >
-                    Calories burned
-                  </Text>
-                </View>
+                <Text style={styles.loginButtonText}>Connect your Fitbit</Text>
               </TouchableOpacity>
             </View>
           </View>
-        </ScrollView>
-      </View>
-    );
+        );
+      }
+    }
   }
 }
 
 const styles = StyleSheet.create({
+  connectFitbit: {
+    backgroundColor: "#85ba6a",
+    shadowOffset: { height: 1, width: 1 }, // IOS
+    shadowOpacity: 1, // IOS
+    shadowRadius: 1, //IOS
+    elevation: 2, // Android
+    width: moderateScale(180),
+    height: moderateScale(60),
+    margin: 10,
+    borderRadius: 30,
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  loginButtonText: {
+    textAlign: "center",
+    color: "#FFF",
+    fontWeight: "700",
+    width: "100%",
+    fontSize: moderateScale(15)
+  },
   photoContainer: {
     flex: 0.6,
     alignSelf: "center",
@@ -440,7 +692,7 @@ const styles = StyleSheet.create({
     color: "#FFF",
     fontWeight: "700",
     width: "100%",
-    fontSize: moderateScale(15)
+    fontSize: moderateScale(16)
   },
   loginText: {
     color: "white"
