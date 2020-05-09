@@ -68,9 +68,7 @@ export default class Register extends React.Component {
   }
 
   async componentDidMount(){
-
     //this.handleIngredients();
-    
   }
 
   async handleIngredients() {
