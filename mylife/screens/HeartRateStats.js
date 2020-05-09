@@ -370,6 +370,20 @@ export default class Login extends React.Component {
     }
   }
 
+  renderGauge(){
+    if (this.state.Loading) {
+      return (
+        <View style={{ flex: 1, justifyContent: "center" }}>
+          <ActivityIndicator size="large" />
+        </View>
+      );
+    } else {
+      return(
+        <GaugeHearthrate navigation={this.props.navigation} scales={this.state.scales} sex={this.state.gauge_sex} value={this.state.gauge_value} label={this.state.gauge_label} labels_array={this.state.labels_array} />
+      )
+    }
+  }
+
   renderChart() {
     if (this.state.Loading) {
       return (
@@ -544,7 +558,7 @@ export default class Login extends React.Component {
                 showsPagination={true}
                 
                 loop={false}>
-                <GaugeHearthrate navigation={this.props.navigation} scales={this.state.scales} sex={this.state.gauge_sex} value={this.state.gauge_value} label={this.state.gauge_label} labels_array={this.state.labels_array} />
+                  {this.renderGauge()}
                 <View style={{flex:1}}>
                   {this.renderChart()}
                 </View>
