@@ -418,7 +418,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 0.6 }}>
+        <View style={{ flex: 1 }}>
           <View
             style={{
               flex: 1,
@@ -505,7 +505,7 @@ export default class Login extends React.Component {
         <View style={{ flex: 0.4 }}>
           <View
             style={{
-              flex: 0.15,
+              flex: 0.25,
               backgroundColor: theme.primary_color,
               flexDirection: "row",
               alignItems: "center",
