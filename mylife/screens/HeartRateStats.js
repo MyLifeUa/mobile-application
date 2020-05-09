@@ -8,7 +8,7 @@ import HeartRateItem from "../components/ChartPageItem";
 import moment from "moment";
 import Swiper from 'react-native-swiper'
 import GaugeHearthrate from "../components/GaugeHearthrate";
-
+ 
 //import react in our code.
 import {
   View,

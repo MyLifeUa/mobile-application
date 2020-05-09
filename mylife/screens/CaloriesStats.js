@@ -440,7 +440,7 @@ export default class Login extends React.Component {
                     name={"food"}
                     size={moderateScale(20)}
                     color={theme.red}
-                  />
+                  /> 
 
                 <Text
                   style={{
