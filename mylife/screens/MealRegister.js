@@ -653,7 +653,7 @@ export default class Register extends React.Component {
                 alignItems: "flex-start"
               }}
             >
-              <Text style={styles.secondHeaderText}>Meal Itens</Text>
+              <Text style={styles.secondHeaderText}>Meal Items</Text>
             </View>
 
             {this.renderList()}

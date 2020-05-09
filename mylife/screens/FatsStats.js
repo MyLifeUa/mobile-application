@@ -193,14 +193,14 @@ export default class Login extends React.Component {
               );
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["dateTime"]
+                  responseJson["message"]["history"][i]["day"]
                 ).format("D/MM")
               );
               chartData.push(responseJson["message"]["history"][i]["value"]);
               chartDataGoal.push(responseJson["message"]["goal"]);
               dataSourceWeek.push({
                 day: moment(
-                  responseJson["message"]["history"][i]["dateTime"]
+                  responseJson["message"]["history"][i]["day"]
                 ).format("D MMMM"),
                 value: responseJson["message"]["history"][i]["value"]
               });
@@ -225,7 +225,7 @@ export default class Login extends React.Component {
               
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["dateTime"]
+                  responseJson["message"]["history"][i]["day"]
                 ).format("D/MM")
               );
               
@@ -239,7 +239,7 @@ export default class Login extends React.Component {
 
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["dateTime"]
+                  responseJson["message"]["history"][i]["day"]
                 ).format("D/MM")
               );
               
@@ -263,7 +263,7 @@ export default class Login extends React.Component {
               
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["dateTime"]
+                  responseJson["message"]["history"][i]["day"]
                 ).format("D/MM")
               );
               
@@ -277,7 +277,7 @@ export default class Login extends React.Component {
 
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["dateTime"]
+                  responseJson["message"]["history"][i]["day"]
                 ).format("D/MM")
               );
               

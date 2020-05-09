@@ -340,11 +340,10 @@ export default class GaugeMetrics extends React.Component {
           <View 
                 style={{    
                     flexDirection: "row",
-                    justifyContent: "flex-start",
-                    alignContent: "flex-start",
                     backgroundColor:'white',
                     flex:1,
                     marginTop:verticalScale(5),
+                    marginRight: moderateScale(6),
                     maxHeight:verticalScale(15),
                     overflow: "hidden"
                 }}

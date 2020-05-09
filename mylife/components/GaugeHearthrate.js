@@ -113,10 +113,16 @@ export default class GaugeMetrics extends React.Component {
   }
 
   calculateRangesArray(arr,inc_value){
-    let smallest_value = parseInt(Object.keys(this.props.scales)[1].toString().substring(0,2)) 
-    console.log("Object keys:")
-    console.log(Object.keys(this.props.scales)[1].toString().substring(0,2))
+    let smallest_value;
 
+    if (this.props.scales.length > 0) {
+      smallest_value = parseInt(Object.keys(this.props.scales)[1].toString().substring(0,2)) 
+      console.log("Object keys:")
+      console.log(smallest_value)
+
+    } else {
+      smallest_value=49
+    }
     let array_ranges = [smallest_value]
     let scale_values = arr
 
