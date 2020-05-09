@@ -78,7 +78,7 @@ export default class GaugeMetrics extends React.Component {
       sex: this.props.sex
     })
     this.calculateDiffRanges(this.props.labels_array)
-    this.calculateRangesArray(this.props.labels_array, this.props.value)
+    //this.calculateRangesArray(this.props.labels_array, this.props.value)
   }
 
   componentWillReceiveProps(){
@@ -89,7 +89,7 @@ export default class GaugeMetrics extends React.Component {
     console.log("-----------------Incoming Updated Props---------------")
     console.log(this.props)
     this.calculateDiffRanges(this.props.labels_array)
-    this.calculateRangesArray(this.props.labels_array, this.props.value)
+    // this.calculateRangesArray(this.props.labels_array, this.props.value)
   }
 
   calculateDiffRanges(labels_sizes_array){
