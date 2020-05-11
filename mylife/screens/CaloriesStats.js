@@ -195,14 +195,14 @@ export default class Login extends React.Component {
               );
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["day"]
+                  responseJson["message"]["history"][i]["dateTime"]
                 ).format("D/MM")
               );
               chartData.push(responseJson["message"]["history"][i]["value"]);
               chartDataGoal.push(responseJson["message"]["goal"]);
               dataSourceWeek.push({
                 day: moment(
-                  responseJson["message"]["history"][i]["day"]
+                  responseJson["message"]["history"][i]["dateTime"]
                 ).format("D MMMM"),
                 value: responseJson["message"]["history"][i]["value"]
               });
@@ -227,7 +227,7 @@ export default class Login extends React.Component {
               
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["day"]
+                  responseJson["message"]["history"][i]["dateTime"]
                 ).format("D/MM")
               );
               
@@ -241,7 +241,7 @@ export default class Login extends React.Component {
 
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["day"]
+                  responseJson["message"]["history"][i]["dateTime"]
                 ).format("D/MM")
               );
               
@@ -265,7 +265,7 @@ export default class Login extends React.Component {
               
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["day"]
+                  responseJson["message"]["history"][i]["dateTime"]
                 ).format("D/MM")
               );
               
@@ -279,7 +279,7 @@ export default class Login extends React.Component {
 
               labels.push(
                 moment(
-                  responseJson["message"]["history"][i]["day"]
+                  responseJson["message"]["history"][i]["dateTime"]
                 ).format("D/MM")
               );
               
@@ -418,7 +418,7 @@ export default class Login extends React.Component {
   render() {
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 0.6 }}>
           <View
             style={{
               flex: 1,
@@ -440,7 +440,7 @@ export default class Login extends React.Component {
                     name={"food"}
                     size={moderateScale(20)}
                     color={theme.red}
-                  /> 
+                  />
 
                 <Text
                   style={{
@@ -505,7 +505,7 @@ export default class Login extends React.Component {
         <View style={{ flex: 0.4 }}>
           <View
             style={{
-              flex: 0.25,
+              flex: 0.15,
               backgroundColor: theme.primary_color,
               flexDirection: "row",
               alignItems: "center",

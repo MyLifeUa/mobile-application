@@ -27,7 +27,7 @@ import { ScrollView, FlatList } from "react-native-gesture-handler";
 import themeStyle from "../constants/theme.style.js";
 import MealItem from "../components/MealItem";
 import Toast, { DURATION } from "react-native-easy-toast";
-
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const { width, height } = Dimensions.get("screen");
 const API_URL = "http://mednat.ieeta.pt:8442";
 
@@ -382,7 +382,7 @@ export default class Register extends React.Component {
     const { searchType, refreshing } = this.state;
 
     return (
-      <View style={{ flex: 0.7 }}>
+      <View style={{ flex: 0.5 }}>
         <FlatList
           Vertical
           showsVericalScrollIndicator={false}
@@ -413,11 +413,18 @@ export default class Register extends React.Component {
       );
     } else {
       return (
-        <View style={styles.container}>
+        <View
+
+        style={styles.container}
+
+        >
           <ImageBackground
             source={require("../assets/icon.png")}
-            style={{ width: "100%", flex: 0.3,    paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
-          }}
+            style={{
+              width: "100%",
+              flex: 0.3,
+              paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight
+            }}
           >
             <View
               style={{
@@ -426,10 +433,8 @@ export default class Register extends React.Component {
                 alignItems: "space-around",
                 justifyContent: "space-around",
                 padding: width * 0.03,
-                backgroundColor: "rgba(0,0,0,.55)",
+                backgroundColor: "rgba(0,0,0,.55)"
                 //paddingTop: Platform.OS === "ios" ? 0 : Constants.statusBarHeight,
-
-
               }}
             >
               <View
@@ -653,7 +658,7 @@ export default class Register extends React.Component {
                 alignItems: "flex-start"
               }}
             >
-              <Text style={styles.secondHeaderText}>Meal Items</Text>
+              <Text style={styles.secondHeaderText}>Meal Itens</Text>
             </View>
 
             {this.renderList()}
@@ -717,8 +722,8 @@ const styles = StyleSheet.create({
   },
   squareView: {
     flex: 1,
-    width: moderateScale(75),
-    height: moderateScale(75),
+    width: verticalScale(75),
+    height: verticalScale(75),
     marginVertical: width * 0.03,
     marginHorizontal: moderateScale(11),
     borderRadius: moderateScale(10),
@@ -799,7 +804,6 @@ const styles = StyleSheet.create({
     flex: 0.4,
     marginLeft: 10,
     marginTop: 10,
-    //backgroundColor: theme.black,
     alignItems: "flex-start",
     justifyContent: "flex-start"
   },
