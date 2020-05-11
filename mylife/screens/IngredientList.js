@@ -397,14 +397,14 @@ export default class Register extends React.Component {
               style={styles.CancelButton}
               onPress={() => this.setState({ modalFlag: false })}
             >
-              <Text style={styles.loginButtonText}>Cancel</Text>
+              <Text style={styles.loginButtonText2}>Cancel</Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               style={styles.SaveButton}
               onPress={() => this.addIngredient()}
             >
-              <Text style={styles.loginButtonText}>Save</Text>
+              <Text style={styles.loginButtonText2}>Save</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -631,6 +631,13 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   loginButtonText: {
+    textAlign: "center",
+    color: "#FFF",
+    fontWeight: "700",
+    width: "100%",
+    fontSize: moderateScale(25)
+  },
+  loginButtonText2: {
     textAlign: "center",
     color: "#FFF",
     fontWeight: "700",

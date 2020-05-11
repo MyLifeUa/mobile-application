@@ -580,12 +580,14 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
   render() {
     let { image } = this.state;
     return (
-      <KeyboardAvoidingView style={styles.container} enabled>
+      <ScrollView enabled>
+        <View style={styles.container}>
         <View style={{ flex: 1, width: "100%", justifyContent: "center" }}>
           <View style={styles.photoContainer}>
             <View
               style={{
                 flex: 0.7,
+                height: verticalScale(200),
                 alignContent: "center",
                 alignItems: "center",
                 justifyContent: "flex-end",
@@ -673,7 +675,10 @@ export default class FoodLogRegisterBarcodeScanner extends React.Component {
           fadeInDuration={1500}
           fadeOutDuration={1500}
         />
-      </KeyboardAvoidingView>
+
+        </View>
+        
+      </ScrollView>
     );
   }
 }

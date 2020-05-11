@@ -504,7 +504,7 @@ export default class Register extends React.Component {
   render() {
     let { image } = this.state;
     return (
-      <KeyboardAvoidingView style={styles.container} enabled>
+      <ScrollView  enabled>
         <View style={{ flex: 1, width: "100%", justifyContent: "center" }}>
           {/*<View
             style={{
@@ -543,8 +543,8 @@ export default class Register extends React.Component {
                 <Image
                   source={{ uri: image }}
                   style={{
-                    width: moderateScale(270),
-                    height: moderateScale(200),
+                    width: verticalScale(270),
+                    height: verticalScale(170),
                     borderWidth: 2,
                     borderColor: themeStyle.primary_color,
                     backgroundColor: "gray"
@@ -730,14 +730,14 @@ export default class Register extends React.Component {
           fadeInDuration={1500}
           fadeOutDuration={1500}
         />
-      </KeyboardAvoidingView>
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
   photoContainer: {
-    flex: 0.6,
+    flex: 0.7,
     alignSelf: "center",
     backgroundColor: theme.gray2,
     width: "90%",

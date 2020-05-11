@@ -385,7 +385,7 @@ export default class Login extends React.Component {
             legend: ["Carbs / Day", "Goal Carbs"] // optional
           }}
           width={Dimensions.get("window").width - moderateScale(30)} // from react-native
-          height={moderateScale(270)}
+          height={verticalScale(200)}
           withVerticalLabels={false}
           chartConfig={{
             backgroundGradientFrom: theme.primary_color,
