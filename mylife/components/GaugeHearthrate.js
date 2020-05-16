@@ -79,7 +79,7 @@ export default class GaugeMetrics extends React.Component {
     })
     this.calculateDiffRanges(this.props.labels_array)
     this.calculateRangesArray(this.props.labels_array, this.props.value)
-  }
+  } 
 
   componentWillReceiveProps(){
     //receives 
