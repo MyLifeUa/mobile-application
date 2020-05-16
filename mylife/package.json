@@ -25,6 +25,7 @@
     "react-dom": "~16.13.1",
     "react-moment": "^0.9.7",
     "react-native": "https://github.com/expo/react-native/archive/sdk-36.0.0.tar.gz",
+    "react-native-app-intro-slider": "^4.0.2",
     "react-native-autocomplete-input": "^4.1.0",
     "react-native-chart-kit": "^5.4.0",
     "react-native-check-box": "^2.1.7",
