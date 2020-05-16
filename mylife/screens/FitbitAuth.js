@@ -129,7 +129,7 @@ export default class Login extends React.Component {
               alert(responseJson.message);
             } else {
               console.log("Success");
-              this.props.navigation.navigate('Profile', {
+              this.props.navigation.navigate('AppIntro', {
                 FitbitToken: true
               })
             }
@@ -254,7 +254,7 @@ export default class Login extends React.Component {
               flexDirection: "row"
             }}
 
-            onPress={() =>this.props.navigation.navigate('Profile', {
+            onPress={() =>this.props.navigation.navigate('AppIntro', {
               FitbitToken: false
             })
           }
