@@ -163,7 +163,7 @@ export default class Register extends React.Component {
   };
 
   dealWithTime = () => {
-    moment.locale("pt");
+    //moment.locale("pt");
     var currentTime = moment(new Date(), "h:mma");
 
     var beginningBreakfastTime = moment("6:00am", "h:mma");
