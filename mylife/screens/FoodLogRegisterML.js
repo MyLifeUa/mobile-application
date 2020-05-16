@@ -38,7 +38,7 @@ export default class Register extends React.Component {
   }
   state = {
     Loading: false,
-    showView: true,
+    showView: false,
     showViewError: false,
     identifiedFood: "",
     calories: 0,
