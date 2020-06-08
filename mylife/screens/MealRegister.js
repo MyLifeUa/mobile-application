@@ -27,7 +27,6 @@ import { ScrollView, FlatList } from "react-native-gesture-handler";
 import themeStyle from "../constants/theme.style.js";
 import MealItem from "../components/MealItem";
 import Toast, { DURATION } from "react-native-easy-toast";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 const { width, height } = Dimensions.get("screen");
 const API_URL = "http://mednat.ieeta.pt:8442";
 

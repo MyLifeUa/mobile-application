@@ -79,7 +79,7 @@ export default class GaugeMetrics extends React.Component {
     })
     this.calculateDiffRanges(this.props.labels_array)
     this.calculateRangesArray(this.props.labels_array, this.props.value)
-  }
+  } 
 
   componentWillReceiveProps(){
     //receives 
@@ -88,6 +88,11 @@ export default class GaugeMetrics extends React.Component {
     //label done
     console.log("-----------------Incoming Updated Props---------------")
     console.log(this.props)
+    this.setState({
+      value: this.props.value,
+      label: this.props.label,
+      sex: this.props.sex
+    })
     this.calculateDiffRanges(this.props.labels_array)
     this.calculateRangesArray(this.props.labels_array, this.props.value)
   }

@@ -428,7 +428,7 @@ export default class Login extends React.Component {
     });
   };
 
-  async getHeartrateStats() {
+  getHeartrateStats() {
     var login_info = "Token " + this.state.user_token;
     console.log(
       `${API_URL}/health-stats/body/heart-rate/` +
@@ -462,11 +462,14 @@ export default class Login extends React.Component {
             gauge_label: responseJson.message.label,
             gauge_sex: responseJson.message.sex
           })
+          this.forceUpdate()
+
         }
       })
       .catch(error => {
         console.log(error);
       });
+
   }
 
 

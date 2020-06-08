@@ -39,6 +39,8 @@ import IngredientList from "./screens/IngredientList";
 import MealRegister from "./screens/MealRegister";
 
 import Login from "./screens/Login";
+import AppIntro from "./screens/AppIntro";
+
 import Register from "./screens/Register";
 import { createAppContainer, createSwitchNavigator } from "react-navigation";
 
@@ -53,12 +55,20 @@ const LoginStack = createStackNavigator(
   //SignedOut Stack
   {
     //Defination of Navigaton from home screen
+    
     Login: {
       screen: Login,
       navigationOptions: {
         header: null
       }
     },
+    AppIntro:{
+      screen: AppIntro,
+      navigationOptions: {
+        header: null
+      }
+    },
+    
     Register: {
       screen: Register,
       navigationOptions: {
